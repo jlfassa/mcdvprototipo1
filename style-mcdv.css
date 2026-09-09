@@ -278,14 +278,13 @@ section[id],
 }
 
 /* =========================================================
-   HEADER — transparente sobre el hero, fundido con la foto de
-   fondo (logo y texto en claro); recién al scrollear más allá del
-   hero pasa a barra sólida clara con logo/texto oscuro, para
-   quedar legible sobre el resto de las secciones. El punto exacto
-   en el que cambia lo calcula JS según el alto real del hero (ver
-   updateHeader() en script.js), no un número fijo — así funciona
-   igual si el hero mide 100vh (fallback) o 250vh (con el efecto
-   de portal activo).
+   HEADER — barra clara con logo negro desde el arranque (antes era
+   transparente sobre el hero con logo/texto claro, y recién pasaba a
+   claro al scrollear; a pedido de la clienta el logo va siempre en
+   negro, así que el fondo tiene que ser claro también desde el
+   inicio). Al scrollear más allá del hero se compacta un poco y
+   suma sombra/borde inferior — eso sí sigue dependiendo del alto
+   real del hero, calculado por JS (ver updateHeader() en script.js).
 ========================================================= */
 
 .header {
@@ -295,7 +294,7 @@ section[id],
   left: 0;
   width: 100%;
 
-  background: transparent;
+  background: var(--paper);
   border-bottom: 2px solid transparent;
   box-shadow: none;
 
@@ -303,7 +302,6 @@ section[id],
 }
 
 .header.scrolled {
-  background: var(--paper);
   border-bottom-color: var(--bronze);
   box-shadow: 0 10px 24px rgba(23, 24, 26, 0.1);
 }
@@ -331,23 +329,12 @@ section[id],
   align-items: center;
   gap: 12px;
 
-  color: var(--paper);
-  transition: color 0.3s ease;
-}
-
-.header.scrolled .header-brand {
   color: var(--graphite-950);
 }
 
 .header-brand img {
   width: 32px;
   height: auto;
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
-  transition: filter 0.3s ease;
-}
-
-.header.scrolled .header-brand img {
-  filter: none;
 }
 
 .header-brand span {
@@ -358,13 +345,8 @@ section[id],
 
 .header-brand em {
   font-style: italic;
-  color: var(--bronze-light);
-  margin: 0 4px;
-  transition: color 0.3s ease;
-}
-
-.header.scrolled .header-brand em {
   color: var(--bronze-dark);
+  margin: 0 4px;
 }
 
 .header-right {
@@ -376,11 +358,6 @@ section[id],
 .header-divider {
   width: 1px;
   height: 22px;
-  background: rgba(247, 246, 244, 0.3);
-  transition: background 0.3s ease;
-}
-
-.header.scrolled .header-divider {
   background: rgba(23, 24, 26, 0.16);
 }
 
@@ -392,16 +369,12 @@ section[id],
   font-size: 1.15rem;
   font-weight: 600;
   letter-spacing: 0.03em;
-  color: var(--paper);
+  color: var(--graphite-950);
 
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
 
   transition: color 0.25s ease, border-color 0.25s ease;
-}
-
-.header.scrolled .header-quick-contact {
-  color: var(--graphite-950);
 }
 
 .header-quick-icon {
@@ -411,11 +384,6 @@ section[id],
 }
 
 .header-quick-contact:hover {
-  color: var(--bronze-light);
-  border-color: var(--bronze-light);
-}
-
-.header.scrolled .header-quick-contact:hover {
   color: var(--bronze-dark);
   border-color: var(--bronze);
 }
@@ -425,19 +393,11 @@ section[id],
   align-items: center;
   gap: 11px;
 
-  color: var(--paper);
+  color: var(--graphite-950);
   transition: color 0.25s ease;
 }
 
-.header.scrolled .menu-toggle {
-  color: var(--graphite-950);
-}
-
 .menu-toggle:hover {
-  color: var(--bronze-light);
-}
-
-.header.scrolled .menu-toggle:hover {
   color: var(--bronze-dark);
 }
 
@@ -796,32 +756,6 @@ section[id],
   right: 0;
 }
 
-/* Costura entre los dos paneles: un par de puntos bronce con glow,
-   visibles mientras el hero está "cerrado". El contenedor solo ubica
-   el punto de partida (el centro); cada punto viaja por su cuenta
-   hacia una esquina opuesta y se apaga — por eso el fade/viaje va en
-   cada <span>, no acá (oculto por defecto: opacity:0 hasta que JS
-   los muestre para animar). */
-.hero-portal-seam {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 5;
-
-  display: flex;
-  gap: 12px;
-  transform: translate(-50%, -50%);
-}
-
-.hero-portal-seam span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--bronze-light);
-  opacity: 0;
-  box-shadow: 0 0 12px 3px rgba(200, 154, 104, 0.75);
-}
-
 /* El nombre partido en dos: oculto por defecto (fallback seguro). JS
    lo hace visible y lo arranca centrado/compacto sobre la costura;
    el scrub lo hace crecer, apretar el tracking y viajar hacia los
@@ -887,11 +821,6 @@ section[id],
   text-transform: uppercase;
   color: rgba(247, 246, 244, 0.55);
   opacity: 0;
-}
-
-.hero-portal-meta--tl {
-  top: 100px;
-  left: 28px;
 }
 
 .hero-portal-meta--tr {

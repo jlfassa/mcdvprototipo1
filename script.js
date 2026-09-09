@@ -73,28 +73,21 @@ if (preloader && preloaderCount) {
 
 
 /* =========================================================
-   HEADER AL HACER SCROLL — transparente y fundido sobre el hero
-   (logo claro), pasa a barra sólida (logo oscuro) recién al
-   scrollear más allá del hero. El punto de cambio se calcula según
-   el alto real del hero, no un número fijo, porque ese alto cambia
-   según si el efecto de portal está activo (250vh) o no (100vh).
+   HEADER AL HACER SCROLL — la barra ya es clara con logo negro desde
+   el arranque; al scrollear más allá del hero solo se compacta un
+   poco y suma sombra/borde inferior (clase "scrolled"). El punto de
+   cambio se calcula según el alto real del hero, no un número fijo,
+   porque ese alto cambia según si el efecto de portal está activo
+   (250vh) o no (100vh).
 ========================================================= */
-
-const headerLogo = document.querySelector(".header-brand img");
 
 function updateHeader() {
   if (!header) return;
 
   const hero = document.querySelector("[data-hero-portal]");
   const threshold = hero ? hero.offsetHeight - 80 : 40;
-  const scrolled = window.scrollY > threshold;
 
-  header.classList.toggle("scrolled", scrolled);
-
-  if (headerLogo) {
-    const src = scrolled ? "img/logo-mcdv.png" : "img/logo-mcdv-light.png";
-    if (!headerLogo.src.endsWith(src)) headerLogo.src = src;
-  }
+  header.classList.toggle("scrolled", window.scrollY > threshold);
 }
 
 window.addEventListener("scroll", updateHeader, { passive: true });
@@ -193,8 +186,6 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalDuotone = document.querySelector("[data-hero-portal-duotone]");
   const heroPortalPanelLeft = document.querySelector('[data-hero-portal-panel="left"]');
   const heroPortalPanelRight = document.querySelector('[data-hero-portal-panel="right"]');
-  const heroPortalDotA = document.querySelector('[data-hero-portal-dot="a"]');
-  const heroPortalDotB = document.querySelector('[data-hero-portal-dot="b"]');
   const heroPortalWordLeft = document.querySelector('[data-hero-portal-word="left"]');
   const heroPortalWordRight = document.querySelector('[data-hero-portal-word="right"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
@@ -231,10 +222,6 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     });
 
     heroPortalTl
-      // Los puntos de la costura: visibles al cerrar, viajan cada uno
-      // hacia una esquina opuesta del cuadro mientras se apagan.
-      .fromTo(heroPortalDotA, { opacity: 1, x: 0, y: 0 }, { opacity: 0, x: "-30vw", y: "-30vh", duration: 0.35, ease: "none" }, 0)
-      .fromTo(heroPortalDotB, { opacity: 1, x: 0, y: 0 }, { opacity: 0, x: "30vw", y: "30vh", duration: 0.35, ease: "none" }, 0)
       // Las puertas: arrancan cerradas (xPercent 0, tapando el centro)
       // y se abren hacia los bordes, más allá de su propio ancho, para
       // despejar el cuadro por completo.
