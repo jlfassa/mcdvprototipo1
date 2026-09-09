@@ -915,6 +915,13 @@ section[id],
 .hero-eyebrow--center {
   border-left: 0;
   padding-left: 0;
+
+  /* La línea sobre el h1 pasa a la serif del sitio (Forum, la misma
+     del logo/h1) en vez de la sans del cuerpo — más editorial. Forum
+     solo carga en weight 400 (ver <link> de Google Fonts), por eso se
+     baja de 700 acá para no depender de negrita sintética. */
+  font-family: var(--font-display);
+  font-weight: 400;
 }
 
 .hero-huge {
