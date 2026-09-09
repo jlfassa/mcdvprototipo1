@@ -188,6 +188,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalPanelRight = document.querySelector('[data-hero-portal-panel="right"]');
   const heroPortalWordLeft = document.querySelector('[data-hero-portal-word="left"]');
   const heroPortalWordRight = document.querySelector('[data-hero-portal-word="right"]');
+  const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
   const heroPortalCrest = document.querySelector("[data-hero-portal-crest]");
   const heroPortalContentReveal = document.querySelectorAll("#home [data-reveal]");
@@ -207,6 +208,8 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     heroPortalPanelRight &&
     heroPortalWordLeft &&
     heroPortalWordRight &&
+    heroPortalWordAmp &&
+    header &&
     window.matchMedia("(min-width: 900px)").matches;
 
   if (heroPortalReady) {
@@ -219,6 +222,12 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     // "cerrada" — a partir de ahí el timeline los abre con normalidad.
     gsap.set([heroPortalPanelLeft, heroPortalPanelRight], { display: "block", xPercent: 0 });
     gsap.set(heroPortalContentReveal, { opacity: 0, y: 40 });
+
+    // El header (escudo + botón Menú) arranca oculto — recién aparece
+    // junto con las puertas abriéndose (ver heroPortalTl más abajo).
+    // Fallback seguro sin este efecto: el header queda visible normal
+    // desde la carga, por CSS, sin depender de JS.
+    gsap.set(header, { opacity: 0 });
 
     const heroPortalTl = gsap.timeline({
       scrollTrigger: {
@@ -235,15 +244,23 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // despejar el cuadro por completo.
       .to(heroPortalPanelLeft, { xPercent: -100, duration: 0.45, ease: "none" }, 0)
       .to(heroPortalPanelRight, { xPercent: 100, duration: 0.45, ease: "none" }, 0)
-      // El nombre: crece, aprieta el tracking y viaja con las puertas.
+      // El nombre: crece, aprieta el tracking y viaja con las puertas
+      // (MCDV a la izquierda, Asociados a la derecha — mismo x que
+      // antes, ahora arrancando apiladas en vez de lado a lado).
       .fromTo(
         [heroPortalWordLeft, heroPortalWordRight],
-        { opacity: 1, fontSize: "1.6rem", letterSpacing: "0.4em" },
-        { fontSize: "3.4rem", letterSpacing: "0.04em", duration: 0.45, ease: "none" },
+        { opacity: 1, fontSize: "2.2rem", letterSpacing: "0.4em" },
+        { fontSize: "5rem", letterSpacing: "0.04em", duration: 0.45, ease: "none" },
         0
       )
       .fromTo(heroPortalWordLeft, { x: 0 }, { x: "-32vw", duration: 0.45, ease: "none" }, 0)
       .fromTo(heroPortalWordRight, { x: 0 }, { x: "32vw", duration: 0.45, ease: "none" }, 0)
+      // El "&" del medio no viaja a ningún lado: se queda en el
+      // centro y se desvanece en el mismo tramo.
+      .fromTo(heroPortalWordAmp, { opacity: 1 }, { opacity: 0, duration: 0.45, ease: "none" }, 0)
+      // El header (escudo + Menú), oculto hasta acá, aparece junto
+      // con las puertas abriéndose.
+      .fromTo(header, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "none" }, 0)
       // La foto: arranca sobre-escalada y se asienta; el wash de color
       // aparece encima.
       .fromTo(heroPortalImage, { scale: 1.15 }, { scale: 1, duration: 0.55, ease: "none" }, 0)

@@ -721,25 +721,28 @@ section[id],
   right: 0;
 }
 
-/* El nombre partido en dos: oculto por defecto (fallback seguro). JS
-   lo hace visible y lo arranca centrado/compacto sobre la costura;
-   el scrub lo hace crecer, apretar el tracking y viajar hacia los
-   bordes junto con los paneles. */
+/* Nombre apilado (MCDV / & / Asociados), oculto por defecto
+   (fallback seguro). JS lo hace visible centrado/compacto sobre la
+   costura; el scrub lo hace crecer, apretar el tracking, y separar
+   MCDV hacia la izquierda y Asociados hacia la derecha junto con los
+   paneles, mientras el "&" del medio se desvanece en el lugar. */
 .hero-portal-wordmark {
   position: absolute;
   inset: 0;
   z-index: 6;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   pointer-events: none;
 }
 
 .hero-portal-word {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: 2rem;
+  font-size: 2.6rem;
   letter-spacing: 0.35em;
   color: var(--paper);
   text-transform: uppercase;
@@ -747,12 +750,10 @@ section[id],
   white-space: nowrap;
 }
 
-.hero-portal-word--left {
-  margin-right: 0.35em;
-}
-
-.hero-portal-word--right {
-  margin-left: 0.35em;
+.hero-portal-word--amp {
+  font-style: italic;
+  text-transform: none;
+  color: var(--bronze-light);
 }
 
 /* Escudo de MCDV, centrado en el cuadro — oculto por defecto,
