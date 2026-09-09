@@ -145,6 +145,44 @@ textarea:focus-visible {
   outline-offset: 3px;
 }
 
+/* =========================================================
+   ÁREAS TÁCTILES AMPLIADAS (sin cambio visual)
+   Varios links/botones son texto o íconos chicos (10-13px) sin
+   padding, por debajo del mínimo táctil recomendado de 44×44px.
+   En vez de agrandar el texto/ícono real (cambiaría el look que ya
+   se ajustó en varias rondas), se amplía solo el ÁREA CLICKEABLE con
+   un ::after invisible y absoluto que sobresale 10px por lado —
+   mismo patrón que "hit-slop" en apps nativas. Verificado que el
+   espacio libre alrededor de cada elemento (gaps de header-right,
+   footer-bottom, etc.) alcanza para los 10px sin que las zonas
+   invisibles de elementos vecinos se superpongan.
+========================================================= */
+
+.header-quick-contact,
+.menu-toggle,
+.footer-instagram,
+.area-card-link,
+.team-link,
+.hero-scroll-link,
+.area-page-back,
+.contact-instagram {
+  position: relative;
+}
+
+.header-quick-contact::after,
+.menu-toggle::after,
+.menu-close::after,
+.footer-instagram::after,
+.area-card-link::after,
+.team-link::after,
+.hero-scroll-link::after,
+.area-page-back::after,
+.contact-instagram::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+}
+
 section[id],
 #contact {
   scroll-margin-top: 90px;
