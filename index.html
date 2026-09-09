@@ -125,20 +125,10 @@
       </div>
     </div>
 
-    <!-- HEADER -->
+    <!-- HEADER — sin logo a propósito (el nombre del estudio ya es el
+         h1 del hero); el header queda solo con el botón de menú. -->
     <header class="header" data-header>
       <div class="header-inner">
-        <a href="#home" class="header-brand" aria-label="MCDV & Asociados - Inicio">
-          <img
-            src="img/logo-mcdv-light.png"
-            alt="MCDV & Asociados"
-            class="header-brand-logo"
-            data-header-static-logo
-            width="272"
-            height="284"
-          />
-        </a>
-
         <button
           class="menu-toggle"
           type="button"
@@ -151,25 +141,6 @@
         </button>
       </div>
     </header>
-
-    <!-- Escudo "viajero": vive fuera de <header> a propósito — si
-         quedara adentro de .hero-portal-stage (que tiene
-         isolation:isolate + overflow:hidden) ningún z-index lo
-         salvaría de quedar atrapado ahí (mismo bug ya encontrado y
-         corregido en rondas anteriores). Oculto por defecto
-         (display:none); JS lo muestra y posiciona solo si el efecto
-         de acople al navbar va a correr de verdad (desktop ancho +
-         GSAP + sin reduced-motion) — sin eso, el logo del header
-         (arriba) queda visible normal desde la carga, sin animación. -->
-    <img
-      src="img/logo-mcdv-light.png"
-      alt=""
-      class="header-dock-crest"
-      aria-hidden="true"
-      data-header-dock-crest
-      width="272"
-      height="284"
-    />
 
     <!-- MENU -->
     <div class="menu-overlay" data-menu>
@@ -246,16 +217,6 @@
 
           <span class="hero-portal-meta hero-portal-meta--br" data-hero-portal-meta>Scroll <span aria-hidden="true">↓</span></span>
 
-          <img
-            src="img/logo-mcdv-light.png"
-            alt=""
-            class="hero-portal-crest"
-            aria-hidden="true"
-            data-hero-portal-crest
-            width="272"
-            height="284"
-          />
-
           <div class="hero-content" data-hero-portal-content>
             <img
               src="img/logo-mcdv-light.png"
@@ -266,16 +227,16 @@
               height="284"
             />
 
-            <span class="hero-eyebrow hero-eyebrow--center" data-reveal>MCDV &amp; Asociados</span>
+            <span class="hero-eyebrow hero-eyebrow--center" data-reveal>Estudio Jurídico — Chubut</span>
 
             <h1 class="hero-huge hero-huge--center" data-reveal>
-              Orientación <em>jurídica</em><br />
-              con cercanía real.
+              MCDV <em>&amp;</em> Asociados
             </h1>
 
             <p class="hero-lead hero-lead--center" data-reveal>
-              Información, acompañamiento y representación legal para quienes
-              necesitan respuestas claras en cada etapa del proceso.
+              Asesoramiento y representación legal en Derecho de Familia,
+              Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil,
+              con compromiso y cercanía en cada etapa del proceso.
             </p>
 
             <div class="hero-actions hero-actions--center" data-reveal>

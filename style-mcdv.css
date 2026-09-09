@@ -276,15 +276,11 @@ section[id],
 }
 
 /* =========================================================
-   HEADER — barra oscura con el escudo centrado (crema, siempre
-   visible por defecto — safe fallback sin JS/reduced-motion/mobile).
-   En desktop con el efecto de portal activo, ese mismo escudo que se
-   ve en el centro del hero "sube" y se acopla acá con el scroll —
-   ver .header-dock-crest más abajo y el bloque "ACOPLE DEL ESCUDO AL
-   NAVBAR" en script.js. Al scrollear más allá del hero, el header se
-   compacta un poco y suma un borde inferior bronce; el punto de
-   cambio depende del alto real del hero, calculado por JS
-   (updateHeader() en script.js).
+   HEADER — barra oscura, sin logo a propósito (el nombre del estudio
+   ya es el h1 del hero): queda solo el botón de Menú. Al scrollear
+   más allá del hero se compacta un poco y suma un borde inferior
+   bronce; el punto de cambio depende del alto real del hero,
+   calculado por JS (updateHeader() en script.js).
 ========================================================= */
 
 .header {
@@ -305,7 +301,6 @@ section[id],
 }
 
 .header-inner {
-  position: relative;
   width: min(calc(100% - 48px), 1320px);
   margin-inline: auto;
 
@@ -320,37 +315,6 @@ section[id],
 
 .header.scrolled .header-inner {
   padding: 13px 0;
-}
-
-/* Centrado real (position:absolute + translate), independiente del
-   ancho del botón "Menú" al lado — así queda simétrico sin importar
-   cuánto mida ese botón. */
-.header-brand {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  display: flex;
-  align-items: center;
-}
-
-.header-brand-logo {
-  width: 34px;
-  height: auto;
-}
-
-/* Escudo "viajero": position:fixed controlado por JS (top/left/width
-   interpolados en tiempo real, nunca por transform — ver script.js
-   para el motivo). Oculto por defecto; solo se muestra cuando el
-   acople al navbar va a correr de verdad. */
-.header-dock-crest {
-  display: none;
-  position: fixed;
-  z-index: 1001;
-  width: auto;
-  height: auto;
-  pointer-events: none;
 }
 
 .menu-toggle {
@@ -754,23 +718,6 @@ section[id],
   font-style: italic;
   text-transform: none;
   color: var(--bronze-light);
-}
-
-/* Escudo de MCDV, centrado en el cuadro — oculto por defecto,
-   aparece con el resto del efecto (JS) y se retira antes de que
-   entre el escudo del contenido real, para no duplicarlo. */
-.hero-portal-crest {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 6;
-
-  width: clamp(70px, 8vw, 110px);
-  height: auto;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
-  pointer-events: none;
 }
 
 /* Metadata de esquina — decorativo, da un aire editorial/de portada.
@@ -1921,10 +1868,6 @@ section[id],
 
   .header-inner {
     width: calc(100% - 36px);
-  }
-
-  .header-brand-logo {
-    width: 28px;
   }
 
   .menu-label {
