@@ -59,7 +59,11 @@
 
     <link rel="stylesheet" href="./style-mcdv.css?v=20260908c" />
 
-    <link rel="preload" as="image" href="img/hero_3.jpg" fetchpriority="high" />
+    <!-- Precarga la imagen real del hero (hero_facade.jpg): antes
+         precargaba hero_3.jpg, que ya no es la foto del hero desde el
+         rediseño "portal" — descargaba ~845KB de más y retrasaba la
+         imagen que sí hace falta para el LCP. -->
+    <link rel="preload" as="image" href="img/hero_facade.jpg" fetchpriority="high" />
 
     <noscript>
       <style>
@@ -579,17 +583,17 @@
             <div class="field-row">
               <label>
                 <span>Nombre</span>
-                <input type="text" id="nombre" name="name" placeholder="Tu nombre" required />
+                <input type="text" id="nombre" name="name" placeholder="Tu nombre" autocomplete="name" required />
               </label>
               <label>
                 <span>Email</span>
-                <input type="email" id="email" name="email" placeholder="tuemail@email.com" />
+                <input type="email" id="email" name="email" placeholder="tuemail@email.com" autocomplete="email" />
               </label>
             </div>
 
             <label>
               <span>Teléfono (opcional)</span>
-              <input type="tel" id="telefono" name="phone" placeholder="Tu teléfono" />
+              <input type="tel" id="telefono" name="phone" placeholder="Tu teléfono" autocomplete="tel" />
             </label>
 
             <label>
