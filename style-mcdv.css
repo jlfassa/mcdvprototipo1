@@ -1685,6 +1685,20 @@ section[id],
   border-color: #d16a5a;
 }
 
+/* Mensaje de error puntual por campo (antes solo cambiaba el borde a
+   rojo, sin texto — no decía qué estaba mal ni era anunciado por
+   lectores de pantalla). Oculto por defecto; JS le pone texto y la
+   clase .show cuando el campo es inválido al enviar. */
+.field-error {
+  display: none;
+  color: #d16a5a;
+  font-size: 1.2rem;
+}
+
+.field-error.show {
+  display: block;
+}
+
 .contact-form textarea {
   min-height: 120px;
   resize: vertical;

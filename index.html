@@ -589,11 +589,28 @@
             <div class="field-row">
               <label>
                 <span>Nombre</span>
-                <input type="text" id="nombre" name="name" placeholder="Tu nombre" autocomplete="name" required />
+                <input
+                  type="text"
+                  id="nombre"
+                  name="name"
+                  placeholder="Tu nombre"
+                  autocomplete="name"
+                  aria-describedby="nombre-error"
+                  required
+                />
+                <span class="field-error" id="nombre-error" role="alert"></span>
               </label>
               <label>
                 <span>Email</span>
-                <input type="email" id="email" name="email" placeholder="tuemail@email.com" autocomplete="email" />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="tuemail@email.com"
+                  autocomplete="email"
+                  aria-describedby="email-error"
+                />
+                <span class="field-error" id="email-error" role="alert"></span>
               </label>
             </div>
 
@@ -604,7 +621,14 @@
 
             <label>
               <span>Mensaje</span>
-              <textarea id="mensaje" name="message" placeholder="Contanos brevemente tu situación" required></textarea>
+              <textarea
+                id="mensaje"
+                name="message"
+                placeholder="Contanos brevemente tu situación"
+                aria-describedby="mensaje-error"
+                required
+              ></textarea>
+              <span class="field-error" id="mensaje-error" role="alert"></span>
             </label>
 
             <button type="submit" class="btn-outline btn-outline--light">

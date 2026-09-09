@@ -398,6 +398,23 @@ function waLink(message) {
 const contactForm = document.getElementById("contactForm");
 const formConfirm = document.getElementById("formConfirm");
 
+// Muestra/oculta el <span class="field-error"> asociado a un campo
+// (vinculado por aria-describedby) — antes solo se pintaba el borde
+// en rojo, sin decir qué estaba mal ni ser anunciado por lectores de
+// pantalla (role="alert" en el span lo anuncia apenas se le pone texto).
+function setFieldError(input, message) {
+  if (!input) return;
+  const errorId = input.getAttribute("aria-describedby");
+  const errorEl = errorId && document.getElementById(errorId);
+
+  input.classList.toggle("is-invalid", Boolean(message));
+
+  if (errorEl) {
+    errorEl.textContent = message || "";
+    errorEl.classList.toggle("show", Boolean(message));
+  }
+}
+
 if (contactForm) {
   contactForm.addEventListener("submit", event => {
     event.preventDefault();
@@ -411,22 +428,28 @@ if (contactForm) {
     const telefono = document.getElementById("telefono")?.value.trim() || "No brindó teléfono";
     const mensaje = mensajeInput?.value.trim() || "";
 
-    let valid = true;
+    let firstInvalid = null;
 
-    [[nombreInput, nombre], [mensajeInput, mensaje]].forEach(([input, value]) => {
+    [
+      [nombreInput, nombre, "Contanos tu nombre para poder responderte."],
+      [mensajeInput, mensaje, "Contanos brevemente tu situación."]
+    ].forEach(([input, value, message]) => {
       if (!input) return;
       const invalid = !value;
-      input.classList.toggle("is-invalid", invalid);
-      if (invalid) valid = false;
+      setFieldError(input, invalid ? message : "");
+      if (invalid && !firstInvalid) firstInvalid = input;
     });
 
     if (emailInput) {
       const emailOk = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      emailInput.classList.toggle("is-invalid", !emailOk);
-      if (!emailOk) valid = false;
+      setFieldError(emailInput, emailOk ? "" : "Revisá el formato del email (ej: nombre@dominio.com).");
+      if (!emailOk && !firstInvalid) firstInvalid = emailInput;
     }
 
-    if (!valid) return;
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return;
+    }
 
     const text =
       "Hola, soy " + nombre +
@@ -440,7 +463,7 @@ if (contactForm) {
   });
 
   contactForm.querySelectorAll("input, textarea").forEach(field => {
-    field.addEventListener("input", () => field.classList.remove("is-invalid"));
+    field.addEventListener("input", () => setFieldError(field, ""));
   });
 }
 
