@@ -59,11 +59,11 @@
 
     <link rel="stylesheet" href="./style-mcdv.css?v=20260908c" />
 
-    <!-- Precarga la imagen real del hero (hero_facade.jpg): antes
-         precargaba hero_3.jpg, que ya no es la foto del hero desde el
-         rediseño "portal" — descargaba ~845KB de más y retrasaba la
-         imagen que sí hace falta para el LCP. -->
-    <link rel="preload" as="image" href="img/hero_facade.jpg" fetchpriority="high" />
+    <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
+         antes precargaba hero_3.jpg, que ya no es la foto del hero
+         desde el rediseño "portal", así que se descargaba de más y se
+         retrasaba la imagen que sí hace falta para el LCP). -->
+    <link rel="preload" as="image" href="img/hero_facade.webp" type="image/webp" fetchpriority="high" />
 
     <noscript>
       <style>
@@ -200,13 +200,16 @@
       <section class="hero-portal" id="home" data-hero-portal>
         <div class="hero-portal-stage">
           <figure class="hero-portal-media" data-hero-portal-image>
-            <img
-              src="img/hero_facade.jpg"
-              alt="MCDV & Asociados, estudio jurídico"
-              width="1920"
-              height="2880"
-              fetchpriority="high"
-            />
+            <picture>
+              <source srcset="img/hero_facade.webp" type="image/webp" />
+              <img
+                src="img/hero_facade.jpg"
+                alt="MCDV & Asociados, estudio jurídico"
+                width="1920"
+                height="2880"
+                fetchpriority="high"
+              />
+            </picture>
           </figure>
 
           <div class="hero-portal-duotone" aria-hidden="true" data-hero-portal-duotone></div>
@@ -520,7 +523,10 @@
 
             <article class="team-card" data-reveal>
               <div class="team-card-photo photo-duo">
-                <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
+                <picture>
+                  <source srcset="img/pablo.webp" type="image/webp" />
+                  <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
+                </picture>
               </div>
               <h3>Pablo Luis Crespo</h3>
               <span class="team-role">Abogado</span>
@@ -616,7 +622,10 @@
     <!-- FOOTER -->
     <footer class="footer hairline-top">
       <div class="footer-band photo-duo" aria-hidden="true">
-        <img src="img/hero_1.jpg" alt="" loading="lazy" />
+        <picture>
+          <source srcset="img/hero_1.webp" type="image/webp" />
+          <img src="img/hero_1.jpg" alt="" loading="lazy" />
+        </picture>
         <div class="footer-band-overlay">
           <span class="footer-band-word">MCDV &amp; Asociados</span>
           <span class="footer-band-sub">Estudio Jurídico</span>

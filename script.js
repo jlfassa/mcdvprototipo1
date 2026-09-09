@@ -302,9 +302,14 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
 
     // La foto la pone JS (vía data-bg), no el HTML/CSS: así el modo
     // simple (fallback) nunca llega a pedir estas imágenes de más.
+    // image-set() pide la versión WebP (bastante más liviana) con la
+    // misma foto en JPG como respaldo si el navegador no soporta WebP.
     areasPinPanels.forEach(panel => {
       const bg = panel.getAttribute("data-bg");
-      if (bg) panel.style.backgroundImage = `url('${bg}')`;
+      if (!bg) return;
+      const webp = bg.replace(/\.jpe?g$/i, ".webp");
+      panel.style.backgroundImage =
+        `image-set(url('${webp}') type('image/webp'), url('${bg}') type('image/jpeg'))`;
     });
 
     // Todas arrancan ocultas debajo (yPercent 100) salvo la primera,
