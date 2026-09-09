@@ -129,31 +129,47 @@
     <header class="header" data-header>
       <div class="header-inner">
         <a href="#home" class="header-brand" aria-label="MCDV & Asociados - Inicio">
-          <img src="img/logo-mcdv.png" alt="" width="272" height="284" />
-          <span>MCDV<em>&amp;</em>Asociados</span>
+          <img
+            src="img/logo-mcdv-light.png"
+            alt="MCDV & Asociados"
+            class="header-brand-logo"
+            data-header-static-logo
+            width="272"
+            height="284"
+          />
         </a>
 
-        <div class="header-right">
-          <a href="#" id="waHeader" class="header-quick-contact" target="_blank" rel="noopener">
-            <img src="img/wsp.png" alt="" class="header-quick-icon" width="18" height="18" />
-            <span>Escribinos</span>
-          </a>
-
-          <span class="header-divider" aria-hidden="true"></span>
-
-          <button
-            class="menu-toggle"
-            type="button"
-            aria-label="Abrir menú"
-            aria-expanded="false"
-            data-menu-toggle
-          >
-            <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
-            <span class="menu-label">Menú</span>
-          </button>
-        </div>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          data-menu-toggle
+        >
+          <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+          <span class="menu-label">Menú</span>
+        </button>
       </div>
     </header>
+
+    <!-- Escudo "viajero": vive fuera de <header> a propósito — si
+         quedara adentro de .hero-portal-stage (que tiene
+         isolation:isolate + overflow:hidden) ningún z-index lo
+         salvaría de quedar atrapado ahí (mismo bug ya encontrado y
+         corregido en rondas anteriores). Oculto por defecto
+         (display:none); JS lo muestra y posiciona solo si el efecto
+         de acople al navbar va a correr de verdad (desktop ancho +
+         GSAP + sin reduced-motion) — sin eso, el logo del header
+         (arriba) queda visible normal desde la carga, sin animación. -->
+    <img
+      src="img/logo-mcdv-light.png"
+      alt=""
+      class="header-dock-crest"
+      aria-hidden="true"
+      data-header-dock-crest
+      width="272"
+      height="284"
+    />
 
     <!-- MENU -->
     <div class="menu-overlay" data-menu>

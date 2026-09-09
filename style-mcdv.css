@@ -158,7 +158,6 @@ textarea:focus-visible {
    invisibles de elementos vecinos se superpongan.
 ========================================================= */
 
-.header-quick-contact,
 .menu-toggle,
 .footer-instagram,
 .area-card-link,
@@ -169,7 +168,6 @@ textarea:focus-visible {
   position: relative;
 }
 
-.header-quick-contact::after,
 .menu-toggle::after,
 .menu-close::after,
 .footer-instagram::after,
@@ -278,13 +276,15 @@ section[id],
 }
 
 /* =========================================================
-   HEADER — barra clara con logo negro desde el arranque (antes era
-   transparente sobre el hero con logo/texto claro, y recién pasaba a
-   claro al scrollear; a pedido de la clienta el logo va siempre en
-   negro, así que el fondo tiene que ser claro también desde el
-   inicio). Al scrollear más allá del hero se compacta un poco y
-   suma sombra/borde inferior — eso sí sigue dependiendo del alto
-   real del hero, calculado por JS (ver updateHeader() en script.js).
+   HEADER — barra oscura con el escudo centrado (crema, siempre
+   visible por defecto — safe fallback sin JS/reduced-motion/mobile).
+   En desktop con el efecto de portal activo, ese mismo escudo que se
+   ve en el centro del hero "sube" y se acopla acá con el scroll —
+   ver .header-dock-crest más abajo y el bloque "ACOPLE DEL ESCUDO AL
+   NAVBAR" en script.js. Al scrollear más allá del hero, el header se
+   compacta un poco y suma un borde inferior bronce; el punto de
+   cambio depende del alto real del hero, calculado por JS
+   (updateHeader() en script.js).
 ========================================================= */
 
 .header {
@@ -294,26 +294,24 @@ section[id],
   left: 0;
   width: 100%;
 
-  background: var(--paper);
+  background: var(--graphite-950);
   border-bottom: 2px solid transparent;
-  box-shadow: none;
 
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, padding 0.3s ease;
 }
 
 .header.scrolled {
   border-bottom-color: var(--bronze);
-  box-shadow: 0 10px 24px rgba(23, 24, 26, 0.1);
 }
 
 .header-inner {
+  position: relative;
   width: min(calc(100% - 48px), 1320px);
   margin-inline: auto;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  justify-content: flex-end;
 
   padding: 18px 0;
 
@@ -324,68 +322,35 @@ section[id],
   padding: 13px 0;
 }
 
+/* Centrado real (position:absolute + translate), independiente del
+   ancho del botón "Menú" al lado — así queda simétrico sin importar
+   cuánto mida ese botón. */
 .header-brand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
   align-items: center;
-  gap: 12px;
-
-  color: var(--graphite-950);
 }
 
-.header-brand img {
-  width: 32px;
+.header-brand-logo {
+  width: 34px;
   height: auto;
 }
 
-.header-brand span {
-  font-family: var(--font-display);
-  font-size: 1.9rem;
-  letter-spacing: 0.02em;
-}
-
-.header-brand em {
-  font-style: italic;
-  color: var(--bronze-dark);
-  margin: 0 4px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-}
-
-.header-divider {
-  width: 1px;
-  height: 22px;
-  background: rgba(23, 24, 26, 0.16);
-}
-
-.header-quick-contact {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--graphite-950);
-
-  border-bottom: 1px solid transparent;
-  padding-bottom: 2px;
-
-  transition: color 0.25s ease, border-color 0.25s ease;
-}
-
-.header-quick-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.header-quick-contact:hover {
-  color: var(--bronze-dark);
-  border-color: var(--bronze);
+/* Escudo "viajero": position:fixed controlado por JS (top/left/width
+   interpolados en tiempo real, nunca por transform — ver script.js
+   para el motivo). Oculto por defecto; solo se muestra cuando el
+   acople al navbar va a correr de verdad. */
+.header-dock-crest {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  width: auto;
+  height: auto;
+  pointer-events: none;
 }
 
 .menu-toggle {
@@ -393,12 +358,12 @@ section[id],
   align-items: center;
   gap: 11px;
 
-  color: var(--graphite-950);
+  color: var(--paper);
   transition: color 0.25s ease;
 }
 
 .menu-toggle:hover {
-  color: var(--bronze-dark);
+  color: var(--bronze-light);
 }
 
 .menu-label {
@@ -1957,21 +1922,8 @@ section[id],
     width: calc(100% - 36px);
   }
 
-  .header-brand span {
-    font-size: 1.5rem;
-  }
-
-  .header-quick-contact span {
-    display: none;
-  }
-
-  .header-quick-contact {
-    border-bottom: 0;
-  }
-
-  .header-quick-icon {
-    width: 20px;
-    height: 20px;
+  .header-brand-logo {
+    width: 28px;
   }
 
   .menu-label {

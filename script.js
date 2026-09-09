@@ -192,6 +192,14 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalCrest = document.querySelector("[data-hero-portal-crest]");
   const heroPortalContentReveal = document.querySelectorAll("#home [data-reveal]");
 
+  // Escudo real del hero (el que queda centrado arriba del h1 una vez
+  // que el portal terminó de abrirse) y las dos piezas del acople al
+  // navbar: el escudo "viajero" (fixed, position interpolada por JS) y
+  // el escudo estático que vive siempre en el header.
+  const heroCrest = document.querySelector(".hero-crest");
+  const headerDockCrest = document.querySelector("[data-header-dock-crest]");
+  const headerStaticLogo = document.querySelector("[data-header-static-logo]");
+
   const heroPortalReady =
     heroPortal &&
     heroPortalImage &&
@@ -256,6 +264,128 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
         { opacity: 1, y: 0, duration: 0.35, ease: "none", stagger: 0.03 },
         0.62
       );
+
+    // ACOPLE DEL ESCUDO AL NAVBAR — el mismo escudo que queda centrado
+    // arriba del h1 (heroCrest, ya visible y asentado en su posición
+    // final desde el paso anterior) "sube" y se acopla al navbar
+    // mientras se termina de salir del hero, quedando ahí fijo el
+    // resto de la página.
+    //
+    // Lecciones de intentos anteriores con este mismo efecto (documentadas
+    // en contexto-proyecto-mcdv.md, rondas 8-11), aplicadas acá:
+    //   1. El navbar NUNCA arranca oculto/invisible — headerStaticLogo es
+    //      visible por defecto (CSS) desde la carga; solo se apaga un
+    //      instante mientras el escudo viajero pasa exactamente por
+    //      encima suyo (ver onUpdate más abajo), nunca durante todo el
+    //      scroll del hero como pasaba antes.
+    //   2. headerDockCrest vive fuera de <main> (hermano de <header> en
+    //      el HTML) con z-index 1001, por encima de la barra — adentro
+    //      de .hero-portal-stage (que tiene isolation:isolate) ningún
+    //      z-index lo hubiera salvado de quedar atrapado detrás.
+    //   3. Se usa el MISMO escudo crema en las tres piezas (el del hero,
+    //      el viajero y el del navbar) — nada de cruzar dos colores.
+    //   4. Posición interpolada en top/left/width reales (getBoundingClientRect),
+    //      nunca por transform/xPercent/yPercent — evita el bug ya
+    //      encontrado de que GSAP escribe eso en la propiedad "translate",
+    //      que se compone con un transform de stylesheet en vez de
+    //      reemplazarlo.
+    //
+    // Corre en un ScrollTrigger aparte (no en heroPortalTl de arriba)
+    // para no tocar ni reajustar el timing ya afinado del portal: arranca
+    // recién cuando el pin del hero está a punto de soltarse (bottom 85%)
+    // y termina cuando el hero termina de salir de pantalla (bottom top)
+    // — una franja de scroll corta y propia para esta transición.
+    if (heroCrest && headerDockCrest && headerStaticLogo) {
+      // Sin esto, el CSS general de [data-reveal] (.js-ready [data-reveal]
+      // { transition: opacity .9s ... }) compite con el opacity que le va
+      // a ir poniendo GSAP acá abajo, cuadro a cuadro — mismo tipo de
+      // conflicto transform/translate ya documentado, pero con
+      // transition/opacity. Se apaga esa transición puntual para este
+      // elemento, GSAP queda como único dueño de su opacity de acá en
+      // más.
+      gsap.set(heroCrest, { transition: "none" });
+
+      const dockTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroPortal,
+          // "bottom 110%" cae mientras heroCrest todavía está fijo por
+          // el sticky del stage (el pin recién suelta en "bottom
+          // 100%") y ya asentado (su propio reveal termina antes, en
+          // torno a "bottom 117%") — margen a ambos lados a propósito,
+          // calculado a partir del timeline de heroPortalTl de arriba,
+          // no a ojo.
+          start: "bottom 110%",
+          end: "bottom 65%",
+          scrub: 0.6,
+          onUpdate: self => {
+            const arrived = self.progress >= 0.98;
+            headerDockCrest.style.opacity = arrived ? 0 : 1;
+            headerStaticLogo.style.opacity = arrived ? 1 : 0;
+
+            // El escudo real se apaga rápido apenas arranca este
+            // tramo (si quedara visible, se separaría del viajero en
+            // cuanto suelte el pin — ver comentario más abajo).
+            // Imperativo, no un .to() de GSAP aparte: un segundo tween
+            // independiente compitiendo por el mismo opacity que ya
+            // controla heroPortalTl (el del reveal) quedaba con un
+            // valor "pegado" a mitad de camino (0.22 en vez de 0) al
+            // scrollear rápido de punta a punta — confirmado con
+            // Playwright forzando un scroll instantáneo del final al
+            // inicio de la página.
+            heroCrest.style.opacity = Math.max(0, 1 - self.progress / 0.25);
+          },
+          onLeaveBack: () => {
+            headerDockCrest.style.display = "none";
+            headerStaticLogo.style.opacity = 1;
+            // Se limpia el inline style en vez de forzar opacity:1 —
+            // así heroPortalTl (el tween del reveal original) queda
+            // como único dueño de esta propiedad de nuevo.
+            heroCrest.style.opacity = "";
+          }
+        }
+      });
+
+      dockTl
+        // fromTo (no to) a propósito, con TODOS los valores de
+        // posición como función: GSAP recién las evalúa cuando el
+        // tween arranca a renderizar de verdad (primer frame dentro
+        // del rango del ScrollTrigger), no al crear el tween — que es
+        // lo que hace falta acá (medir heroCrest recién cuando el
+        // usuario llega a este tramo del scroll, no en el load de la
+        // página, cuando headerDockCrest todavía mide 0 por estar en
+        // display:none). Dos bugs reales encontrados y corregidos acá,
+        // confirmados con Playwright antes de este comentario:
+        //   1. Un primer intento con gsap.to() + gsap.set() en
+        //      onToggle no andaba: el tween ya había capturado como
+        //      "from" el tamaño 0 que tenía headerDockCrest al cargar
+        //      la página, y lo volvía a pisar en cada frame de scroll
+        //      (el viajero llegaba a medir 4×4px en vez de ~90px).
+        //   2. Sin immediateRender:false, fromTo() renderiza su
+        //      estado "from" apenas se crea el tween (scrollY 0) en
+        //      vez de esperar a que el scroll entre de verdad en el
+        //      rango del ScrollTrigger — el escudo viajero aparecía ya
+        //      visible arriba del hero desde el principio.
+        .fromTo(
+          headerDockCrest,
+          {
+            display: "block",
+            top: () => heroCrest.getBoundingClientRect().top,
+            left: () => heroCrest.getBoundingClientRect().left,
+            width: () => heroCrest.getBoundingClientRect().width,
+            height: () => heroCrest.getBoundingClientRect().height
+          },
+          {
+            top: () => headerStaticLogo.getBoundingClientRect().top,
+            left: () => headerStaticLogo.getBoundingClientRect().left,
+            width: () => headerStaticLogo.getBoundingClientRect().width,
+            height: () => headerStaticLogo.getBoundingClientRect().height,
+            ease: "none",
+            duration: 1,
+            immediateRender: false
+          },
+          0
+        );
+    }
   } else {
     // Sin el efecto de portal (mobile, o sin GSAP/reduced-motion ya
     // filtrado más arriba): el copy del hero entra apenas carga la
@@ -372,7 +502,7 @@ function waLink(message) {
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-["waHeader", "waContact", "waFloat"].forEach(id => {
+["waContact", "waFloat"].forEach(id => {
   const element = document.getElementById(id);
   if (element) element.href = waLink(defaultMessage);
 });
