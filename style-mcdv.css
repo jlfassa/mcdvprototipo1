@@ -23,7 +23,10 @@
   --white: #ffffff;
 
   --charcoal: #2b2c2f;
-  --gray: #6f7276;
+  /* Antes #6f7276 (4.48:1 sobre --paper, no llega al mínimo AA de
+     4.5:1 para texto normal) — oscurecido lo justo para pasar 4.5:1
+     sin cambio visual perceptible. */
+  --gray: #696c70;
   --gray-light: #a6a8ac;
 
   --bronze: #ad7d4c;
@@ -111,6 +114,34 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--bronze);
+  outline-offset: 3px;
+}
+
+/* Link "saltar al contenido" para navegación por teclado: invisible
+   hasta recibir foco (primer Tab de la página), por encima incluso
+   del preloader para que sea alcanzable apenas carga. */
+.skip-link {
+  position: fixed;
+  z-index: 10000;
+  top: -80px;
+  left: 16px;
+
+  background: var(--bronze);
+  color: var(--graphite-950);
+
+  padding: 14px 22px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  top: 16px;
+  outline: 2px solid var(--graphite-950);
   outline-offset: 3px;
 }
 
@@ -1048,7 +1079,9 @@ section[id],
 
 .manifesto-lead em {
   font-style: italic;
-  color: var(--bronze);
+  /* Mismo motivo que .team-role: --bronze no pasa 4.5:1 sobre
+     --paper (fondo real de .area-page-intro en las páginas de área). */
+  color: var(--bronze-dark);
 }
 
 .manifesto-copy p {
@@ -1475,7 +1508,10 @@ section[id],
 
 .team-role {
   display: block;
-  color: var(--bronze);
+  /* --bronze da 3.34:1 sobre --paper (no pasa el mínimo AA de 4.5:1
+     para texto de 10px) — se usa --bronze-dark, que sí pasa (5.05:1),
+     en vez de introducir un color nuevo. */
+  color: var(--bronze-dark);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
