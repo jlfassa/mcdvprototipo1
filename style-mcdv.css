@@ -847,6 +847,20 @@ section[id],
   max-width: 780px;
 }
 
+/* El h1 es, en el fondo, el mismo texto que el wordmark del portal
+   asentándose ahí — por eso NUNCA lleva el translateY(36px) que sí
+   tiene el resto de [data-reveal] (acá se anula con más
+   especificidad): un deslizamiento vertical se sentía como un
+   elemento nuevo entrando desde abajo, no como el mismo texto
+   continuando en el lugar. Sin esto, GSAP solo tocaba su opacity y
+   el translateY de este selector seguía activo por separado (mismo
+   tipo de conflicto transform/translate ya documentado en el
+   proyecto) — el h1 quedaba 36px más abajo de su lugar real incluso
+   ya en opacity:1. */
+.hero-huge[data-reveal] {
+  transform: none;
+}
+
 .hero-huge--center {
   max-width: 920px;
 }

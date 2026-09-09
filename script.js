@@ -193,7 +193,15 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalWordRight = document.querySelector('[data-hero-portal-word="right"]');
   const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
-  const heroPortalContentReveal = document.querySelectorAll("#home [data-reveal]");
+
+  // El h1 real ("MCDV & Asociados") es, en el fondo, el mismo texto
+  // que el wordmark del portal — por eso se revela aparte del resto
+  // (fade puro, sin el y:40→0 del resto del contenido) y superpuesto
+  // en el tiempo con el fade-out del wordmark, para que se sienta
+  // como el mismo texto asentándose y no como un elemento nuevo
+  // entrando desde abajo.
+  const heroPortalTitle = document.querySelector("#home h1[data-reveal]");
+  const heroPortalContentReveal = document.querySelectorAll("#home [data-reveal]:not(h1)");
 
   const heroPortalReady =
     heroPortal &&
@@ -203,6 +211,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     heroPortalWordLeft &&
     heroPortalWordRight &&
     heroPortalWordAmp &&
+    heroPortalTitle &&
     header &&
     window.matchMedia("(min-width: 900px)").matches;
 
@@ -216,6 +225,10 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     // "cerrada" — a partir de ahí el timeline los abre con normalidad.
     gsap.set([heroPortalPanelLeft, heroPortalPanelRight], { display: "block", xPercent: 0 });
     gsap.set(heroPortalContentReveal, { opacity: 0, y: 40 });
+    // El h1, aparte: solo opacity, sin y — no "entra desde abajo"
+    // como el resto, se desvanece-in en el mismo lugar donde el
+    // wordmark se desvanece-out (ver heroPortalTl más abajo).
+    gsap.set(heroPortalTitle, { opacity: 0 });
 
     // El header (escudo + botón Menú) arranca oculto — recién aparece
     // junto con las puertas abriéndose (ver heroPortalTl más abajo).
@@ -261,11 +274,18 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .fromTo(heroPortalDuotone, { opacity: 0 }, { opacity: 0.4, duration: 0.45, ease: "none" }, 0.05)
       // La metadata de esquina aparece de a poco.
       .fromTo(heroPortalMeta, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.1)
-      // El nombre y la metadata se retiran para dejar paso al
-      // contenido real (que ya dice lo mismo: "MCDV & Asociados" como
-      // h1), que entra con el mismo fade-in de siempre.
+      // El wordmark se apaga y, apenas termina, el h1 real (mismo
+      // texto, "MCDV & Asociados") se enciende en el mismo lugar —
+      // sin bajarlo desde abajo, solo opacity. Un solapamiento largo
+      // entre las dos formas del texto (una partida en dos y en
+      // mayúsculas, la otra unida) se veía como un revoltijo de dos
+      // textos pisándose — por eso el cruce es corto/casi inmediato
+      // en vez de una superposición prolongada.
       .to([heroPortalWordLeft, heroPortalWordRight], { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
+      .fromTo(heroPortalTitle, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 0.68)
+      // El resto del contenido (escudo, eyebrow, bajada, botones) sí
+      // entra con el fade + deslizamiento de siempre, después del h1.
       .to(
         heroPortalContentReveal,
         { opacity: 1, y: 0, duration: 0.35, ease: "none", stagger: 0.03 },
@@ -274,9 +294,10 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   } else {
     // Sin el efecto de portal (mobile, o sin GSAP/reduced-motion ya
     // filtrado más arriba): el copy del hero entra apenas carga la
-    // página, como un hero normal.
+    // página, como un hero normal — acá el h1 se suma al mismo grupo
+    // (no hay wordmark del que "heredar" su aparición).
     gsap.fromTo(
-      heroPortalContentReveal,
+      [...heroPortalContentReveal, heroPortalTitle],
       { y: 40, opacity: 0 },
       { y: 0, opacity: 1, duration: 1, ease: "power3.out", stagger: 0.12, delay: 0.3 }
     );
