@@ -1,0 +1,2015 @@
+/* =========================================================
+   MCDV & ASOCIADOS — ESTUDIO JURÍDICO
+   Sistema editorial: negro/azul muy oscuro (a tono con el
+   escudo de MCDV) + acento bronce, tipografía enorme, listas
+   interactivas en vez de grids de tarjetas, líneas finas entre
+   secciones. Retratos circulares del equipo inspirados en el
+   criterio institucional de bouhan.com.
+========================================================= */
+
+:root {
+  /* Antes gris grafito neutro; ahora con un leve subtono azul
+     ("azules oscuros con negro") para acercarse al negro real
+     del escudo de MCDV en vez de un gris frío genérico. */
+  --graphite-950: #0e1016;
+  --graphite-900: #161923;
+  --graphite-850: #1f232f;
+  --graphite-800: #2a2f3d;
+
+  --slate-light: #6b6e73;
+
+  --paper: #f7f6f4;
+  --paper-light: #fbfaf8;
+  --white: #ffffff;
+
+  --charcoal: #2b2c2f;
+  --gray: #6f7276;
+  --gray-light: #a6a8ac;
+
+  --bronze: #ad7d4c;
+  --bronze-light: #c89a68;
+  --bronze-dark: #8a6138;
+
+  --green: #2f8b57;
+
+  --font-display: "Forum", serif;
+  --font-body: "DM Sans", sans-serif;
+
+  --container: 1280px;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 10px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--charcoal);
+  font-family: var(--font-body);
+  font-size: 1.6rem;
+  line-height: 1.7;
+  overflow-x: hidden;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+::selection {
+  background: var(--bronze);
+  color: var(--white);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: 3px;
+}
+
+section[id],
+#contact {
+  scroll-margin-top: 90px;
+}
+
+.container {
+  width: min(calc(100% - 48px), var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding: 130px 0;
+}
+
+/* Líneas finas negras entre secciones (a pedido, referencia
+   bouhan.com): translúcidas para leer bien tanto contra fondo
+   claro (línea nítida) como oscuro (costura sutil). */
+.hairline-top {
+  border-top: 1px solid rgba(0, 0, 0, 0.55);
+}
+
+/* =========================================================
+   REVEAL POR SCROLL
+========================================================= */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+}
+
+.js-ready [data-reveal] {
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   PRELOADER
+========================================================= */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--graphite-950);
+  color: var(--paper);
+
+  transition:
+    opacity 0.7s var(--ease),
+    visibility 0.7s var(--ease);
+}
+
+.preloader.loaded {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.preloader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.preloader-count {
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 12vw, 12rem);
+  line-height: 1;
+  color: var(--bronze-light);
+}
+
+.preloader-count::after {
+  content: "%";
+  font-size: 0.4em;
+  margin-left: 4px;
+  color: var(--gray-light);
+}
+
+.preloader-word {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 1.1rem;
+  color: var(--gray-light);
+}
+
+/* =========================================================
+   HEADER — transparente sobre el hero, fundido con la foto de
+   fondo (logo y texto en claro); recién al scrollear más allá del
+   hero pasa a barra sólida clara con logo/texto oscuro, para
+   quedar legible sobre el resto de las secciones. El punto exacto
+   en el que cambia lo calcula JS según el alto real del hero (ver
+   updateHeader() en script.js), no un número fijo — así funciona
+   igual si el hero mide 100vh (fallback) o 250vh (con el efecto
+   de portal activo).
+========================================================= */
+
+.header {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  box-shadow: none;
+
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header.scrolled {
+  background: var(--paper);
+  border-bottom-color: var(--bronze);
+  box-shadow: 0 10px 24px rgba(23, 24, 26, 0.1);
+}
+
+.header-inner {
+  width: min(calc(100% - 48px), 1320px);
+  margin-inline: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  padding: 18px 0;
+
+  transition: padding 0.3s ease;
+}
+
+.header.scrolled .header-inner {
+  padding: 13px 0;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: var(--paper);
+  transition: color 0.3s ease;
+}
+
+.header.scrolled .header-brand {
+  color: var(--graphite-950);
+}
+
+.header-brand img {
+  width: 32px;
+  height: auto;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
+  transition: filter 0.3s ease;
+}
+
+.header.scrolled .header-brand img {
+  filter: none;
+}
+
+.header-brand span {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  letter-spacing: 0.02em;
+}
+
+.header-brand em {
+  font-style: italic;
+  color: var(--bronze-light);
+  margin: 0 4px;
+  transition: color 0.3s ease;
+}
+
+.header.scrolled .header-brand em {
+  color: var(--bronze-dark);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.header-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(247, 246, 244, 0.3);
+  transition: background 0.3s ease;
+}
+
+.header.scrolled .header-divider {
+  background: rgba(23, 24, 26, 0.16);
+}
+
+.header-quick-contact {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--paper);
+
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.header.scrolled .header-quick-contact {
+  color: var(--graphite-950);
+}
+
+.header-quick-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.header-quick-contact:hover {
+  color: var(--bronze-light);
+  border-color: var(--bronze-light);
+}
+
+.header.scrolled .header-quick-contact:hover {
+  color: var(--bronze-dark);
+  border-color: var(--bronze);
+}
+
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  color: var(--paper);
+  transition: color 0.25s ease;
+}
+
+.header.scrolled .menu-toggle {
+  color: var(--graphite-950);
+}
+
+.menu-toggle:hover {
+  color: var(--bronze-light);
+}
+
+.header.scrolled .menu-toggle:hover {
+  color: var(--bronze-dark);
+}
+
+.menu-label {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+}
+
+.menu-icon {
+  width: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-icon span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: width 0.3s var(--ease);
+}
+
+.menu-icon span:last-child {
+  width: 65%;
+  margin-left: auto;
+}
+
+.menu-toggle:hover .menu-icon span:last-child {
+  width: 100%;
+}
+
+/* =========================================================
+   MENU — pantalla completa, sube desde abajo
+========================================================= */
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: var(--graphite-950);
+  color: var(--paper);
+
+  transform: translateY(100%);
+  visibility: hidden;
+
+  padding: 40px clamp(24px, 6vw, 90px);
+}
+
+.menu-overlay.active {
+  visibility: visible;
+  transform: translateY(0);
+  transition: transform 0.6s var(--ease);
+}
+
+.menu-overlay:not(.active) {
+  transition: transform 0.5s var(--ease), visibility 0s linear 0.5s;
+}
+
+.menu-close {
+  position: absolute;
+  top: 34px;
+  right: clamp(24px, 6vw, 90px);
+
+  width: 40px;
+  height: 40px;
+}
+
+.menu-close span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 26px;
+  height: 1px;
+  background: var(--paper);
+}
+
+.menu-close span:first-child {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.menu-close span:last-child {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.menu-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.6vh, 16px);
+}
+
+.menu-navigation a {
+  display: flex;
+  align-items: baseline;
+  gap: 22px;
+
+  padding: 6px 0;
+  transition: color 0.3s ease;
+}
+
+.menu-navigation a em {
+  font-style: normal;
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  color: var(--bronze);
+  font-weight: 700;
+}
+
+.menu-link-text {
+  font-family: var(--font-display);
+  font-size: clamp(3.6rem, min(6vw, 9vh), 7.5rem);
+  line-height: 1.05;
+  transition: transform 0.4s var(--ease), color 0.3s ease;
+  display: inline-block;
+}
+
+.menu-navigation a:hover .menu-link-text {
+  color: var(--bronze-light);
+  transform: translateX(20px);
+}
+
+.menu-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 30px;
+
+  margin-top: 50px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+  font-size: 1.3rem;
+  color: var(--gray-light);
+}
+
+.menu-foot > div,
+.menu-foot > a {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.menu-foot > a:last-child {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.menu-foot a:hover {
+  color: var(--bronze-light);
+}
+
+.menu-small-label {
+  color: var(--bronze);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 1rem;
+}
+
+
+/* =========================================================
+   FOTOGRAFÍA — DUOTONO NEGRO/AZUL OSCURO
+   (antes tenía un lavado bronce marcado; ahora más neutro y
+   oscuro, en línea con el escudo de MCDV — el bronce queda
+   como acento de interfaz, no como tinte de foto).
+========================================================= */
+
+.photo-duo {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-duo img {
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.15) brightness(0.9);
+}
+
+.photo-duo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(20, 24, 34, 0.35), rgba(8, 9, 13, 0.65));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.btn-outline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 17px 36px;
+
+  border: 1px solid var(--graphite-950);
+  color: var(--graphite-950);
+
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-outline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background: var(--graphite-950);
+  transform: translateY(101%);
+  transition: transform 0.4s var(--ease);
+}
+
+.btn-outline:hover {
+  color: var(--paper);
+}
+
+.btn-outline:hover::before {
+  transform: translateY(0);
+}
+
+.btn-outline--light {
+  border-color: var(--paper);
+  color: var(--paper);
+}
+
+.btn-outline--light::before {
+  background: var(--bronze);
+}
+
+.btn-outline--light:hover {
+  color: var(--graphite-950);
+}
+
+/* =========================================================
+   HERO "PORTAL" — dos paneles cerrados que se abren revelando la
+   foto de fondo, con el nombre partido en dos viajando hacia los
+   bordes. Por defecto (sin JS, o con reduced-motion, o en mobile) es
+   un hero normal de un viewport: paneles y wordmark ocultos por CSS
+   (nunca tapan nada a ciegas), foto + contenido real visibles de
+   entrada. JS agrega "is-portal-active" SOLO cuando el efecto va a
+   correr de verdad (desktop ancho + GSAP + sin reduced-motion): recién
+   ahí la sección crece a 250vh con el stage sticky adentro (mismo
+   patrón sticky+scrub ya usado en el telón de rondas anteriores, sin
+   pin de GSAP) y arranca el timeline.
+========================================================= */
+
+.hero-portal {
+  position: relative;
+  height: 100svh;
+
+  background: var(--graphite-950);
+}
+
+.hero-portal.is-portal-active {
+  height: 250vh;
+}
+
+.hero-portal-stage {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-portal.is-portal-active .hero-portal-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.hero-portal-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-portal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.2) contrast(1.08) brightness(0.92);
+}
+
+/* Punto de reemplazo: cuando el estudio tenga video propio, este
+   <img> se puede cambiar por <video autoplay muted loop playsinline>
+   dentro del mismo .hero-portal-media. */
+
+/* Wash a dos colores (bronce/grafito) sobre la foto — mix-blend-mode
+   la funde con la imagen en vez de taparla; arranca en 0 (foto al
+   natural) y JS la sube al abrirse los paneles. */
+.hero-portal-duotone {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: linear-gradient(135deg, var(--bronze) 0%, var(--graphite-950) 75%);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Viñeta radial fija (no anima, no depende de JS): oscurece bordes,
+   deja el centro más claro para que se note la foto. */
+.hero-portal-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  background: radial-gradient(ellipse at center, rgba(14, 16, 22, 0) 38%, rgba(14, 16, 22, 0.72) 100%);
+  pointer-events: none;
+}
+
+/* Los paneles ("puertas"): por defecto ni existen visualmente
+   (display:none) — no tapan nada, y de paso evitan un problema real
+   de GSAP: si en vez de esto arrancaran fuera de pantalla con un
+   "transform" puesto por CSS, el xPercent que escribe GSAP (que usa
+   la propiedad "translate" moderna) se SUMARÍA a ese transform en vez
+   de reemplazarlo, y el panel quedaría trabado sin poder "cerrarse"
+   (mismo bug ya encontrado con las solapas de Áreas). Al no haber
+   ningún transform previo, JS puede manejar xPercent con total
+   libertad. Solo JS los hace visibles y los manda al centro (posición
+   "cerrada") cuando el efecto va a correr — desde ahí, el scroll los
+   vuelve a sacar hacia los bordes. */
+.hero-portal-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 4;
+
+  display: none;
+  width: 52%;
+  background: var(--graphite-950);
+}
+
+.hero-portal-panel--left {
+  left: 0;
+}
+
+.hero-portal-panel--right {
+  right: 0;
+}
+
+/* Costura entre los dos paneles: un par de puntos bronce con glow,
+   visibles mientras el hero está "cerrado". El contenedor solo ubica
+   el punto de partida (el centro); cada punto viaja por su cuenta
+   hacia una esquina opuesta y se apaga — por eso el fade/viaje va en
+   cada <span>, no acá (oculto por defecto: opacity:0 hasta que JS
+   los muestre para animar). */
+.hero-portal-seam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+
+  display: flex;
+  gap: 12px;
+  transform: translate(-50%, -50%);
+}
+
+.hero-portal-seam span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bronze-light);
+  opacity: 0;
+  box-shadow: 0 0 12px 3px rgba(200, 154, 104, 0.75);
+}
+
+/* El nombre partido en dos: oculto por defecto (fallback seguro). JS
+   lo hace visible y lo arranca centrado/compacto sobre la costura;
+   el scrub lo hace crecer, apretar el tracking y viajar hacia los
+   bordes junto con los paneles. */
+.hero-portal-wordmark {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.hero-portal-word {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2rem;
+  letter-spacing: 0.35em;
+  color: var(--paper);
+  text-transform: uppercase;
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.hero-portal-word--left {
+  margin-right: 0.35em;
+}
+
+.hero-portal-word--right {
+  margin-left: 0.35em;
+}
+
+/* Escudo de MCDV, centrado en el cuadro — oculto por defecto,
+   aparece con el resto del efecto (JS) y se retira antes de que
+   entre el escudo del contenido real, para no duplicarlo. */
+.hero-portal-crest {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+
+  width: clamp(70px, 8vw, 110px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+/* Metadata de esquina — decorativo, da un aire editorial/de portada.
+   Oculta por defecto: solo tiene sentido cuando el efecto de portal
+   está activo (ver JS); en el fallback (mobile o sin JS) se solapaba
+   con el título/CTA del hero clásico. */
+.hero-portal-meta {
+  position: absolute;
+  z-index: 6;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(247, 246, 244, 0.55);
+  opacity: 0;
+}
+
+.hero-portal-meta--tl {
+  top: 100px;
+  left: 28px;
+}
+
+.hero-portal-meta--tr {
+  top: 100px;
+  right: 28px;
+}
+
+.hero-portal-meta--bl {
+  bottom: 28px;
+  left: 28px;
+}
+
+.hero-portal-meta--br {
+  bottom: 28px;
+  right: 28px;
+}
+
+/* Degradé de legibilidad para el contenido real del hero (escudo,
+   título, texto, botones) — siempre presente, no depende del scroll,
+   igual que en la versión anterior del hero. */
+.hero-portal-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(14, 16, 22, 0.78) 0%,
+    rgba(14, 16, 22, 0.5) 42%,
+    rgba(14, 16, 22, 0.45) 65%,
+    rgba(14, 16, 22, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  min-height: 100svh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: clamp(110px, 16vh, 160px) 24px 80px;
+  text-align: center;
+}
+
+/* Solo con el efecto de portal activo, el contenido real pasa a
+   superponerse sobre el stage (que ya mide exactamente 100svh) en
+   vez de ocupar su propio alto en el flujo normal — es lo que le
+   permite aparecer encima de la foto ya revelada, dentro del mismo
+   stage sticky. */
+.hero-portal.is-portal-active .hero-content {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+
+  min-height: 0;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+/* Escudo simple del hero: una imagen más dentro del flujo normal,
+   con el mismo fade-in que el resto (data-reveal). Sin position
+   fixed/absolute ni scroll — nada que pueda quedar "colgado" en
+   pantalla ni depender de mediciones en tiempo real. */
+.hero-crest {
+  width: clamp(78px, 8vw, 108px);
+  height: auto;
+  margin-bottom: 30px;
+
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  margin-bottom: 26px;
+
+  border-left: 3px solid var(--bronze);
+  padding-left: 16px;
+
+  color: var(--bronze-light);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+}
+
+.hero-eyebrow--center {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.hero-huge {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4.6rem, 6.4vw, 8.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  max-width: 780px;
+}
+
+.hero-huge--center {
+  max-width: 920px;
+}
+
+.hero-huge em {
+  font-style: italic;
+  color: var(--bronze-light);
+}
+
+.hero-lead {
+  max-width: 480px;
+  margin-top: 34px;
+
+  color: var(--gray-light);
+  font-size: 1.75rem;
+  line-height: 1.65;
+}
+
+.hero-lead--center {
+  max-width: 560px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 34px;
+
+  margin-top: 46px;
+}
+
+.hero-actions--center {
+  justify-content: center;
+}
+
+.hero-scroll-link {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 3px;
+}
+
+.hero-scroll-link:hover {
+  border-color: var(--bronze);
+  color: var(--bronze-light);
+}
+
+/* =========================================================
+   ÍNDICE DE SECCIÓN (numeración editorial)
+========================================================= */
+
+.manifesto-index {
+  display: flex;
+  align-items: baseline;
+
+  color: var(--graphite-950);
+}
+
+.manifesto-index-label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--gray);
+}
+
+.manifesto-index--light {
+  color: var(--paper);
+}
+
+.manifesto-index--light .manifesto-index-label {
+  color: var(--gray-light);
+}
+
+/* =========================================================
+   NOSOTROS — MANIFIESTO
+========================================================= */
+
+.manifesto {
+  background: var(--paper-light);
+}
+
+.manifesto-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 60px;
+  align-items: stretch;
+}
+
+.manifesto-copy {
+  max-width: 640px;
+}
+
+.manifesto-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 4vw, 4.6rem);
+  font-weight: 400;
+  color: var(--graphite-900);
+}
+
+.bronze-rule {
+  display: block;
+  width: 60px;
+  height: 2px;
+  margin: 22px 0 30px;
+  background: var(--bronze);
+}
+
+.manifesto-lead {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 3vw, 3.6rem);
+  line-height: 1.3;
+  color: var(--graphite-900);
+  margin-bottom: 28px;
+}
+
+.manifesto-lead em {
+  font-style: italic;
+  color: var(--bronze);
+}
+
+.manifesto-copy p {
+  color: var(--gray);
+  margin-bottom: 24px;
+  font-size: 1.7rem;
+}
+
+.manifesto-copy .btn-outline {
+  margin-top: 12px;
+}
+
+.manifesto-side {
+  display: flex;
+  height: 100%;
+}
+
+.manifesto-photo {
+  position: relative;
+  flex: 1;
+  min-height: 420px;
+}
+
+/* La altura de esta columna depende del contenido de texto de al
+   lado (grid con align-items: stretch) y ese alto no se conoce de
+   antemano, así que un <img> con height:100% normal (heredado de
+   .photo-duo) no tendría de qué "colgar" — igual aplica acá para
+   el día que se reemplace el placeholder por una foto real. */
+.manifesto-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.manifesto-photo-placeholder {
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(150deg, var(--graphite-900) 0%, var(--graphite-850) 100%);
+  border: 1px solid rgba(200, 154, 104, 0.2);
+}
+
+.manifesto-photo-placeholder span {
+  color: var(--gray-light);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ÁREAS DE PRÁCTICA — sección fijada (pin real de ScrollTrigger).
+   Por defecto (sin JS, o con reduced-motion) es una lista vertical
+   simple con las 5 tarjetas en caja, todas visibles, sobre fondo
+   grafito liso — sin fotos ni pin, nunca "position:absolute"/fotos a
+   ciegas por CSS. JS agrega la clase "is-stacked" solo cuando el pin
+   va a correr de verdad (ver script.js): recién ahí cada tarjeta pasa
+   a ser una "solapa" opaca A PANTALLA COMPLETA (sin márgenes
+   laterales, sin caja: es la foto de fondo + el ícono/texto sueltos
+   encima) que sube desde abajo y tapa por completo a la anterior —
+   nunca se superponen ni se cruzan los textos. El encabezado
+   ("Áreas de práctica") vive aparte (.areas-pin-head), superpuesto
+   arriba de todo, y se desvanece apenas arranca la primera solapa
+   para que el área ocupe toda la pantalla.
+========================================================= */
+
+.areas-pin {
+  position: relative;
+  overflow: hidden;
+
+  background: var(--graphite-950);
+  color: var(--paper);
+  padding: 100px 0;
+}
+
+.areas-pin-head {
+  position: relative;
+  z-index: 2;
+}
+
+/* Fallback simple: lista angosta y centrada, como cualquier otro
+   bloque de texto — por eso lleva .container además de esta clase.
+   En modo pin (abajo) se la libera de esa restricción para que la
+   foto ocupe TODO el ancho, sin márgenes laterales. */
+.areas-pin-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 640px;
+  margin-top: 40px;
+}
+
+.areas-pin-panel {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  padding: 34px 30px;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(200, 154, 104, 0.2);
+}
+
+.areas-pin-number {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--bronze);
+  margin-bottom: 10px;
+}
+
+.areas-pin-panel .areas-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  color: var(--bronze);
+}
+
+.areas-pin-panel h3 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  font-weight: 400;
+  color: var(--paper);
+  margin-bottom: 14px;
+}
+
+.areas-pin-panel p {
+  max-width: 460px;
+  color: var(--gray-light);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* Con el pin activo, la sección ocupa toda la pantalla y el stack de
+   solapas pasa a cubrirla ENTERA (inset:0 sobre .areas-pin, ya no
+   adentro de .container): la foto de cada área llega de punta a
+   punta, sin márgenes. El encabezado queda flotando arriba, fijo,
+   encima de todo (z-index), todo el recorrido. La primera solapa
+   (Derecho de Familia) arranca ya puesta (yPercent 0, ver script.js)
+   para que no haya un momento "vacío" al enganchar el pin; las
+   siguientes arrancan fuera de vista, debajo del recuadro, y al subir
+   a yPercent 0 tapan por completo a la anterior — nada de opacity,
+   nunca hay dos visibles ni texto cruzado. Al ser position:absolute +
+   orden normal del DOM, la que sube siempre tapa a la anterior sin
+   necesitar z-index manual por índice. */
+.areas-pin.is-stacked {
+  height: 100svh;
+  padding: 0;
+}
+
+.areas-pin.is-stacked .areas-pin-head {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+}
+
+.areas-pin.is-stacked .areas-head-centered {
+  margin-bottom: 0;
+}
+
+.areas-pin.is-stacked .areas-pin-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Sin transform acá a propósito: la posición inicial (fuera de
+   vista, abajo) la fija JS con gsap.set({ yPercent: 100 }) — si se
+   pone también un transform por CSS, se termina componiendo con el
+   que escribe GSAP en vez de ser reemplazado por él (GSAP usa la
+   propiedad "translate" moderna, que se suma a "transform" en vez de
+   pisarlo), y la solapa queda trabada sin animar nunca. */
+.areas-pin.is-stacked .areas-pin-panel {
+  position: absolute;
+  inset: 0;
+
+  justify-content: center;
+  /* Padding-top grande a propósito: dentro de este cuadro, el
+     contenido se centra verticalmente (justify-content:center), y el
+     encabezado fijo (.areas-pin-head, arriba de todo) necesita ese
+     margen para no pisarse con el "01"/ícono cuando ambos están
+     visibles al mismo tiempo. */
+  padding: clamp(180px, 24vh, 240px) 30px 60px;
+
+  background-color: var(--graphite-950);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+}
+
+/* A pantalla completa el ícono/número/título crecen un poco respecto
+   del modo lista compacta (fallback) — con toda esa foto de fondo,
+   el texto chico quedaba perdido. Insignia circular para el ícono en
+   vez de solo el trazo suelto, para que no se sienta genérico. */
+.areas-pin.is-stacked .areas-pin-number {
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+
+.areas-pin.is-stacked .areas-pin-panel .areas-icon {
+  width: 32px;
+  height: 32px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(200, 154, 104, 0.45);
+  border-radius: 50%;
+  box-sizing: content-box;
+}
+
+.areas-pin.is-stacked .areas-pin-panel h3 {
+  font-size: clamp(3.4rem, 5.5vw, 6rem);
+  margin-bottom: 20px;
+}
+
+.areas-pin.is-stacked .areas-pin-panel p {
+  max-width: 560px;
+  font-size: 1.55rem;
+  margin-bottom: 22px;
+}
+
+/* Degradé opaco sobre la foto de cada solapa, para que el texto se
+   lea bien — no es transparencia entre solapas, es solo contraste
+   sobre la propia foto de esa solapa. */
+.areas-pin.is-stacked .areas-pin-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(14, 16, 22, 0.5) 0%,
+    rgba(14, 16, 22, 0.78) 60%,
+    rgba(14, 16, 22, 0.92) 100%
+  );
+}
+
+.areas-pin.is-stacked .areas-pin-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   ÁREAS DE PRÁCTICA — encabezado (compartido con .areas-pin)
+========================================================= */
+
+/* Encabezado de 2 columnas: lo siguen usando Equipo y Contacto
+   (el de Áreas de práctica pasó a .areas-head-centered, abajo). */
+.areas-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: end;
+
+  margin-bottom: 60px;
+}
+
+/* Gris oscuro por defecto (esta clase la usa Equipo, de fondo
+   claro); en Contacto, de fondo oscuro, se sobreescribe abajo. */
+.areas-head p {
+  max-width: 440px;
+  color: var(--gray);
+  font-size: 1.6rem;
+  justify-self: end;
+  text-align: right;
+}
+
+.areas .areas-head p,
+.contact .areas-head p {
+  color: var(--gray-light);
+}
+
+.areas-head-centered {
+  max-width: 760px;
+  margin: 0 auto 70px;
+  text-align: center;
+}
+
+.areas-head-centered h2 {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 4.4vw, 5rem);
+  font-weight: 400;
+  color: var(--paper);
+}
+
+.areas-underline {
+  display: block;
+  width: 70px;
+  height: 2px;
+  margin: 22px auto;
+  background: var(--bronze);
+}
+
+.areas-head-centered p {
+  color: var(--gray-light);
+  font-size: 1.6rem;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+/* Usado tanto por .areas-pin-panel como por la lista de detalle de
+   las páginas de cada área (areas/*.html). */
+.area-card-link {
+  display: inline-block;
+  margin-top: 12px;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--bronze-light);
+  border-bottom: 1px solid var(--bronze);
+}
+
+/* =========================================================
+   STATEMENT
+========================================================= */
+
+.statement {
+  position: relative;
+  background: var(--graphite-900);
+  padding: 90px 0 120px;
+}
+
+.statement-inner {
+  max-width: 1000px;
+  margin-top: 60px;
+}
+
+.statement h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4rem, 6vw, 7.2rem);
+  line-height: 1.08;
+  color: var(--paper);
+}
+
+.statement h2 em {
+  font-style: italic;
+  color: var(--bronze-light);
+}
+
+.statement p {
+  max-width: 620px;
+  margin-top: 32px;
+  color: var(--gray-light);
+  font-size: 1.6rem;
+}
+
+/* =========================================================
+   EQUIPO — grid simple, sin efectos
+   A propósito lo más plano posible: fotos grandes, nombre, rol
+   y descripción siempre visibles, sin hover que revele nada ni
+   JS de posicionamiento. Después de varias vueltas con formatos
+   más "creativos" (lista+panel, acordeón, carrusel), se optó por
+   esto — más cerca de cómo Setia Law realmente presenta a su
+   equipo (setialaw.com/team: lista clara, sin efectos).
+========================================================= */
+
+.team {
+  background: var(--paper);
+  padding: 80px 0;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px 36px;
+}
+
+.team-card-photo {
+  aspect-ratio: 4 / 5;
+  margin-bottom: 20px;
+
+  overflow: hidden;
+  background: var(--graphite-900);
+}
+
+.team-card-photo img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.team-card:hover .team-card-photo img {
+  transform: scale(1.04);
+}
+
+.team-avatar-placeholder {
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(150deg, var(--graphite-900) 0%, var(--graphite-850) 100%);
+}
+
+.team-avatar-placeholder span {
+  color: var(--gray-light);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.team-card h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--graphite-900);
+  margin-bottom: 4px;
+}
+
+.team-role {
+  display: block;
+  color: var(--bronze);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.team-card p {
+  color: var(--gray);
+  font-size: 1.3rem;
+  line-height: 1.6;
+}
+
+.team-link {
+  display: inline-block;
+  margin-top: 12px;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--bronze-dark);
+  border-bottom: 1px solid var(--bronze);
+}
+
+/* =========================================================
+   CONTACTO
+========================================================= */
+
+.contact {
+  position: relative;
+  padding: 130px 0;
+
+  background: var(--graphite-950);
+  color: var(--paper);
+}
+
+.contact .areas-head {
+  grid-template-columns: 1fr;
+  margin-bottom: 40px;
+}
+
+.contact-mega {
+  display: block;
+
+  font-family: var(--font-display);
+  font-size: clamp(3.6rem, 6.5vw, 8rem);
+  line-height: 1.02;
+
+  color: var(--paper);
+  max-width: 900px;
+
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.contact-mega:hover {
+  color: var(--bronze-light);
+  border-color: var(--bronze);
+}
+
+.contact-note {
+  max-width: 560px;
+  margin-top: 34px;
+
+  color: var(--gray-light);
+  font-size: 1.5rem;
+}
+
+.contact-instagram {
+  display: inline-block;
+  margin-top: 20px;
+
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--bronze-light);
+  border-bottom: 1px solid var(--bronze);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  max-width: 640px;
+  margin-top: 70px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.contact-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.contact-form label > span {
+  color: var(--bronze-light);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 13px 0;
+
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+
+  outline: 0;
+  background: transparent;
+  color: var(--paper);
+
+  transition: border-color 0.3s ease;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--bronze);
+}
+
+.contact-form input.is-invalid,
+.contact-form textarea.is-invalid {
+  border-color: #d16a5a;
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.contact-form .btn-outline {
+  align-self: flex-start;
+}
+
+.form-confirm {
+  display: none;
+  padding: 14px;
+  border: 1px solid var(--green);
+  color: #8fd1a8;
+  font-size: 1.3rem;
+}
+
+.form-confirm.show {
+  display: block;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  background: var(--graphite-950);
+  color: var(--paper);
+}
+
+.footer-band {
+  position: relative;
+  height: 220px;
+}
+
+.footer-band img {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
+
+.footer-band-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  background: rgba(14, 16, 22, 0.6);
+
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-band-word {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  color: var(--paper);
+}
+
+.footer-band-sub {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--bronze-light);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  padding: 26px 0;
+
+  color: var(--gray-light);
+  font-size: 1.2rem;
+}
+
+.footer-instagram {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--gray-light);
+  font-weight: 600;
+
+  transition: color 0.25s ease;
+}
+
+.footer-instagram svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.footer-instagram:hover {
+  color: var(--bronze-light);
+}
+
+.footer-studio {
+  color: var(--gray-light);
+}
+
+.footer-studio a {
+  color: var(--bronze-light);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(200, 154, 104, 0.6);
+}
+
+.footer-studio a:hover {
+  color: var(--paper);
+}
+
+/* =========================================================
+   PÁGINA DE ÁREA (areas/*.html)
+========================================================= */
+
+.area-page-hero {
+  position: relative;
+  overflow: hidden;
+
+  height: 46vh;
+  min-height: 320px;
+
+  margin-top: 88px;
+}
+
+.area-page-hero-content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: min(calc(100% - 48px), var(--container));
+  margin-inline: auto;
+}
+
+.area-page-back {
+  display: inline-flex;
+  align-self: flex-start;
+
+  margin-bottom: 24px;
+
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gray-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 2px;
+}
+
+.area-page-back:hover {
+  color: var(--bronze-light);
+  border-color: var(--bronze);
+}
+
+.area-page-hero-content .areas-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 18px;
+  color: var(--bronze-light);
+}
+
+.area-page-hero-content h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.6rem, 6vw, 6.5rem);
+  color: var(--paper);
+}
+
+.area-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.area-page-intro p {
+  color: var(--gray);
+  margin-bottom: 22px;
+  font-size: 1.7rem;
+}
+
+.area-page-intro .manifesto-lead {
+  margin-top: 26px;
+}
+
+/* .hero-eyebrow trae color bronze-light (pensado para fondo
+   oscuro, como el hero); acá el fondo es claro, así que se
+   oscurece para que no quede pálido sobre --paper. */
+.area-page-intro .hero-eyebrow {
+  color: var(--bronze-dark);
+}
+
+.area-detail-list {
+  border-top: 1px solid rgba(23, 24, 26, 0.14);
+}
+
+.area-detail-list li {
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(23, 24, 26, 0.14);
+}
+
+.area-detail-list h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--graphite-900);
+  margin-bottom: 8px;
+}
+
+.area-detail-list p {
+  color: var(--gray);
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 1100px) {
+  .area-page-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   WHATSAPP FLOTANTE
+========================================================= */
+
+.wa-float {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 800;
+
+  width: 58px;
+  height: 58px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.3s ease;
+}
+
+.wa-icon {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.35));
+}
+
+.wa-float:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — 1100px
+========================================================= */
+
+@media (max-width: 1100px) {
+  .manifesto-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .areas-head {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .areas-head p {
+    justify-self: start;
+    text-align: left;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE — 760px
+========================================================= */
+
+@media (max-width: 760px) {
+  .container {
+    width: min(calc(100% - 36px), var(--container));
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .header-inner {
+    width: calc(100% - 36px);
+  }
+
+  .header-brand span {
+    font-size: 1.5rem;
+  }
+
+  .header-quick-contact span {
+    display: none;
+  }
+
+  .header-quick-contact {
+    border-bottom: 0;
+  }
+
+  .header-quick-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .menu-label {
+    display: none;
+  }
+
+  .menu-link-text {
+    font-size: clamp(3rem, 9vh, 4rem);
+  }
+
+  .menu-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .menu-foot > a:last-child {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .section {
+    padding: 90px 0;
+  }
+
+  .hero-content {
+    padding-top: 100px;
+  }
+
+  .manifesto-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .manifesto-side {
+    flex-direction: column;
+  }
+
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .wa-float {
+    right: 18px;
+    bottom: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-huge {
+    font-size: 4.4rem;
+  }
+
+  .contact-mega {
+    font-size: 3.4rem;
+  }
+
+  .statement h2 {
+    font-size: 3.4rem;
+  }
+}

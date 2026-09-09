@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>MCDV & Asociados | Estudio Jurídico</title>
+
+    <meta
+      name="description"
+      content="MCDV & Asociados, estudio jurídico. Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Atención presencial y virtual."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="MCDV & Asociados" />
+    <meta name="language" content="es-AR" />
+    <meta name="theme-color" content="#0e1016" />
+    <meta name="format-detection" content="telephone=yes" />
+
+    <!-- NOTA: dominio provisorio, actualizar cuando esté confirmado -->
+    <link rel="canonical" href="https://mcdvasociados.com.ar/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content="MCDV & Asociados | Estudio Jurídico" />
+    <meta
+      property="og:description"
+      content="Asesoramiento y representación legal en Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Atención presencial y virtual."
+    />
+    <meta property="og:image" content="https://mcdvasociados.com.ar/img/hero_3.jpg" />
+    <meta property="og:image:width" content="1920" />
+    <meta property="og:image:height" content="2560" />
+    <meta property="og:image:alt" content="MCDV & Asociados, estudio jurídico" />
+    <meta property="og:url" content="https://mcdvasociados.com.ar/" />
+    <meta property="og:site_name" content="MCDV & Asociados" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MCDV & Asociados | Estudio Jurídico" />
+    <meta
+      name="twitter:description"
+      content="Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Atención presencial y virtual."
+    />
+    <meta name="twitter:image" content="https://mcdvasociados.com.ar/img/hero_3.jpg" />
+
+    <link rel="icon" href="img/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="img/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Forum&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260908c" />
+
+    <link rel="preload" as="image" href="img/hero_3.jpg" fetchpriority="high" />
+
+    <noscript>
+      <style>
+        .team-detail { grid-template-rows: 1fr !important; }
+        .team-panel { display: none !important; }
+        [data-reveal] { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
+
+    <!-- Datos estructurados: entidad legal + página -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "LegalService",
+            "@id": "https://mcdvasociados.com.ar/#studio",
+            "name": "MCDV & Asociados",
+            "image": "https://mcdvasociados.com.ar/img/hero_3.jpg",
+            "url": "https://mcdvasociados.com.ar/",
+            "sameAs": ["https://www.instagram.com/mcdv.asociados/"],
+            "areaServed": {
+              "@type": "Place",
+              "name": "Chubut, Argentina"
+            },
+            "priceRange": "$$",
+            "knowsAbout": [
+              "Derecho de Familia",
+              "Sucesiones",
+              "Derecho Laboral",
+              "Amparos de Salud",
+              "Derecho Civil"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://mcdvasociados.com.ar/#website",
+            "url": "https://mcdvasociados.com.ar/",
+            "name": "MCDV & Asociados",
+            "inLanguage": "es-AR",
+            "publisher": { "@id": "https://mcdvasociados.com.ar/#studio" }
+          }
+        ]
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  </head>
+
+  <body>
+    <!-- PRELOADER -->
+    <div class="preloader" data-preloader>
+      <div class="preloader-inner">
+        <span class="preloader-count" data-preloader-count>0</span>
+        <span class="preloader-word">MCDV &amp; Asociados</span>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header" data-header>
+      <div class="header-inner">
+        <a href="#home" class="header-brand" aria-label="MCDV & Asociados - Inicio">
+          <img src="img/logo-mcdv.png" alt="" width="272" height="284" />
+          <span>MCDV<em>&amp;</em>Asociados</span>
+        </a>
+
+        <div class="header-right">
+          <a href="#" id="waHeader" class="header-quick-contact" target="_blank" rel="noopener">
+            <img src="img/wsp.png" alt="" class="header-quick-icon" width="18" height="18" />
+            <span>Escribinos</span>
+          </a>
+
+          <span class="header-divider" aria-hidden="true"></span>
+
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            data-menu-toggle
+          >
+            <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+            <span class="menu-label">Menú</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MENU -->
+    <div class="menu-overlay" data-menu>
+      <button class="menu-close" type="button" aria-label="Cerrar menú" data-menu-close>
+        <span></span><span></span>
+      </button>
+
+      <nav class="menu-navigation" aria-label="Navegación principal">
+        <a href="#home" data-menu-link><em>01</em><span class="menu-link-text">Inicio</span></a>
+        <a href="#el-estudio" data-menu-link><em>02</em><span class="menu-link-text">El Estudio</span></a>
+        <a href="#areas" data-menu-link><em>03</em><span class="menu-link-text">Áreas de práctica</span></a>
+        <a href="#equipo" data-menu-link><em>04</em><span class="menu-link-text">Equipo</span></a>
+        <a href="#contact" data-menu-link><em>05</em><span class="menu-link-text">Contacto</span></a>
+      </nav>
+
+      <div class="menu-foot">
+        <div>
+          <span class="menu-small-label">Atención</span>
+          <span>Presencial y virtual</span>
+        </div>
+        <a href="https://www.instagram.com/mcdv.asociados/" target="_blank" rel="noopener">
+          <span class="menu-small-label">Instagram</span>
+          <span>@mcdv.asociados</span>
+        </a>
+      </div>
+    </div>
+
+    <main>
+      <!-- HERO "PORTAL" — dos paneles sólidos arrancan cerrados,
+        tapando la foto de fondo; al hacer scroll se abren hacia los
+        bordes revelándola, mientras el nombre partido en dos
+        ("MCDV" / "Asociados") crece, aprieta su tracking y viaja
+        hacia esos mismos bordes. Sticky (no pin de GSAP) sobre una
+        sección de 250vh — mismo patrón ya usado en el telón entre
+        Hero y Nosotros de rondas anteriores: más simple/robusto que
+        un pin real para un efecto que es puro scrub.
+
+        Fallback seguro (sin JS, o reduced-motion): los paneles y el
+        wordmark parten OCULTOS por CSS (paneles fuera de pantalla,
+        wordmark en opacity:0) — JS es quien los pone en su posición
+        "cerrada" recién si el efecto va a correr de verdad. Así, sin
+        JS, la foto y el contenido real del hero (escudo/título/CTA)
+        quedan visibles de entrada, como cualquier hero normal. -->
+      <section class="hero-portal" id="home" data-hero-portal>
+        <div class="hero-portal-stage">
+          <figure class="hero-portal-media" data-hero-portal-image>
+            <img
+              src="img/hero_facade.jpg"
+              alt="MCDV & Asociados, estudio jurídico"
+              width="1920"
+              height="2880"
+              fetchpriority="high"
+            />
+          </figure>
+
+          <div class="hero-portal-duotone" aria-hidden="true" data-hero-portal-duotone></div>
+          <div class="hero-portal-vignette" aria-hidden="true"></div>
+
+          <div class="hero-portal-panel hero-portal-panel--left" aria-hidden="true" data-hero-portal-panel="left"></div>
+          <div class="hero-portal-panel hero-portal-panel--right" aria-hidden="true" data-hero-portal-panel="right"></div>
+
+          <div class="hero-portal-seam" aria-hidden="true">
+            <span data-hero-portal-dot="a"></span>
+            <span data-hero-portal-dot="b"></span>
+          </div>
+
+          <div class="hero-portal-wordmark" aria-hidden="true" data-hero-portal-wordmark>
+            <span class="hero-portal-word hero-portal-word--left" data-hero-portal-word="left">MCDV</span>
+            <span class="hero-portal-word hero-portal-word--right" data-hero-portal-word="right">Asociados</span>
+          </div>
+
+          <span class="hero-portal-meta hero-portal-meta--tl" data-hero-portal-meta>Estudio Jurídico</span>
+          <span class="hero-portal-meta hero-portal-meta--br" data-hero-portal-meta>Scroll <span aria-hidden="true">↓</span></span>
+
+          <img
+            src="img/logo-mcdv-light.png"
+            alt=""
+            class="hero-portal-crest"
+            aria-hidden="true"
+            data-hero-portal-crest
+            width="272"
+            height="284"
+          />
+
+          <div class="hero-content" data-hero-portal-content>
+            <img
+              src="img/logo-mcdv-light.png"
+              alt="MCDV & Asociados"
+              class="hero-crest"
+              data-reveal
+              width="272"
+              height="284"
+            />
+
+            <span class="hero-eyebrow hero-eyebrow--center" data-reveal>Estudio Jurídico — Chubut</span>
+
+            <h1 class="hero-huge hero-huge--center" data-reveal>
+              Orientación <em>jurídica</em><br />
+              con cercanía real.
+            </h1>
+
+            <p class="hero-lead hero-lead--center" data-reveal>
+              Información, acompañamiento y representación legal para quienes
+              necesitan respuestas claras en cada etapa del proceso.
+            </p>
+
+            <div class="hero-actions hero-actions--center" data-reveal>
+              <a href="#contact" class="btn-outline btn-outline--light">
+                <span>Solicitar consulta</span>
+              </a>
+              <a href="#areas" class="hero-scroll-link">
+                5 áreas de práctica <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EL ESTUDIO -->
+      <section class="section manifesto hairline-top" id="el-estudio">
+        <div class="container manifesto-grid">
+          <div class="manifesto-copy">
+            <h2 class="manifesto-title" data-reveal>El Estudio</h2>
+            <span class="bronze-rule" data-reveal aria-hidden="true"></span>
+
+            <!-- Texto real, tomado tal cual del posteo de bienvenida de
+                 Instagram (@dradiazcarrizobelen) que compartió el
+                 usuario — no es lorem ipsum. Único cambio: "trabajó" →
+                 "trabajamos" (typo evidente del posteo original). -->
+            <p data-reveal>
+              Este espacio nace con el objetivo de brindar información,
+              orientación y acompañamiento jurídico a quienes necesitan
+              respuestas claras y asesoramiento profesional.
+            </p>
+
+            <p data-reveal>
+              Sabemos que detrás de cada consulta hay una situación
+              personal importante. Por eso, trabajamos con compromiso,
+              cercanía y responsabilidad para acompañarte en cada etapa
+              del proceso.
+            </p>
+
+            <!-- A partir de acá, contenido de relleno (lorem ipsum) para
+                 dar más cuerpo a la sección hasta contar con más texto
+                 real del estudio. -->
+            <p data-reveal>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+
+            <p data-reveal>
+              Duis aute irure dolor in reprehenderit in voluptate velit
+              esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+              occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.
+            </p>
+
+            <a href="#contact" class="btn-outline" data-reveal>
+              <span>Solicitar consulta</span>
+            </a>
+          </div>
+
+          <div class="manifesto-side" data-reveal>
+            <!-- Placeholder a propósito: ninguna foto de stock
+                 representa bien "el estudio" real — queda marcado así
+                 hasta tener una foto propia (de la oficina, el equipo,
+                 etc.) para reemplazar. -->
+            <div class="manifesto-photo manifesto-photo-placeholder">
+              <span>Imagen del<br />estudio</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ÁREAS DE PRÁCTICA — sección fijada (pin real, no sticky):
+           mientras dura el ciclo de las 5 tarjetas, la página NO
+           scrollea — lo que se mueve son el texto y la imagen de
+           fondo, que van cambiando juntos de un área a la siguiente
+           en el mismo lugar (cada área usa la misma foto que después
+           se ve en su página de detalle, para que quede consistente).
+           Recién cuando termina la última (Derecho Civil) se libera
+           el pin y el scroll de la página sigue normal. Sin
+           JS/reduced-motion es una lista vertical simple sobre fondo
+           grafito liso, sin fotos ni pin — JS agrega la clase
+           "is-stacked" solo cuando el efecto va a correr de verdad
+           (ver script.js). En ese modo cada área es una "solapa"
+           opaca (foto propia + degradé, sin transparencia) que sube
+           desde abajo y tapa por completo a la anterior, a pantalla
+           completa (sin márgenes laterales) — nunca se ven dos a la
+           vez ni se cruzan los textos. El encabezado vive aparte
+           (.areas-pin-head), superpuesto arriba, y se desvanece apenas
+           arranca la primera solapa para que el área ocupe todo el
+           espacio. Cada foto es la misma que después usa la página de
+           detalle de esa área (data-bg; JS la aplica como
+           background-image solo en modo pin, así el fallback nunca
+           carga fotos de más). -->
+      <section class="areas-pin hairline-top" id="areas" data-areas-pin>
+        <div class="container areas-pin-head" data-areas-pin-head>
+          <div class="areas-head-centered" data-reveal>
+            <h2>Áreas de práctica</h2>
+            <span class="areas-underline" aria-hidden="true"></span>
+            <p>
+              Asesoramiento y representación legal adaptados a cada
+              situación, con atención presencial y virtual.
+            </p>
+          </div>
+        </div>
+
+        <div class="areas-pin-stack container">
+          <article class="areas-pin-panel" data-bg="img/hero_1.jpg">
+            <span class="areas-pin-number">01</span>
+            <span class="areas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 11.5 12 4l9 7.5" />
+                <path d="M5.5 10v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9" />
+                <path d="M9.5 20v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5" />
+              </svg>
+            </span>
+            <h3>Derecho de Familia</h3>
+            <p>
+              Alimentos, Divorcios, Cuidado Personal, Régimen de
+              Comunicación, Violencia Familiar y de Género,
+              Mediaciones.
+            </p>
+            <a href="areas/derecho-de-familia.html" class="area-card-link">Ver más ↗</a>
+          </article>
+
+          <article class="areas-pin-panel" data-bg="img/parallax_1.jpg">
+            <span class="areas-pin-number">02</span>
+            <span class="areas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+                <path d="M14 3v4h4" />
+                <path d="M9 12h6M9 15.5h6M9 8.5h2" />
+              </svg>
+            </span>
+            <h3>Sucesiones</h3>
+            <p>
+              Declaratorias, Particiones, Inscripción de Bienes,
+              Acuerdos Particionarios.
+            </p>
+            <a href="areas/sucesiones.html" class="area-card-link">Ver más ↗</a>
+          </article>
+
+          <article class="areas-pin-panel" data-bg="img/parallax_2.jpg">
+            <span class="areas-pin-number">03</span>
+            <span class="areas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="8" width="18" height="11" rx="1.5" />
+                <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <path d="M3 13h18" />
+                <path d="M10.5 13v1.5h3V13" />
+              </svg>
+            </span>
+            <h3>Derecho Laboral</h3>
+            <p>
+              ART, Despidos, Violencia Laboral, Conciliaciones,
+              Audiencias SRT.
+            </p>
+            <a href="areas/derecho-laboral.html" class="area-card-link">Ver más ↗</a>
+          </article>
+
+          <article class="areas-pin-panel" data-bg="img/hero_2.jpg">
+            <span class="areas-pin-number">04</span>
+            <span class="areas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3 3 7v5c0 5 3.8 8.4 9 9 5.2-.6 9-4 9-9V7l-9-4Z" />
+                <path d="M12 8.5v7M8.5 12h7" />
+              </svg>
+            </span>
+            <h3>Amparos de Salud</h3>
+            <p>Obras Sociales, Prepagas, Medicamentos, Tratamientos.</p>
+            <a href="areas/amparos-de-salud.html" class="area-card-link">Ver más ↗</a>
+          </article>
+
+          <article class="areas-pin-panel" data-bg="img/hero_3.jpg">
+            <span class="areas-pin-number">05</span>
+            <span class="areas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v18M8 21h8" />
+                <path d="M4 7h6M14 7h6" />
+                <path d="M4 7 2 12a2.5 2.5 0 0 0 5 0Z" />
+                <path d="M20 7l-2 5a2.5 2.5 0 0 0 5 0Z" />
+              </svg>
+            </span>
+            <h3>Derecho Civil</h3>
+            <p>
+              Daños y Perjuicios, Desalojos, Ejecuciones
+              Contractuales.
+            </p>
+            <a href="areas/derecho-civil.html" class="area-card-link">Ver más ↗</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- EQUIPO — lista + panel cuadrado, justo después de Áreas.
+        Solo Pablo tiene foto real (reusada de su propio sitio); el resto
+        queda con el espacio marcado como "Foto de perfil" hasta que el
+        estudio mande las fotos. -->
+      <section class="section team hairline-top" id="equipo">
+        <div class="container">
+          <div class="areas-head">
+            <div class="manifesto-index" data-reveal>
+              <span class="manifesto-index-label">Equipo</span>
+            </div>
+
+            <p data-reveal>
+              Un equipo interdisciplinario de profesionales, cada uno con
+              su propia área de dedicación dentro del estudio.
+            </p>
+          </div>
+
+          <!-- Grid simple: fotos grandes, todo visible siempre, sin
+               hover que revele nada ni JS de carrusel — en la línea de
+               cómo Setia Law (setialaw.com/team) presenta a su equipo
+               en la vida real: lista clara, sin efectos. -->
+          <div class="team-grid">
+            <article class="team-card" data-reveal>
+              <div class="team-card-photo team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <h3>Maria Belen Diaz Carrizo</h3>
+              <span class="team-role">Abogada</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </article>
+
+            <article class="team-card" data-reveal>
+              <div class="team-card-photo team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <h3>Fiorella Albertoli</h3>
+              <span class="team-role">Abogada</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </article>
+
+            <article class="team-card" data-reveal>
+              <div class="team-card-photo team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <h3>Danilo Sepulveda</h3>
+              <span class="team-role">Abogado</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </article>
+
+            <article class="team-card" data-reveal>
+              <div class="team-card-photo team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <h3>Victoria Garcia Vilches</h3>
+              <span class="team-role">Abogada</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </article>
+
+            <article class="team-card" data-reveal>
+              <div class="team-card-photo team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <h3>Manuel Alfredo Magri</h3>
+              <span class="team-role">Abogado</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+            </article>
+
+            <article class="team-card" data-reveal>
+              <div class="team-card-photo photo-duo">
+                <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
+              </div>
+              <h3>Pablo Luis Crespo</h3>
+              <span class="team-role">Abogado</span>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+              <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
+                Ver perfil completo ↗
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATEMENT -->
+      <section class="statement hairline-top">
+        <div class="container statement-inner">
+          <h2 data-reveal>
+            Lorem ipsum <em>dolor sit amet</em> consectetur adipiscing
+            elit.
+          </h2>
+
+          <p data-reveal>
+            Sed do eiusmod tempor incididunt ut labore et dolore magna
+            aliqua, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip.
+          </p>
+        </div>
+      </section>
+
+      <!-- CONTACTO -->
+      <section class="contact hairline-top" id="contact">
+        <div class="container">
+          <div class="areas-head">
+            <div class="manifesto-index manifesto-index--light" data-reveal>
+              <span class="manifesto-index-label">Contacto</span>
+            </div>
+          </div>
+
+          <a href="#" id="waContact" class="contact-mega" target="_blank" rel="noopener" data-reveal>
+            Hablemos por WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+
+          <p class="contact-note" data-reveal>
+            No todos los conflictos requieren la misma respuesta. Escribinos
+            o completá el formulario y coordinamos una entrevista
+            presencial o virtual. Atención confidencial · Consultas
+            urgentes.
+          </p>
+
+          <a
+            href="https://www.instagram.com/mcdv.asociados/"
+            target="_blank"
+            rel="noopener"
+            class="contact-instagram"
+            data-reveal
+          >
+            @mcdv.asociados
+          </a>
+
+          <form class="contact-form" id="contactForm" data-reveal>
+            <div class="field-row">
+              <label>
+                <span>Nombre</span>
+                <input type="text" id="nombre" name="name" placeholder="Tu nombre" required />
+              </label>
+              <label>
+                <span>Email</span>
+                <input type="email" id="email" name="email" placeholder="tuemail@email.com" />
+              </label>
+            </div>
+
+            <label>
+              <span>Teléfono (opcional)</span>
+              <input type="tel" id="telefono" name="phone" placeholder="Tu teléfono" />
+            </label>
+
+            <label>
+              <span>Mensaje</span>
+              <textarea id="mensaje" name="message" placeholder="Contanos brevemente tu situación" required></textarea>
+            </label>
+
+            <button type="submit" class="btn-outline btn-outline--light">
+              <span>Enviar consulta</span>
+            </button>
+
+            <div class="form-confirm" id="formConfirm" aria-live="polite">
+              Tu consulta fue preparada para enviarse por WhatsApp.
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer hairline-top">
+      <div class="footer-band photo-duo" aria-hidden="true">
+        <img src="img/hero_1.jpg" alt="" loading="lazy" />
+        <div class="footer-band-overlay">
+          <span class="footer-band-word">MCDV &amp; Asociados</span>
+          <span class="footer-band-sub">Estudio Jurídico</span>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <span>Chubut, Argentina (dirección a confirmar)</span>
+
+        <a
+          href="https://www.instagram.com/mcdv.asociados/"
+          target="_blank"
+          rel="noopener"
+          class="footer-instagram"
+          aria-label="Instagram de MCDV & Asociados"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none" />
+          </svg>
+          <span>@mcdv.asociados</span>
+        </a>
+
+        <span class="footer-studio">
+          Desarrollo y Diseño Web por
+          <a
+            href="https://wa.me/5492804713889?text=Hola%20Juli%C3%A1n%2C%20me%20interesa%20discutir%20un%20proyecto%20web."
+            target="_blank"
+            rel="noopener"
+          >
+            Julián Luchelli Fassa
+          </a>
+        </span>
+      </div>
+    </footer>
+
+    <!-- WHATSAPP FLOTANTE -->
+    <a href="#" id="waFloat" class="wa-float" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+      <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
+    </a>
+
+    <script src="./script.js?v=20260908c" defer></script>
+  </body>
+</html>
