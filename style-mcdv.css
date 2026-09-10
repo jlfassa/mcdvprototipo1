@@ -1277,6 +1277,30 @@ section[id],
     opacity: 1;
   }
 
+  /* Mismo detalle de esquinas que .team-expand-card — acá con
+     ::after porque ::before ya lo usa la foto de fondo. Solo
+     aparece junto con el hover/foco, reforzando el estado activo. */
+  .areas-index-row::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--bronze-light);
+    border-left: none;
+    border-bottom: none;
+    opacity: 0;
+    transition: opacity 0.35s var(--ease);
+    pointer-events: none;
+  }
+
+  .areas-index-row:hover::after,
+  .areas-index-row:focus-visible::after {
+    opacity: 1;
+  }
+
   .areas-index-row:hover h3,
   .areas-index-row:focus-visible h3 {
     color: var(--bronze-light);
@@ -1473,6 +1497,35 @@ section[id],
   overflow: hidden;
   aspect-ratio: 4 / 5;
   background: var(--graphite-900);
+}
+
+/* Detalle: esquinas tipo "marca de registro" (tarjeta de museo/plano
+   de arquitecto) en dos de las cuatro esquinas — sutil, no un marco
+   completo. Prueba puntual en Equipo + Áreas de práctica antes de
+   extenderlo al resto del sitio. */
+.team-expand-card::before,
+.team-expand-card::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  border-color: var(--bronze-light);
+  border-style: solid;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.team-expand-card::before {
+  top: 10px;
+  left: 10px;
+  border-width: 1.5px 0 0 1.5px;
+}
+
+.team-expand-card::after {
+  bottom: 10px;
+  right: 10px;
+  border-width: 0 1.5px 1.5px 0;
 }
 
 .team-expand-media {
