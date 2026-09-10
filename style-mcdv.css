@@ -162,7 +162,6 @@ textarea:focus-visible {
 .footer-instagram,
 .area-card-link,
 .team-link,
-.hero-scroll-link,
 .area-page-back,
 .contact-instagram {
   position: relative;
@@ -173,7 +172,6 @@ textarea:focus-visible {
 .footer-instagram::after,
 .area-card-link::after,
 .team-link::after,
-.hero-scroll-link::after,
 .area-page-back::after,
 .contact-instagram::after {
   content: "";
@@ -879,19 +877,6 @@ section[id],
   justify-content: center;
 }
 
-.hero-scroll-link {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--gray);
-  border-bottom: 1px solid rgba(23, 24, 26, 0.25);
-  padding-bottom: 3px;
-}
-
-.hero-scroll-link:hover {
-  border-color: var(--bronze);
-  color: var(--bronze-dark);
-}
-
 /* =========================================================
    ÍNDICE DE SECCIÓN (numeración editorial)
 ========================================================= */
@@ -925,17 +910,52 @@ section[id],
 
 .manifesto {
   background: var(--paper-light);
+  padding-bottom: 130px;
 }
 
-.manifesto-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 60px;
-  align-items: stretch;
+/* Banner "portada" (~820:320, como una foto de portada de Facebook):
+   flush contra el borde superior de la sección (por eso .manifesto
+   no usa la clase .section, que pondría padding arriba también). El
+   min-height es lo que manda en mobile (aspect-ratio daría un banner
+   demasiado bajo/apretado para el título ahí), el max-height evita
+   que se vuelva gigante en monitores muy anchos. */
+.manifesto-banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 820 / 320;
+  min-height: 260px;
+  max-height: 420px;
+  overflow: hidden;
+}
+
+.manifesto-banner-media {
+  position: absolute;
+  inset: 0;
+}
+
+.manifesto-banner-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 16, 22, 0.1) 0%, rgba(14, 16, 22, 0.6) 100%);
+  pointer-events: none;
+}
+
+.manifesto-banner-content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .manifesto-copy {
-  max-width: 640px;
+  max-width: 720px;
+  margin-inline: auto;
+  padding-top: 70px;
 }
 
 .manifesto-title {
@@ -945,12 +965,20 @@ section[id],
   color: var(--graphite-900);
 }
 
+.manifesto-title--on-banner {
+  color: var(--paper);
+}
+
 .bronze-rule {
   display: block;
   width: 60px;
   height: 2px;
   margin: 22px 0 30px;
   background: var(--bronze);
+}
+
+.bronze-rule--center {
+  margin-inline: auto;
 }
 
 .manifesto-lead {
@@ -978,29 +1006,8 @@ section[id],
   margin-top: 12px;
 }
 
-.manifesto-side {
-  display: flex;
-  height: 100%;
-}
-
-.manifesto-photo {
-  position: relative;
-  flex: 1;
-  min-height: 420px;
-}
-
-/* La altura de esta columna depende del contenido de texto de al
-   lado (grid con align-items: stretch) y ese alto no se conoce de
-   antemano, así que un <img> con height:100% normal (heredado de
-   .photo-duo) no tendría de qué "colgar" — igual aplica acá para
-   el día que se reemplace el placeholder por una foto real. */
-.manifesto-photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
+/* Reusado por .manifesto-banner-media (banner de "El Estudio") y en
+   su día por cualquier otro placeholder de foto del sitio. */
 .manifesto-photo-placeholder {
   display: grid;
   place-items: center;
@@ -1829,10 +1836,6 @@ section[id],
 ========================================================= */
 
 @media (max-width: 1100px) {
-  .manifesto-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .team-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1894,12 +1897,12 @@ section[id],
     padding: 100px 0 90px;
   }
 
-  .manifesto-grid {
-    grid-template-columns: 1fr;
+  .manifesto {
+    padding-bottom: 90px;
   }
 
-  .manifesto-side {
-    flex-direction: column;
+  .manifesto-copy {
+    padding-top: 50px;
   }
 
   .field-row {
