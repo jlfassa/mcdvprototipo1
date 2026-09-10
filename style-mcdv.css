@@ -1476,7 +1476,7 @@ section[id],
   .team-expand-card {
     flex: 1;
     aspect-ratio: auto;
-    height: 170px;
+    height: 230px;
     cursor: pointer;
     transition: height 0.5s var(--ease);
   }
