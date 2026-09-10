@@ -315,8 +315,39 @@ section[id],
   padding: 13px 0;
 }
 
-.menu-toggle {
+/* Navbar de áreas: reemplaza al botón de menú en desktop (≥1101px,
+   ver el override en "RESPONSIVE — 1100px" más abajo, que invierte
+   ambos display). Debajo de ese ancho vuelve a ser el botón de menú
+   de siempre — a esa resolución 5 links de área ya no entran
+   cómodos en una sola línea. */
+.header-areas-nav {
   display: flex;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 28px);
+}
+
+.header-areas-nav a {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: var(--gray-light);
+  transition: color 0.25s ease;
+}
+
+.header-areas-nav a:hover,
+.header-areas-nav a:focus-visible {
+  color: var(--bronze-light);
+}
+
+.header-areas-nav a[aria-current="page"] {
+  color: var(--bronze);
+}
+
+.menu-toggle {
+  display: none;
   align-items: center;
   gap: 11px;
 
@@ -1866,6 +1897,15 @@ section[id],
     text-align: left;
   }
 
+  /* Debajo de 1100px las 5 áreas ya no entran cómodas en una línea:
+     se invierte lo de arriba, vuelve el botón de menú de siempre. */
+  .header-areas-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
 }
 
 /* =========================================================

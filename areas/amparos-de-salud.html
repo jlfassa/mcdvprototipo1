@@ -41,7 +41,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="../style-mcdv.css?v=20260910c" />
+    <link rel="stylesheet" href="../style-mcdv.css?v=20260910d" />
 
     <script type="application/ld+json">
       {
@@ -68,10 +68,19 @@
     </div>
 
     <!-- HEADER — sin logo a propósito (el nombre del estudio ya es el
-         h1 del hero en index.html); el header queda solo con el
-         botón de menú. -->
+         h1 del hero en index.html). En desktop (≥1101px) muestra
+         directo las 5 áreas de práctica en vez del botón de menú;
+         debajo de 1100px se invierte (ver style-mcdv.css). -->
     <header class="header" data-header>
       <div class="header-inner">
+        <nav class="header-areas-nav" aria-label="Áreas de práctica">
+          <a href="derecho-de-familia.html">Derecho de Familia</a>
+          <a href="sucesiones.html">Sucesiones</a>
+          <a href="derecho-laboral.html">Derecho Laboral</a>
+          <a href="amparos-de-salud.html" aria-current="page">Amparos de Salud</a>
+          <a href="derecho-civil.html">Derecho Civil</a>
+        </nav>
+
         <button
           class="menu-toggle"
           type="button"
@@ -241,6 +250,6 @@
       <img src="../img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="../script.js?v=20260910c" defer></script>
+    <script src="../script.js?v=20260910d" defer></script>
   </body>
 </html>

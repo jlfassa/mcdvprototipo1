@@ -63,7 +63,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910c" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910d" />
 
     <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
          antes precargaba hero_3.jpg, que ya no es la foto del hero
@@ -131,9 +131,23 @@
     </div>
 
     <!-- HEADER — sin logo a propósito (el nombre del estudio ya es el
-         h1 del hero); el header queda solo con el botón de menú. -->
+         h1 del hero). En desktop (≥1101px) muestra directo las 5
+         áreas de práctica en vez del botón de menú; a partir de
+         1100px (ver style-mcdv.css) se invierte: aparece el botón de
+         menú y esta lista se oculta — mismo umbral que ya usa el
+         resto del sitio para "angosto". El resto de las secciones
+         (Inicio/El Estudio/Equipo/Contacto) siguen alcanzables
+         scrolleando la página o, en mobile, desde el menú overlay. -->
     <header class="header" data-header>
       <div class="header-inner">
+        <nav class="header-areas-nav" aria-label="Áreas de práctica">
+          <a href="areas/derecho-de-familia.html">Derecho de Familia</a>
+          <a href="areas/sucesiones.html">Sucesiones</a>
+          <a href="areas/derecho-laboral.html">Derecho Laboral</a>
+          <a href="areas/amparos-de-salud.html">Amparos de Salud</a>
+          <a href="areas/derecho-civil.html">Derecho Civil</a>
+        </nav>
+
         <button
           class="menu-toggle"
           type="button"
@@ -694,6 +708,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910c" defer></script>
+    <script src="./script.js?v=20260910d" defer></script>
   </body>
 </html>
