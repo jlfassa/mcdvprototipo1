@@ -63,7 +63,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910g" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910j" />
 
     <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
          antes precargaba hero_3.jpg, que ya no es la foto del hero
@@ -304,34 +304,24 @@
         </div>
       </section>
 
-      <!-- EL ESTUDIO -->
+      <!-- EL ESTUDIO — antes tenía un banner de "portada" propio (foto
+           + título superpuesto, ~260-420px de alto) separado del
+           texto; a pedido explícito se sacó por ocupar espacio de más
+           "al pedo" con el título solo — ahora es un encabezado chico
+           (mismo lenguaje que .areas-head-centered/.team-head-centered,
+           coherencia entre secciones) directamente arriba del texto,
+           todo junto y compacto. La foto/placeholder también se sacó
+           (era solo un gradiente sin foto real todavía); cuando haya
+           una foto real del estudio, puede volver como elemento chico
+           dentro de .manifesto-copy en vez de banner de pantalla
+           completa. -->
       <section class="manifesto hairline-top" id="el-estudio">
-        <!-- Banner tipo "portada" (proporción ~820:320, como una foto
-             de portada de Facebook), foto de fondo opacada con el
-             título superpuesto — a pedido explícito, en vez de la
-             fotito chica al costado del texto que había antes.
-             Placeholder por ahora: la clienta va a pedir la foto real
-             del estudio/oficina a los abogados; mismo lenguaje visual
-             que el resto de los placeholders del sitio ("Foto de
-             perfil", "Imagen del estudio"), lista para reemplazar
-             (solo hay que cambiar .manifesto-banner-media por un
-             <img>/<picture> real, el scrim y el texto ya están
-             armados para funcionar encima de una foto). -->
-        <div class="manifesto-banner">
-          <!-- Sin texto "Imagen del estudio" adentro a propósito: se
-               superponía con el título de acá abajo (los dos se
-               centran en el mismo punto del banner) — el gradiente
-               liso ya se lee como placeholder por su cuenta; el
-               comentario de arriba explica qué reemplazar. -->
-          <div class="manifesto-banner-media manifesto-photo-placeholder"></div>
-          <div class="manifesto-banner-scrim" aria-hidden="true"></div>
-          <div class="manifesto-banner-content">
-            <h2 class="manifesto-title manifesto-title--on-banner" data-reveal>El Estudio</h2>
-            <span class="bronze-rule bronze-rule--center" data-reveal aria-hidden="true"></span>
-          </div>
-        </div>
-
         <div class="container manifesto-copy">
+          <div class="manifesto-head-centered" data-reveal>
+            <h2>El Estudio</h2>
+            <span class="manifesto-underline" aria-hidden="true"></span>
+          </div>
+
           <!-- Texto real, tomado tal cual del posteo de bienvenida de
                Instagram (@dradiazcarrizobelen) que compartió el
                usuario — no es lorem ipsum. Único cambio: "trabajó" →
@@ -766,6 +756,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910g" defer></script>
+    <script src="./script.js?v=20260910j" defer></script>
   </body>
 </html>
