@@ -2,8 +2,3 @@
 Thumbs.db
 *.log
 __pycache__/
-
-# instaladores/descargas que no son del proyecto
-*.exe
-*.msi
-*.zip

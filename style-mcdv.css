@@ -35,7 +35,7 @@
 
   --green: #2f8b57;
 
-  --font-display: "Cormorant Garamond", serif;
+  --font-display: "Forum", serif;
   --font-body: "DM Sans", sans-serif;
 
   --container: 1280px;
@@ -593,7 +593,7 @@ section[id],
   position: relative;
   height: 100svh;
 
-  background: var(--paper);
+  background: var(--graphite-950);
 }
 
 .hero-portal.is-portal-active {
@@ -638,20 +638,20 @@ section[id],
   inset: 0;
   z-index: 1;
 
-  background: linear-gradient(135deg, var(--bronze-light) 0%, var(--paper) 75%);
-  mix-blend-mode: multiply;
+  background: linear-gradient(135deg, var(--bronze) 0%, var(--graphite-950) 75%);
+  mix-blend-mode: overlay;
   opacity: 0;
   pointer-events: none;
 }
 
-/* Viñeta radial fija (no anima, no depende de JS): funde los bordes
-   hacia el papel para que el grabado se integre con el fondo claro. */
+/* Viñeta radial fija (no anima, no depende de JS): oscurece bordes,
+   deja el centro más claro para que se note la foto. */
 .hero-portal-vignette {
   position: absolute;
   inset: 0;
   z-index: 2;
 
-  background: radial-gradient(ellipse at center, rgba(247, 246, 244, 0) 45%, rgba(247, 246, 244, 0.75) 100%);
+  background: radial-gradient(ellipse at center, rgba(14, 16, 22, 0) 38%, rgba(14, 16, 22, 0.72) 100%);
   pointer-events: none;
 }
 
@@ -674,22 +674,15 @@ section[id],
 
   display: none;
   width: 52%;
-  background: var(--paper-light);
+  background: var(--graphite-950);
 }
 
-/* Sobre fondo claro, dos paneles claros abriéndose no se distinguen:
-   el filo bronce + la sombra hacia el centro son los que hacen legible
-   el gesto de "puertas que se separan". */
 .hero-portal-panel--left {
   left: 0;
-  border-right: 1px solid var(--bronze);
-  box-shadow: 10px 0 30px rgba(14, 16, 22, 0.12);
 }
 
 .hero-portal-panel--right {
   right: 0;
-  border-left: 1px solid var(--bronze);
-  box-shadow: -10px 0 30px rgba(14, 16, 22, 0.12);
 }
 
 /* Nombre apilado (MCDV / & / Asociados), oculto por defecto
@@ -712,10 +705,10 @@ section[id],
 
 .hero-portal-word {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   font-size: 2.6rem;
   letter-spacing: 0.35em;
-  color: var(--graphite-950);
+  color: var(--paper);
   text-transform: uppercase;
   opacity: 0;
   white-space: nowrap;
@@ -724,7 +717,7 @@ section[id],
 .hero-portal-word--amp {
   font-style: italic;
   text-transform: none;
-  color: var(--bronze-dark);
+  color: var(--bronze-light);
 }
 
 /* Metadata de esquina — decorativo, da un aire editorial/de portada.
@@ -739,7 +732,7 @@ section[id],
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(14, 16, 22, 0.5);
+  color: rgba(247, 246, 244, 0.55);
   opacity: 0;
 }
 
@@ -769,10 +762,10 @@ section[id],
 
   background: linear-gradient(
     to bottom,
-    rgba(247, 246, 244, 0.72) 0%,
-    rgba(247, 246, 244, 0.32) 42%,
-    rgba(247, 246, 244, 0.38) 65%,
-    rgba(247, 246, 244, 0.8) 100%
+    rgba(14, 16, 22, 0.78) 0%,
+    rgba(14, 16, 22, 0.5) 42%,
+    rgba(14, 16, 22, 0.45) 65%,
+    rgba(14, 16, 22, 0.85) 100%
   );
   pointer-events: none;
 }
@@ -814,6 +807,8 @@ section[id],
   width: clamp(78px, 8vw, 108px);
   height: auto;
   margin-bottom: 30px;
+
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
 }
 
 .hero-eyebrow {
@@ -823,7 +818,7 @@ section[id],
   border-left: 3px solid var(--bronze);
   padding-left: 16px;
 
-  color: var(--bronze-dark);
+  color: var(--bronze-light);
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -846,9 +841,9 @@ section[id],
   font-family: var(--font-display);
   font-weight: 400;
   font-size: clamp(4.6rem, 6.4vw, 8.4rem);
-  line-height: 0.98;
+  line-height: 0.96;
   letter-spacing: -0.01em;
-  color: var(--graphite-950);
+  color: var(--paper);
   max-width: 780px;
 }
 
@@ -872,14 +867,14 @@ section[id],
 
 .hero-huge em {
   font-style: italic;
-  color: var(--bronze-dark);
+  color: var(--bronze-light);
 }
 
 .hero-lead {
   max-width: 480px;
   margin-top: 34px;
 
-  color: var(--gray);
+  color: var(--gray-light);
   font-size: 1.75rem;
   line-height: 1.65;
 }
@@ -904,14 +899,14 @@ section[id],
 .hero-scroll-link {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--gray);
-  border-bottom: 1px solid rgba(14, 16, 22, 0.28);
+  color: var(--gray-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   padding-bottom: 3px;
 }
 
 .hero-scroll-link:hover {
   border-color: var(--bronze);
-  color: var(--bronze-dark);
+  color: var(--bronze-light);
 }
 
 /* =========================================================
