@@ -28,12 +28,16 @@
       property="og:description"
       content="Asesoramiento y representación legal en Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Atención presencial y virtual."
     />
-    <!-- hero_facade.jpg, no hero_3.jpg: es la foto real del hero desde
-         el rediseño "portal" — antes apuntaba a una imagen que ya no
-         se muestra en la página. -->
+    <!-- hero_facade.jpg: foto real del hero portal. Cambiada a pedido
+         explícito por una inscripción romana grabada en piedra (altar/
+         cippus), de Unsplash (licencia libre, uso comercial sin
+         atribución obligatoria) — foto de Imrane Alferd,
+         unsplash.com/photos/-14imrane-b99f706f384b. Mismo nombre de
+         archivo que la anterior para no tener que actualizar todas
+         las referencias (og:image, preload, JSON-LD, <picture>). -->
     <meta property="og:image" content="https://mcdvasociados.com.ar/img/hero_facade.jpg" />
-    <meta property="og:image:width" content="1920" />
-    <meta property="og:image:height" content="2880" />
+    <meta property="og:image:width" content="1800" />
+    <meta property="og:image:height" content="2250" />
     <meta property="og:image:alt" content="MCDV & Asociados, estudio jurídico" />
     <meta property="og:url" content="https://mcdvasociados.com.ar/" />
     <meta property="og:site_name" content="MCDV & Asociados" />
@@ -63,12 +67,10 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910k" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910l" />
 
-    <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
-         antes precargaba hero_3.jpg, que ya no es la foto del hero
-         desde el rediseño "portal", así que se descargaba de más y se
-         retrasaba la imagen que sí hace falta para el LCP). -->
+    <!-- Precarga la imagen real del hero, en WebP (665KB; el jpg de
+         fallback pesa 918KB) — es la que hace falta para el LCP. -->
     <link rel="preload" as="image" href="img/hero_facade.webp" type="image/webp" fetchpriority="high" />
 
     <noscript>
@@ -236,8 +238,8 @@
               <img
                 src="img/hero_facade.jpg"
                 alt="MCDV & Asociados, estudio jurídico"
-                width="1920"
-                height="2880"
+                width="1800"
+                height="2250"
                 fetchpriority="high"
               />
             </picture>
@@ -764,6 +766,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910k" defer></script>
+    <script src="./script.js?v=20260910l" defer></script>
   </body>
 </html>
