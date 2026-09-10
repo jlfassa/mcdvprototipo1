@@ -269,54 +269,82 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
   }
 
-  // Áreas de práctica: la sección queda FIJA en pantalla (pin real,
-  // la página no baja) mientras cada área es una "solapa" (tarjeta +
-  // descripción, ya no foto a pantalla completa — se sacó a pedido
-  // explícito) que sube desde abajo y tapa por completo a la
-  // anterior dentro de un cuadro chico y centrado — sin opacity,
-  // nunca se ven ni se cruzan dos a la vez. La primera (Derecho de
-  // Familia) ya se ve completa apenas engancha el pin. Recién al
-  // terminar la última (Derecho Civil) se libera el pin y el scroll
-  // normal continúa. Solo en desktop/tablet ancho: en pantallas
-  // angostas el pin de scroll se siente raro con teclados táctiles,
-  // así que ahí se usa el fallback seguro (lista simple sobre fondo
-  // grafito liso, ver valores por defecto en el CSS).
-  const areasPin = document.querySelector("[data-areas-pin]");
-  const areasPinPanels = document.querySelectorAll(".areas-pin-panel");
+  // Áreas de práctica: lista editorial (índice numerado). El nombre
+  // de cada área y su descripción ya están siempre visibles por CSS
+  // en cualquier dispositivo — lo único que agrega JS es una foto
+  // flotante puramente decorativa que sigue al cursor al pasar (o
+  // enfocar con teclado) una fila, y solo en desktop con mouse real
+  // ("hover: hover" + "pointer: fine", no un ancho fijo: una tablet
+  // grande con mouse Bluetooth pero pantalla táctil no debería
+  // quedar en un estado intermedio raro). Sin ese soporte, este
+  // bloque entero no corre y la lista sigue siendo 100% usable tal
+  // cual está en el HTML.
+  const areasIndexList = document.querySelector("[data-areas-index-list]");
+  const areasIndexRows = document.querySelectorAll("[data-areas-index-row]");
+  const areasIndexPhoto = document.querySelector("[data-areas-index-photo]");
+  const areasIndexPhotoImg = document.querySelector("[data-areas-index-photo-img]");
 
-  if (areasPin && areasPinPanels.length && window.matchMedia("(min-width: 900px)").matches) {
-    areasPin.classList.add("is-stacked");
+  if (
+    areasIndexList &&
+    areasIndexRows.length &&
+    areasIndexPhoto &&
+    areasIndexPhotoImg &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches
+  ) {
+    let currentPhotoSrc = "";
+    const railMargin = 24; // separación de la foto respecto al borde derecho
 
-    // Todas arrancan ocultas debajo (yPercent 100) salvo la primera,
-    // que arranca ya puesta (yPercent 0) — se ve completa desde el
-    // instante en que engancha el pin. Importante inicializarlas por
-    // JS y no por CSS: GSAP 3.13 escribe yPercent en la propiedad CSS
-    // moderna "translate", que se compone con un "transform" puesto
-    // por stylesheet en vez de reemplazarlo — si el estado inicial
-    // viniera del CSS, GSAP nunca se entera y las solapas quedan
-    // trabadas sin animar.
-    gsap.set(areasPinPanels, { yPercent: 100 });
-    gsap.set(areasPinPanels[0], { yPercent: 0 });
-
-    // Un paso de scroll por cada transición entre áreas (4 pasos
-    // para 5 áreas: la primera ya está puesta, no cuenta paso propio).
-    const stepDistance = 500; // px de scroll por paso
-    const totalDistance = stepDistance * (areasPinPanels.length - 1);
-
-    const pinTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: areasPin,
-        start: "top top",
-        end: "+=" + totalDistance,
-        scrub: 0.6,
-        pin: true,
-        anticipatePin: 1
+    const setPhotoSrc = row => {
+      const src = row.getAttribute("data-photo");
+      if (src && src !== currentPhotoSrc) {
+        areasIndexPhotoImg.src = src;
+        currentPhotoSrc = src;
       }
+    };
+
+    // La foto vive en un "riel" pegado al borde derecho (x prácticamente
+    // fijo) y solo la coordenada Y sigue al cursor/fila — a propósito NO
+    // sigue también la X: centrada sobre el cursor tapaba el título que
+    // se supone que ilustra (confirmado con captura de pantalla).
+    const positionPhoto = y => {
+      const listRect = areasIndexList.getBoundingClientRect();
+      const photoRect = areasIndexPhoto.getBoundingClientRect();
+      const halfW = photoRect.width / 2;
+      const halfH = photoRect.height / 2;
+      const x = listRect.width - halfW - railMargin;
+      const clampedY = Math.min(Math.max(y, halfH), listRect.height - halfH);
+      areasIndexPhoto.style.transform = `translate(${x}px, ${clampedY}px) translate(-50%, -50%)`;
+    };
+
+    areasIndexList.addEventListener("mousemove", event => {
+      const listRect = areasIndexList.getBoundingClientRect();
+      positionPhoto(event.clientY - listRect.top);
     });
 
-    areasPinPanels.forEach((panel, index) => {
-      if (index === 0) return;
-      pinTl.to(panel, { yPercent: 0, ease: "none", duration: 1 }, `c${index}`);
+    areasIndexRows.forEach(row => {
+      row.addEventListener("mouseenter", () => {
+        setPhotoSrc(row);
+        areasIndexPhoto.classList.add("is-visible");
+      });
+
+      row.addEventListener("mouseleave", () => {
+        areasIndexPhoto.classList.remove("is-visible");
+      });
+
+      // Foco por teclado: no hay posición de cursor, así que la foto
+      // se ubica a la altura de la fila enfocada en vez de seguir al
+      // mouse.
+      row.addEventListener("focus", () => {
+        setPhotoSrc(row);
+        const rowRect = row.getBoundingClientRect();
+        const listRect = areasIndexList.getBoundingClientRect();
+        positionPhoto(rowRect.top - listRect.top + rowRect.height / 2);
+        areasIndexPhoto.classList.add("is-visible");
+      });
+
+      row.addEventListener("blur", () => {
+        areasIndexPhoto.classList.remove("is-visible");
+      });
     });
   }
 
