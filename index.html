@@ -169,21 +169,30 @@
     </div>
 
     <main id="main">
-      <!-- HERO "PORTAL" — dos paneles sólidos arrancan cerrados,
-        tapando la foto de fondo; al hacer scroll se abren hacia los
-        bordes revelándola, mientras el nombre partido en dos
-        ("MCDV" / "Asociados") crece, aprieta su tracking y viaja
-        hacia esos mismos bordes. Sticky (no pin de GSAP) sobre una
-        sección de 250vh — mismo patrón ya usado en el telón entre
-        Hero y Nosotros de rondas anteriores: más simple/robusto que
-        un pin real para un efecto que es puro scrub.
+      <!-- HERO "PORTAL" — primer acto, sección propia. Dos paneles
+        sólidos arrancan cerrados, tapando la foto de fondo; al hacer
+        scroll se abren hacia los bordes revelándola, mientras el
+        nombre apilado ("MCDV" / "&" / "Asociados") crece, aprieta su
+        tracking y MCDV/Asociados se separan hacia los costados. Sticky
+        (no pin de GSAP) sobre una sección de 250vh — mismo patrón ya
+        usado en el telón entre Hero y Nosotros de rondas anteriores:
+        más simple/robusto que un pin real para un efecto que es puro
+        scrub.
+
+        El segundo acto (escudo, "Estudio Jurídico", h1, bajada, CTAs)
+        ya NO vive acá adentro — es la sección .hero-message, aparte,
+        justo debajo, en el flujo normal de la página (a pedido
+        explícito: que no se sienta como "dos heroes" superpuestos en
+        el mismo lugar, sino como dos momentos separados al bajar el
+        scroll).
 
         Fallback seguro (sin JS, o reduced-motion): los paneles y el
         wordmark parten OCULTOS por CSS (paneles fuera de pantalla,
         wordmark en opacity:0) — JS es quien los pone en su posición
-        "cerrada" recién si el efecto va a correr de verdad. Así, sin
-        JS, la foto y el contenido real del hero (escudo/título/CTA)
-        quedan visibles de entrada, como cualquier hero normal. -->
+        "cerrada" recién si el efecto va a correr de verdad. Sin JS,
+        la foto queda visible de entrada (un hero de un viewport
+        normal) y .hero-message aparece debajo como cualquier otra
+        sección. -->
       <section class="hero-portal" id="home" data-hero-portal>
         <div class="hero-portal-stage">
           <figure class="hero-portal-media" data-hero-portal-image>
@@ -216,38 +225,47 @@
           </div>
 
           <span class="hero-portal-meta hero-portal-meta--br" data-hero-portal-meta>Scroll <span aria-hidden="true">↓</span></span>
+        </div>
+      </section>
 
-          <div class="hero-content" data-hero-portal-content>
-            <img
-              src="img/logo-mcdv.png"
-              alt="MCDV & Asociados"
-              class="hero-crest"
-              data-reveal
-              width="272"
-              height="284"
-            />
+      <!-- MENSAJE — segundo acto, sección propia (no superpuesta sobre
+           la foto del portal): recién aparece cuando el usuario sigue
+           bajando el scroll después de que el portal termina. Reveal
+           genérico de siempre (fade + deslizamiento, ver script.js),
+           ya no atado al timeline del portal — más simple, y evita
+           que se sienta como "dos heroes" superpuestos en el mismo
+           lugar. -->
+      <section class="hero-message hairline-top">
+        <div class="container hero-message-inner">
+          <img
+            src="img/logo-mcdv.png"
+            alt="MCDV & Asociados"
+            class="hero-crest"
+            data-reveal
+            width="272"
+            height="284"
+          />
 
-            <span class="hero-eyebrow hero-eyebrow--center" data-reveal>Estudio Jurídico — Chubut</span>
+          <span class="hero-eyebrow hero-eyebrow--center" data-reveal>Estudio Jurídico — Chubut</span>
 
-            <h1 class="hero-huge hero-huge--center" data-reveal>
-              Orientación <em>jurídica</em><br />
-              con cercanía real.
-            </h1>
+          <h1 class="hero-huge hero-huge--center" data-reveal>
+            Orientación <em>jurídica</em><br />
+            con cercanía real.
+          </h1>
 
-            <p class="hero-lead hero-lead--center" data-reveal>
-              Asesoramiento y representación legal en Derecho de Familia,
-              Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil,
-              con dedicación y respuestas claras en cada etapa del proceso.
-            </p>
+          <p class="hero-lead hero-lead--center" data-reveal>
+            Asesoramiento y representación legal en Derecho de Familia,
+            Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil,
+            con dedicación y respuestas claras en cada etapa del proceso.
+          </p>
 
-            <div class="hero-actions hero-actions--center" data-reveal>
-              <a href="#contact" class="btn-outline btn-outline--light">
-                <span>Solicitar consulta</span>
-              </a>
-              <a href="#areas" class="hero-scroll-link">
-                5 áreas de práctica <span aria-hidden="true">↓</span>
-              </a>
-            </div>
+          <div class="hero-actions hero-actions--center" data-reveal>
+            <a href="#contact" class="btn-outline btn-outline--light">
+              <span>Solicitar consulta</span>
+            </a>
+            <a href="#areas" class="hero-scroll-link">
+              5 áreas de práctica <span aria-hidden="true">↓</span>
+            </a>
           </div>
         </div>
       </section>

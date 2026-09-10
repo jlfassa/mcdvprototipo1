@@ -177,13 +177,17 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   // fondo; al scrollear se abren hacia los bordes revelándola,
   // mientras "MCDV" / "&" / "Asociados" (apiladas al centro) crecen,
   // aprietan su tracking y MCDV/Asociados se separan hacia los
-  // costados del centro (no hasta el borde — ese texto es, en
-  // esencia, el mismo mensaje que después es el h1 real) mientras el
-  // "&" se desvanece en el lugar. Sticky + scrub (sin pin de GSAP)
-  // sobre una sección de 250vh. Solo en desktop ancho:
-  // en mobile este scroll-jacking largo se siente pesado, así que ahí
-  // se usa el fallback seguro (hero normal de un viewport, foto +
-  // contenido visibles de entrada, ver valores por defecto en el CSS).
+  // costados del centro, mientras el "&" se desvanece en el lugar.
+  // Sticky + scrub (sin pin de GSAP) sobre una sección de 250vh. Solo
+  // en desktop ancho: en mobile este scroll-jacking largo se siente
+  // pesado, así que ahí se usa el fallback seguro (paneles y wordmark
+  // quedan ocultos por sus valores por defecto en el CSS).
+  //
+  // El "segundo acto" (escudo, eyebrow, h1, bajada, botones) ya NO
+  // vive adentro de este portal — es la sección .hero-message, aparte,
+  // en el flujo normal de la página (ver index.html). Se revela sola
+  // con el bloque genérico de [data-reveal] de más abajo, como
+  // cualquier otra sección del sitio — no necesita nada especial acá.
   const heroPortal = document.querySelector("[data-hero-portal]");
   const heroPortalImage = document.querySelector("[data-hero-portal-image] img");
   const heroPortalDuotone = document.querySelector("[data-hero-portal-duotone]");
@@ -194,15 +198,6 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
 
-  // El h1 real ("MCDV & Asociados") es, en el fondo, el mismo texto
-  // que el wordmark del portal — por eso se revela aparte del resto
-  // (fade puro, sin el y:40→0 del resto del contenido) y superpuesto
-  // en el tiempo con el fade-out del wordmark, para que se sienta
-  // como el mismo texto asentándose y no como un elemento nuevo
-  // entrando desde abajo.
-  const heroPortalTitle = document.querySelector("#home h1[data-reveal]");
-  const heroPortalContentReveal = document.querySelectorAll("#home [data-reveal]:not(h1)");
-
   const heroPortalReady =
     heroPortal &&
     heroPortalImage &&
@@ -211,7 +206,6 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     heroPortalWordLeft &&
     heroPortalWordRight &&
     heroPortalWordAmp &&
-    heroPortalTitle &&
     header &&
     window.matchMedia("(min-width: 900px)").matches;
 
@@ -224,11 +218,6 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     // por él). Acá recién los hacemos visibles, ya en su posición
     // "cerrada" — a partir de ahí el timeline los abre con normalidad.
     gsap.set([heroPortalPanelLeft, heroPortalPanelRight], { display: "block", xPercent: 0 });
-    gsap.set(heroPortalContentReveal, { opacity: 0, y: 40 });
-    // El h1, aparte: solo opacity, sin y — no "entra desde abajo"
-    // como el resto, se desvanece-in en el mismo lugar donde el
-    // wordmark se desvanece-out (ver heroPortalTl más abajo).
-    gsap.set(heroPortalTitle, { opacity: 0 });
 
     // El header (escudo + botón Menú) arranca oculto — recién aparece
     // junto con las puertas abriéndose (ver heroPortalTl más abajo).
@@ -254,8 +243,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // El nombre: crece, aprieta el tracking y se separa con las
       // puertas — MCDV hacia el centro-izquierda, Asociados hacia el
       // centro-derecha (no hasta el borde: quedan más cerca del medio
-      // para asentarse ahí, ya que ese es el mensaje central del
-      // hero — el "&" del medio se desvanece en el lugar).
+      // para asentarse ahí) mientras el "&" del medio se desvanece.
       .fromTo(
         [heroPortalWordLeft, heroPortalWordRight],
         { opacity: 1, fontSize: "2.2rem", letterSpacing: "0.4em" },
@@ -274,36 +262,11 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .fromTo(heroPortalDuotone, { opacity: 0 }, { opacity: 0.4, duration: 0.45, ease: "none" }, 0.05)
       // La metadata de esquina aparece de a poco.
       .fromTo(heroPortalMeta, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.1)
-      // El wordmark se apaga y, apenas termina, el h1 real (mismo
-      // texto, "MCDV & Asociados") se enciende en el mismo lugar —
-      // sin bajarlo desde abajo, solo opacity. Un solapamiento largo
-      // entre las dos formas del texto (una partida en dos y en
-      // mayúsculas, la otra unida) se veía como un revoltijo de dos
-      // textos pisándose — por eso el cruce es corto/casi inmediato
-      // en vez de una superposición prolongada.
+      // El wordmark y la metadata se apagan al final del recorrido —
+      // lo que sigue después (.hero-message) es una sección aparte,
+      // con su propio reveal genérico al entrar en pantalla.
       .to([heroPortalWordLeft, heroPortalWordRight], { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
-      .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
-      .fromTo(heroPortalTitle, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 0.68)
-      // El resto del contenido (escudo, eyebrow, bajada, botones) sí
-      // entra con el fade + deslizamiento de siempre, después del h1.
-      .to(
-        heroPortalContentReveal,
-        { opacity: 1, y: 0, duration: 0.35, ease: "none", stagger: 0.03 },
-        0.62
-      );
-  } else {
-    // Sin el efecto de portal (mobile, o sin GSAP/reduced-motion ya
-    // filtrado más arriba): el copy del hero entra apenas carga la
-    // página, como un hero normal — acá el h1 se suma al mismo grupo
-    // (no hay wordmark del que "heredar" su aparición).
-    // .filter(Boolean): en las páginas de areas/ no existe #home, así
-    // que heroPortalTitle es null y GSAP explotaba al recibirlo dentro
-    // del array ("Cannot read properties of null (reading '_gsap')").
-    gsap.fromTo(
-      [...heroPortalContentReveal, heroPortalTitle].filter(Boolean),
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out", stagger: 0.12, delay: 0.3 }
-    );
+      .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
   }
 
   // Áreas de práctica: la sección queda FIJA en pantalla (pin real,

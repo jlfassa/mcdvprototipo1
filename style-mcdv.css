@@ -770,33 +770,25 @@ section[id],
   pointer-events: none;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
+/* =========================================================
+   HERO — MENSAJE (segundo acto)
+   Sección propia, en el flujo normal de la página — ya no
+   superpuesta sobre la foto del portal. Fondo sólido oscuro (mismo
+   tono que el degradé del portal) para que el escudo negro + textos
+   claros seguidos funcionando sin cambiar ningún color.
+========================================================= */
 
-  min-height: 100svh;
+.hero-message {
+  background: var(--graphite-950);
+  color: var(--paper);
+  padding: 140px 0 130px;
+}
 
+.hero-message-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  padding: clamp(110px, 16vh, 160px) 24px 80px;
   text-align: center;
-}
-
-/* Solo con el efecto de portal activo, el contenido real pasa a
-   superponerse sobre el stage (que ya mide exactamente 100svh) en
-   vez de ocupar su propio alto en el flujo normal — es lo que le
-   permite aparecer encima de la foto ya revelada, dentro del mismo
-   stage sticky. */
-.hero-portal.is-portal-active .hero-content {
-  position: absolute;
-  inset: 0;
-  z-index: 7;
-
-  min-height: 0;
-  justify-content: center;
-  overflow-y: auto;
 }
 
 /* Escudo simple del hero: una imagen más dentro del flujo normal,
@@ -850,20 +842,6 @@ section[id],
   letter-spacing: -0.01em;
   color: var(--paper);
   max-width: 780px;
-}
-
-/* El h1 es, en el fondo, el mismo texto que el wordmark del portal
-   asentándose ahí — por eso NUNCA lleva el translateY(36px) que sí
-   tiene el resto de [data-reveal] (acá se anula con más
-   especificidad): un deslizamiento vertical se sentía como un
-   elemento nuevo entrando desde abajo, no como el mismo texto
-   continuando en el lugar. Sin esto, GSAP solo tocaba su opacity y
-   el translateY de este selector seguía activo por separado (mismo
-   tipo de conflicto transform/translate ya documentado en el
-   proyecto) — el h1 quedaba 36px más abajo de su lugar real incluso
-   ya en opacity:1. */
-.hero-huge[data-reveal] {
-  transform: none;
 }
 
 .hero-huge--center {
@@ -1912,8 +1890,8 @@ section[id],
     padding: 90px 0;
   }
 
-  .hero-content {
-    padding-top: 100px;
+  .hero-message {
+    padding: 100px 0 90px;
   }
 
   .manifesto-grid {
