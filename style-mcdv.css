@@ -1178,7 +1178,7 @@ section[id],
 
   display: flex;
   align-items: center;
-  gap: clamp(12px, 2.4vw, 22px);
+  gap: clamp(20px, 3vw, 40px);
 
   padding: 12px 18px 12px 28px;
   border: 1px solid rgba(200, 154, 104, 0.28);
@@ -1199,10 +1199,23 @@ section[id],
   transition: opacity 0.5s var(--ease);
 }
 
-.areas-index-number {
+/* Número + título + flecha: en la fila colapsada (mobile/sin hover)
+   este bloque ES la fila entera (flex:1, ocupa todo el ancho). Con
+   hover disponible pasa a tamaño de contenido (ver media query abajo)
+   para dejarle lugar a .areas-index-desc a la derecha. */
+.areas-index-row-head {
   position: relative;
   z-index: 1;
 
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.4vw, 22px);
+
+  flex: 1;
+  min-width: 0;
+}
+
+.areas-index-number {
   font-family: var(--font-display);
   font-size: 1.2rem;
   color: var(--bronze);
@@ -1210,9 +1223,8 @@ section[id],
 }
 
 .areas-index-row h3 {
-  position: relative;
-  z-index: 1;
   flex: 1;
+  min-width: 0;
 
   font-family: var(--font-display);
   font-weight: 400;
@@ -1222,9 +1234,6 @@ section[id],
 }
 
 .areas-index-arrow {
-  position: relative;
-  z-index: 1;
-
   font-size: 1.4rem;
   color: var(--bronze-light);
   opacity: 0;
@@ -1234,7 +1243,75 @@ section[id],
     transform 0.35s var(--ease);
 }
 
+/* Descripción: no existe para mobile/táctil (display:none) — mismo
+   criterio que .team-expand-detail, es una mejora progresiva, nunca
+   la única forma de ver el nombre del área o entrar a su página (el
+   link de la fila ya funciona solo). Solo se activa dentro del media
+   de abajo. */
+.areas-index-desc {
+  display: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
+  /* Alto total FIJO: al crecer la fila con hover, las demás se
+     acortan solas por flex-grow — nunca cambia el alto del bloque
+     entero (sigue entrando en pantalla sin scroll). */
+  .areas-index-list {
+    height: clamp(360px, 42vh, 420px);
+  }
+
+  .areas-index-row {
+    /* flex-basis:0 es la parte clave: sin esto, el "auto" por
+       defecto hace que cada fila arranque con el alto de su propio
+       contenido y flex-grow solo reparta el sobrante (casi nada,
+       porque 5 filas ya casi llenan el alto fijo de arriba) — con
+       basis 0 el alto total se reparte 100% por el ratio de
+       flex-grow, ahí sí se nota el acordeón. */
+    flex: 1 0 0%;
+    min-height: 0; /* deja que flexbox achique más allá del alto natural del contenido */
+    transition:
+      flex-grow 0.5s var(--ease),
+      border-color 0.35s var(--ease);
+  }
+
+  .areas-index-row:hover,
+  .areas-index-row:focus-visible {
+    flex-grow: 3;
+  }
+
+  .areas-index-row-head {
+    flex: 0 0 auto;
+  }
+
+  .areas-index-row h3 {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .areas-index-desc {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 460px;
+
+    color: var(--gray-light);
+    font-size: 1.3rem;
+    line-height: 1.6;
+
+    opacity: 0;
+    transform: translateX(-10px);
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.4s var(--ease);
+  }
+
+  .areas-index-row:hover .areas-index-desc,
+  .areas-index-row:focus-visible .areas-index-desc {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.12s;
+  }
+
   .areas-index-row::before {
     background-image: linear-gradient(
         90deg,
