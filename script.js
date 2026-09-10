@@ -269,84 +269,11 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
   }
 
-  // Áreas de práctica: lista editorial (índice numerado). El nombre
-  // de cada área y su descripción ya están siempre visibles por CSS
-  // en cualquier dispositivo — lo único que agrega JS es una foto
-  // flotante puramente decorativa que sigue al cursor al pasar (o
-  // enfocar con teclado) una fila, y solo en desktop con mouse real
-  // ("hover: hover" + "pointer: fine", no un ancho fijo: una tablet
-  // grande con mouse Bluetooth pero pantalla táctil no debería
-  // quedar en un estado intermedio raro). Sin ese soporte, este
-  // bloque entero no corre y la lista sigue siendo 100% usable tal
-  // cual está en el HTML.
-  const areasIndexList = document.querySelector("[data-areas-index-list]");
-  const areasIndexRows = document.querySelectorAll("[data-areas-index-row]");
-  const areasIndexPhoto = document.querySelector("[data-areas-index-photo]");
-  const areasIndexPhotoImg = document.querySelector("[data-areas-index-photo-img]");
-
-  if (
-    areasIndexList &&
-    areasIndexRows.length &&
-    areasIndexPhoto &&
-    areasIndexPhotoImg &&
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches
-  ) {
-    let currentPhotoSrc = "";
-    const railMargin = 24; // separación de la foto respecto al borde derecho
-
-    const setPhotoSrc = row => {
-      const src = row.getAttribute("data-photo");
-      if (src && src !== currentPhotoSrc) {
-        areasIndexPhotoImg.src = src;
-        currentPhotoSrc = src;
-      }
-    };
-
-    // La foto vive en un "riel" pegado al borde derecho (x prácticamente
-    // fijo) y solo la coordenada Y sigue al cursor/fila — a propósito NO
-    // sigue también la X: centrada sobre el cursor tapaba el título que
-    // se supone que ilustra (confirmado con captura de pantalla).
-    const positionPhoto = y => {
-      const listRect = areasIndexList.getBoundingClientRect();
-      const photoRect = areasIndexPhoto.getBoundingClientRect();
-      const halfW = photoRect.width / 2;
-      const halfH = photoRect.height / 2;
-      const x = listRect.width - halfW - railMargin;
-      const clampedY = Math.min(Math.max(y, halfH), listRect.height - halfH);
-      areasIndexPhoto.style.transform = `translate(${x}px, ${clampedY}px) translate(-50%, -50%)`;
-    };
-
-    areasIndexList.addEventListener("mousemove", event => {
-      const listRect = areasIndexList.getBoundingClientRect();
-      positionPhoto(event.clientY - listRect.top);
-    });
-
-    areasIndexRows.forEach(row => {
-      row.addEventListener("mouseenter", () => {
-        setPhotoSrc(row);
-        areasIndexPhoto.classList.add("is-visible");
-      });
-
-      row.addEventListener("mouseleave", () => {
-        areasIndexPhoto.classList.remove("is-visible");
-      });
-
-      // Foco por teclado: no hay posición de cursor, así que la foto
-      // se ubica a la altura de la fila enfocada en vez de seguir al
-      // mouse.
-      row.addEventListener("focus", () => {
-        setPhotoSrc(row);
-        const rowRect = row.getBoundingClientRect();
-        const listRect = areasIndexList.getBoundingClientRect();
-        positionPhoto(rowRect.top - listRect.top + rowRect.height / 2);
-        areasIndexPhoto.classList.add("is-visible");
-      });
-
-      row.addEventListener("blur", () => {
-        areasIndexPhoto.classList.remove("is-visible");
-      });
-    });
-  }
+  // Áreas de práctica: índice compacto (01-05). Ya no necesita JS —
+  // la foto que se ilumina dentro de cada rectángulo al pasar el
+  // mouse o enfocar con teclado es pura CSS (variable --row-bg
+  // inline por fila + background-image gateado en
+  // "@media (hover: hover) and (pointer: fine)", ver style-mcdv.css).
 
   gsap.utils.toArray("[data-reveal]:not(#home [data-reveal])").forEach(element => {
     gsap.fromTo(

@@ -63,7 +63,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910b" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910c" />
 
     <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
          antes precargaba hero_3.jpg, que ya no es la foto del hero
@@ -342,28 +342,20 @@
         </div>
       </section>
 
-      <!-- ÁREAS DE PRÁCTICA — sección fijada (pin real, no sticky):
-           mientras dura el ciclo de las 5 áreas, la página NO
-           scrollea — lo que cambia es el contenido de un cuadro
-           chico y centrado (no a pantalla completa: queda margen y
-           fondo grafito visible alrededor, a propósito). Cada área es
-           tarjeta (número + ícono + nombre) a la izquierda y su
-           descripción a la derecha; al subir tapa por completo a la
-           anterior, nunca se ven ni se cruzan dos a la vez. Recién
-           cuando termina la última (Derecho Civil) se libera el pin.
-           Ya no usa foto de fondo a pantalla completa (se sacó a
-           pedido explícito; ese mecanismo se reemplazó por completo
-           por una lista editorial (índice numerado 01-05) inspirada en
-           estudios como Setia Law: cada fila es un <a> con el nombre
-           del área y su descripción SIEMPRE visibles (nada queda
-           oculto detrás de un hover, ver contexto-proyecto-mcdv.md /
-           regla WCAG del proyecto); en desktop con mouse real, al
-           pasar (o enfocar con teclado) una fila aparece una foto
-           flotante decorativa que sigue al cursor, reutilizando el
-           mismo mapeo foto-por-área que ya usa cada página de detalle
-           (ver script.js, gateado con "(hover: hover) and
-           (pointer: fine)"). Sin ese soporte la lista ya es 100%
-           usable tal cual está en este HTML. -->
+      <!-- ÁREAS DE PRÁCTICA — índice compacto (01-05): cada fila es su
+           propio "rectángulo" (borde completo, no solo línea inferior)
+           con número + nombre, siempre legibles en cualquier
+           dispositivo. La foto por área ya NO es un elemento flotante
+           por JS (se sacó a pedido explícito) — ahora vive DENTRO del
+           propio rectángulo, apagada por defecto, y se ilumina con
+           :hover/:focus-visible usando pura CSS: la url de la foto va
+           en la variable --row-bg (inline, por fila) y la propiedad
+           background-image que la consume solo se declara dentro de
+           "@media (hover: hover) and (pointer: fine)" — en mobile esa
+           regla nunca aplica, así que la imagen ni se pide por red
+           (0 bytes extra), no solo queda invisible. Todo el bloque
+           (encabezado + 5 filas) se dimensionó chico a propósito para
+           entrar en una pantalla de escritorio típica sin scroll. -->
       <section class="areas-index hairline-top" id="areas">
         <div class="container">
           <div class="areas-head-centered" data-reveal>
@@ -375,103 +367,56 @@
             </p>
           </div>
 
-          <!-- Sin data-reveal a propósito: es la lista interactiva
-               (hover/foco disparan la foto flotante) y esta animación
-               mueve el elemento con translateY durante ~1s al entrar
-               en viewport — si el mouse ya está apoyado ahí mientras
-               las filas todavía se deslizan, el mouseenter puede
-               quedar desincronizado de la fila que termina bajo el
-               cursor. El encabezado de arriba ya da la sensación de
-               entrada; la lista aparece directamente en su lugar. -->
-          <div class="areas-index-list" data-areas-index-list>
+          <div class="areas-index-list">
             <a
               href="areas/derecho-de-familia.html"
               class="areas-index-row"
-              data-areas-index-row
-              data-photo="img/hero_1.jpg"
+              style="--row-bg: url('img/hero_1.jpg')"
             >
-              <span class="areas-index-row-top">
-                <span class="areas-index-number">01</span>
-                <h3>Derecho de Familia</h3>
-                <span class="areas-index-arrow" aria-hidden="true">↗</span>
-              </span>
-              <p class="areas-index-desc">
-                Alimentos, Divorcios, Cuidado Personal, Régimen de
-                Comunicación, Violencia Familiar y de Género,
-                Mediaciones.
-              </p>
+              <span class="areas-index-number">01</span>
+              <h3>Derecho de Familia</h3>
+              <span class="areas-index-arrow" aria-hidden="true">↗</span>
             </a>
 
             <a
               href="areas/sucesiones.html"
               class="areas-index-row"
-              data-areas-index-row
-              data-photo="img/parallax_1.jpg"
+              style="--row-bg: url('img/parallax_1.jpg')"
             >
-              <span class="areas-index-row-top">
-                <span class="areas-index-number">02</span>
-                <h3>Sucesiones</h3>
-                <span class="areas-index-arrow" aria-hidden="true">↗</span>
-              </span>
-              <p class="areas-index-desc">
-                Declaratorias, Particiones, Inscripción de Bienes,
-                Acuerdos Particionarios.
-              </p>
+              <span class="areas-index-number">02</span>
+              <h3>Sucesiones</h3>
+              <span class="areas-index-arrow" aria-hidden="true">↗</span>
             </a>
 
             <a
               href="areas/derecho-laboral.html"
               class="areas-index-row"
-              data-areas-index-row
-              data-photo="img/parallax_2.jpg"
+              style="--row-bg: url('img/parallax_2.jpg')"
             >
-              <span class="areas-index-row-top">
-                <span class="areas-index-number">03</span>
-                <h3>Derecho Laboral</h3>
-                <span class="areas-index-arrow" aria-hidden="true">↗</span>
-              </span>
-              <p class="areas-index-desc">
-                ART, Despidos, Violencia Laboral, Conciliaciones,
-                Audiencias SRT.
-              </p>
+              <span class="areas-index-number">03</span>
+              <h3>Derecho Laboral</h3>
+              <span class="areas-index-arrow" aria-hidden="true">↗</span>
             </a>
 
             <a
               href="areas/amparos-de-salud.html"
               class="areas-index-row"
-              data-areas-index-row
-              data-photo="img/hero_2.jpg"
+              style="--row-bg: url('img/hero_2.jpg')"
             >
-              <span class="areas-index-row-top">
-                <span class="areas-index-number">04</span>
-                <h3>Amparos de Salud</h3>
-                <span class="areas-index-arrow" aria-hidden="true">↗</span>
-              </span>
-              <p class="areas-index-desc">
-                Obras Sociales, Prepagas, Medicamentos, Tratamientos.
-              </p>
+              <span class="areas-index-number">04</span>
+              <h3>Amparos de Salud</h3>
+              <span class="areas-index-arrow" aria-hidden="true">↗</span>
             </a>
 
             <a
               href="areas/derecho-civil.html"
               class="areas-index-row"
-              data-areas-index-row
-              data-photo="img/hero_3.jpg"
+              style="--row-bg: url('img/hero_3.jpg')"
             >
-              <span class="areas-index-row-top">
-                <span class="areas-index-number">05</span>
-                <h3>Derecho Civil</h3>
-                <span class="areas-index-arrow" aria-hidden="true">↗</span>
-              </span>
-              <p class="areas-index-desc">
-                Daños y Perjuicios, Desalojos, Ejecuciones
-                Contractuales.
-              </p>
+              <span class="areas-index-number">05</span>
+              <h3>Derecho Civil</h3>
+              <span class="areas-index-arrow" aria-hidden="true">↗</span>
             </a>
-
-            <div class="areas-index-photo" data-areas-index-photo aria-hidden="true">
-              <img data-areas-index-photo-img src="" alt="" decoding="async" />
-            </div>
           </div>
         </div>
       </section>
@@ -749,6 +694,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910b" defer></script>
+    <script src="./script.js?v=20260910c" defer></script>
   </body>
 </html>
