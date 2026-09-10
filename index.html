@@ -63,7 +63,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910j" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910k" />
 
     <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
          antes precargaba hero_3.jpg, que ya no es la foto del hero
@@ -270,25 +270,31 @@
            ya no atado al timeline del portal — más simple, y evita
            que se sienta como "dos heroes" superpuestos en el mismo
            lugar. -->
+      <!-- Un solo data-reveal en el contenedor (antes: 5 independientes,
+           uno por elemento — escudo, eyebrow, h1, bajada y botón se
+           revelaban en cascada a medida que se scrolleaba, se sentía
+           muy "encadenado" para lo que es un único bloque de
+           presentación). Ahora aparece todo junto, como un solo
+           bloque — a pedido explícito de aligerar el segundo acto
+           del hero. -->
       <section class="hero-message hairline-top">
-        <div class="container hero-message-inner">
+        <div class="container hero-message-inner" data-reveal>
           <img
             src="img/logo-mcdv.png"
             alt="MCDV & Asociados"
             class="hero-crest"
-            data-reveal
             width="272"
             height="284"
           />
 
-          <span class="hero-eyebrow hero-eyebrow--center" data-reveal>Estudio Jurídico</span>
+          <span class="hero-eyebrow hero-eyebrow--center">Estudio Jurídico</span>
 
-          <h1 class="hero-huge hero-huge--center" data-reveal>
+          <h1 class="hero-huge hero-huge--center">
             Orientación <em>jurídica</em><br />
             con cercanía real.
           </h1>
 
-          <p class="hero-lead hero-lead--center" data-reveal>
+          <p class="hero-lead hero-lead--center">
             Asesoramiento y representación legal en Derecho de Familia,
             Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Un
             equipo interdisciplinario que acompaña cada caso con compromiso,
@@ -296,7 +302,7 @@
             del proceso.
           </p>
 
-          <div class="hero-actions hero-actions--center" data-reveal>
+          <div class="hero-actions hero-actions--center">
             <a href="#contact" class="btn-outline">
               <span>Solicitar consulta</span>
             </a>
@@ -604,18 +610,20 @@
         </div>
       </section>
 
-      <!-- STATEMENT -->
+      <!-- STATEMENT — antes en lorem ipsum; frase de valores/misión,
+           no son datos/hechos verificables (fechas, cifras, casos)
+           así que no choca con la regla de no inventar contenido
+           real del estudio. -->
       <section class="statement hairline-top">
         <div class="container statement-inner">
           <h2 data-reveal>
-            Lorem ipsum <em>dolor sit amet</em> consectetur adipiscing
-            elit.
+            Cada caso es <em>una persona</em>, no un expediente más.
           </h2>
 
           <p data-reveal>
-            Sed do eiusmod tempor incididunt ut labore et dolore magna
-            aliqua, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip.
+            Escuchamos primero, después actuamos: buscamos siempre la
+            vía más clara y menos desgastante para resolver cada
+            situación, sin perder de vista lo que realmente importa.
           </p>
         </div>
       </section>
@@ -756,6 +764,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910j" defer></script>
+    <script src="./script.js?v=20260910k" defer></script>
   </body>
 </html>
