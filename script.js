@@ -296,8 +296,11 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     // filtrado más arriba): el copy del hero entra apenas carga la
     // página, como un hero normal — acá el h1 se suma al mismo grupo
     // (no hay wordmark del que "heredar" su aparición).
+    // .filter(Boolean): en las páginas de areas/ no existe #home, así
+    // que heroPortalTitle es null y GSAP explotaba al recibirlo dentro
+    // del array ("Cannot read properties of null (reading '_gsap')").
     gsap.fromTo(
-      [...heroPortalContentReveal, heroPortalTitle],
+      [...heroPortalContentReveal, heroPortalTitle].filter(Boolean),
       { y: 40, opacity: 0 },
       { y: 0, opacity: 1, duration: 1, ease: "power3.out", stagger: 0.12, delay: 0.3 }
     );
