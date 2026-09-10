@@ -28,9 +28,12 @@
       property="og:description"
       content="Asesoramiento y representación legal en Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Atención presencial y virtual."
     />
-    <meta property="og:image" content="https://mcdvasociados.com.ar/img/hero_3.jpg" />
+    <!-- hero_facade.jpg, no hero_3.jpg: es la foto real del hero desde
+         el rediseño "portal" — antes apuntaba a una imagen que ya no
+         se muestra en la página. -->
+    <meta property="og:image" content="https://mcdvasociados.com.ar/img/hero_facade.jpg" />
     <meta property="og:image:width" content="1920" />
-    <meta property="og:image:height" content="2560" />
+    <meta property="og:image:height" content="2880" />
     <meta property="og:image:alt" content="MCDV & Asociados, estudio jurídico" />
     <meta property="og:url" content="https://mcdvasociados.com.ar/" />
     <meta property="og:site_name" content="MCDV & Asociados" />
@@ -42,7 +45,7 @@
       name="twitter:description"
       content="Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Atención presencial y virtual."
     />
-    <meta name="twitter:image" content="https://mcdvasociados.com.ar/img/hero_3.jpg" />
+    <meta name="twitter:image" content="https://mcdvasociados.com.ar/img/hero_facade.jpg" />
 
     <link rel="icon" href="img/favicon-32x32.png" type="image/png" sizes="32x32" />
     <link rel="icon" href="img/favicon-16x16.png" type="image/png" sizes="16x16" />
@@ -60,7 +63,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260908c" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910a" />
 
     <!-- Precarga la imagen real del hero, en WebP (877KB → 463KB;
          antes precargaba hero_3.jpg, que ya no es la foto del hero
@@ -85,14 +88,13 @@
             "@type": "LegalService",
             "@id": "https://mcdvasociados.com.ar/#studio",
             "name": "MCDV & Asociados",
-            "image": "https://mcdvasociados.com.ar/img/hero_3.jpg",
+            "image": "https://mcdvasociados.com.ar/img/hero_facade.jpg",
             "url": "https://mcdvasociados.com.ar/",
             "sameAs": ["https://www.instagram.com/mcdv.asociados/"],
             "areaServed": {
               "@type": "Place",
               "name": "Chubut, Argentina"
             },
-            "priceRange": "$$",
             "knowsAbout": [
               "Derecho de Familia",
               "Sucesiones",
@@ -669,7 +671,7 @@
       <div class="footer-band photo-duo" aria-hidden="true">
         <picture>
           <source srcset="img/hero_1.webp" type="image/webp" />
-          <img src="img/hero_1.jpg" alt="" loading="lazy" />
+          <img src="img/hero_1.jpg" alt="" loading="lazy" width="1920" height="1280" />
         </picture>
         <div class="footer-band-overlay">
           <span class="footer-band-word">MCDV &amp; Asociados</span>
@@ -712,6 +714,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260908c" defer></script>
+    <script src="./script.js?v=20260910a" defer></script>
   </body>
 </html>

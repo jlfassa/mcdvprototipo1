@@ -153,9 +153,9 @@ textarea:focus-visible {
    se ajustó en varias rondas), se amplía solo el ÁREA CLICKEABLE con
    un ::after invisible y absoluto que sobresale 10px por lado —
    mismo patrón que "hit-slop" en apps nativas. Verificado que el
-   espacio libre alrededor de cada elemento (gaps de header-right,
-   footer-bottom, etc.) alcanza para los 10px sin que las zonas
-   invisibles de elementos vecinos se superpongan.
+   espacio libre alrededor de cada elemento (gap de footer-bottom,
+   etc.) alcanza para los 10px sin que las zonas invisibles de
+   elementos vecinos se superpongan.
 ========================================================= */
 
 .menu-toggle,
@@ -732,16 +732,6 @@ section[id],
   text-transform: uppercase;
   color: rgba(247, 246, 244, 0.55);
   opacity: 0;
-}
-
-.hero-portal-meta--tr {
-  top: 100px;
-  right: 28px;
-}
-
-.hero-portal-meta--bl {
-  bottom: 28px;
-  left: 28px;
 }
 
 .hero-portal-meta--br {
