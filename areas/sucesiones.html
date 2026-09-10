@@ -41,7 +41,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="../style-mcdv.css?v=20260910d" />
+    <link rel="stylesheet" href="../style-mcdv.css?v=20260910e" />
 
     <script type="application/ld+json">
       {
@@ -68,17 +68,35 @@
     </div>
 
     <!-- HEADER — sin logo a propósito (el nombre del estudio ya es el
-         h1 del hero en index.html). En desktop (≥1101px) muestra
-         directo las 5 áreas de práctica en vez del botón de menú;
-         debajo de 1100px se invierte (ver style-mcdv.css). -->
+         h1 del hero en index.html). En desktop (≥1101px) muestra las
+         secciones de la página en vez del botón de menú; "Áreas de
+         práctica" es link directo + submenú (hover/foco) con las 5
+         áreas, la propia queda marcada con aria-current. Debajo de
+         1100px se invierte (ver style-mcdv.css). -->
     <header class="header" data-header>
       <div class="header-inner">
-        <nav class="header-areas-nav" aria-label="Áreas de práctica">
-          <a href="derecho-de-familia.html">Derecho de Familia</a>
-          <a href="sucesiones.html" aria-current="page">Sucesiones</a>
-          <a href="derecho-laboral.html">Derecho Laboral</a>
-          <a href="amparos-de-salud.html">Amparos de Salud</a>
-          <a href="derecho-civil.html">Derecho Civil</a>
+        <nav class="header-nav" aria-label="Navegación principal">
+          <a href="../index.html#home">Inicio</a>
+          <a href="../index.html#el-estudio">El Estudio</a>
+
+          <div class="header-nav-dropdown">
+            <a href="../index.html#areas" class="header-nav-dropdown-trigger">
+              Áreas de práctica
+              <span class="header-nav-caret" aria-hidden="true">▾</span>
+            </a>
+            <div class="header-nav-dropdown-menu">
+              <div class="header-nav-dropdown-menu-inner">
+                <a href="derecho-de-familia.html">Derecho de Familia</a>
+                <a href="sucesiones.html" aria-current="page">Sucesiones</a>
+                <a href="derecho-laboral.html">Derecho Laboral</a>
+                <a href="amparos-de-salud.html">Amparos de Salud</a>
+                <a href="derecho-civil.html">Derecho Civil</a>
+              </div>
+            </div>
+          </div>
+
+          <a href="../index.html#equipo">Equipo</a>
+          <a href="../index.html#contact">Contacto</a>
         </nav>
 
         <button
@@ -252,6 +270,6 @@
       <img src="../img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="../script.js?v=20260910d" defer></script>
+    <script src="../script.js?v=20260910e" defer></script>
   </body>
 </html>

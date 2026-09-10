@@ -315,18 +315,26 @@ section[id],
   padding: 13px 0;
 }
 
-/* Navbar de áreas: reemplaza al botón de menú en desktop (≥1101px,
-   ver el override en "RESPONSIVE — 1100px" más abajo, que invierte
-   ambos display). Debajo de ese ancho vuelve a ser el botón de menú
-   de siempre — a esa resolución 5 links de área ya no entran
-   cómodos en una sola línea. */
-.header-areas-nav {
+/* Navbar de secciones: reemplaza al botón de menú en desktop
+   (≥1101px, ver el override en "RESPONSIVE — 1100px" más abajo, que
+   invierte ambos display). Debajo de ese ancho vuelve a ser el botón
+   de menú de siempre. "Áreas de práctica" es también un link directo
+   (va a #areas / ../index.html#areas) que además, con mouse real,
+   despliega un submenú con las 5 áreas al pasar o enfocar — nunca es
+   la ÚNICA forma de llegar a una: el link principal ya funciona
+   solo. */
+.header-nav {
   display: flex;
   align-items: center;
-  gap: clamp(14px, 1.6vw, 28px);
+  gap: clamp(18px, 2vw, 34px);
 }
 
-.header-areas-nav a {
+.header-nav > a,
+.header-nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
   font-family: var(--font-body);
   font-size: 1.15rem;
   font-weight: 600;
@@ -337,13 +345,96 @@ section[id],
   transition: color 0.25s ease;
 }
 
-.header-areas-nav a:hover,
-.header-areas-nav a:focus-visible {
+.header-nav > a:hover,
+.header-nav > a:focus-visible,
+.header-nav-dropdown-trigger:hover,
+.header-nav-dropdown-trigger:focus-visible {
   color: var(--bronze-light);
 }
 
-.header-areas-nav a[aria-current="page"] {
+.header-nav > a[aria-current="page"] {
   color: var(--bronze);
+}
+
+.header-nav-caret {
+  font-size: 0.85em;
+  transition: transform 0.3s var(--ease);
+}
+
+.header-nav-dropdown {
+  position: relative;
+}
+
+/* Zona "puente" invisible entre el trigger y el panel visible: el
+   padding-top (no margin) hace que ese hueco siga siendo parte de
+   este mismo elemento, así el mouse no pierde el :hover al bajar
+   desde el link hasta el submenú. */
+.header-nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 14px;
+
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 0.25s;
+}
+
+.header-nav-dropdown-menu-inner {
+  display: flex;
+  flex-direction: column;
+  min-width: 230px;
+
+  background: var(--graphite-900);
+  border: 1px solid rgba(200, 154, 104, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  padding: 8px 0;
+
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+
+.header-nav-dropdown-menu a {
+  padding: 10px 22px;
+
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--gray-light);
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.header-nav-dropdown-menu a:hover,
+.header-nav-dropdown-menu a:focus-visible {
+  color: var(--bronze-light);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.header-nav-dropdown-menu a[aria-current="page"] {
+  color: var(--bronze);
+}
+
+.header-nav-dropdown:hover .header-nav-dropdown-menu,
+.header-nav-dropdown:focus-within .header-nav-dropdown-menu {
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+
+.header-nav-dropdown:hover .header-nav-dropdown-menu-inner,
+.header-nav-dropdown:focus-within .header-nav-dropdown-menu-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header-nav-dropdown:hover .header-nav-caret,
+.header-nav-dropdown:focus-within .header-nav-caret {
+  transform: rotate(180deg);
 }
 
 .menu-toggle {
@@ -1899,7 +1990,7 @@ section[id],
 
   /* Debajo de 1100px las 5 áreas ya no entran cómodas en una línea:
      se invierte lo de arriba, vuelve el botón de menú de siempre. */
-  .header-areas-nav {
+  .header-nav {
     display: none;
   }
 
