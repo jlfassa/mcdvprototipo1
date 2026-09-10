@@ -1325,13 +1325,23 @@ section[id],
 }
 
 /* =========================================================
-   EQUIPO — grid simple, sin efectos
-   A propósito lo más plano posible: fotos grandes, nombre, rol
-   y descripción siempre visibles, sin hover que revele nada ni
-   JS de posicionamiento. Después de varias vueltas con formatos
-   más "creativos" (lista+panel, acordeón, carrusel), se optó por
-   esto — más cerca de cómo Setia Law realmente presenta a su
-   equipo (setialaw.com/team: lista clara, sin efectos).
+   EQUIPO — fila de tarjetas que se expanden en hover (referencia:
+   video que mandó la clienta de goldmanwolfe.com, sección "Our
+   Services": tarjetas parejas, la que está bajo el mouse crece por
+   encima de las demás revelando texto). Acá el crecimiento llega
+   hasta el tope de la fila (más marcado que la referencia, a pedido
+   explícito), y en vez de servicios son las 6 personas del equipo.
+
+   Por defecto (base, sin gatear por media query) es una GRILLA
+   simple con todo visible siempre — el mismo contenido, sin ningún
+   estado oculto — porque es el fallback seguro para mobile/tablet/
+   táctil, donde no existe :hover persistente. Recién dentro de
+   @media (hover:hover) and (pointer:fine) el layout pasa a fila +
+   alto colapsado + expansión en :hover/:focus-within/:focus-visible
+   (cada tarjeta tiene tabindex="0", así el teclado también puede
+   expandirla, no es un efecto hover-only). El "&&" con pointer:fine
+   evita que una tablet con mouse Bluetooth pero pantalla táctil
+   quede en un estado intermedio raro.
 ========================================================= */
 
 .team {
@@ -1339,34 +1349,60 @@ section[id],
   padding: 80px 0;
 }
 
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px 36px;
+.team-head-centered {
+  max-width: 760px;
+  margin: 0 auto 60px;
+  text-align: center;
 }
 
-.team-card-photo {
-  aspect-ratio: 4 / 5;
-  margin-bottom: 20px;
+.team-head-centered h2 {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 4.4vw, 5rem);
+  font-weight: 400;
+  color: var(--graphite-900);
+}
 
+.team-underline {
+  display: block;
+  width: 70px;
+  height: 2px;
+  margin: 22px auto;
+  background: var(--bronze);
+}
+
+.team-head-centered p {
+  color: var(--gray);
+  font-size: 1.6rem;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.team-expand-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.team-expand-card {
+  position: relative;
   overflow: hidden;
+  aspect-ratio: 4 / 5;
   background: var(--graphite-900);
 }
 
-.team-card-photo img {
+.team-expand-media {
+  position: absolute;
+  inset: 0;
+}
+
+.team-expand-media img {
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s var(--ease);
 }
 
-.team-card:hover .team-card-photo img {
-  transform: scale(1.04);
-}
-
-.team-avatar-placeholder {
+.team-expand-media.team-avatar-placeholder {
   display: grid;
   place-items: center;
-
   background: linear-gradient(150deg, var(--graphite-900) 0%, var(--graphite-850) 100%);
 }
 
@@ -1379,41 +1415,100 @@ section[id],
   line-height: 1.5;
 }
 
-.team-card h3 {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 400;
-  color: var(--graphite-900);
-  margin-bottom: 4px;
+.team-expand-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 16, 22, 0) 35%, rgba(14, 16, 22, 0.85) 100%);
 }
 
-.team-role {
+.team-expand-body {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px;
+}
+
+.team-expand-name {
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.team-expand-detail .team-role {
   display: block;
-  /* --bronze da 3.34:1 sobre --paper (no pasa el mínimo AA de 4.5:1
-     para texto de 10px) — se usa --bronze-dark, que sí pasa (5.05:1),
-     en vez de introducir un color nuevo. */
-  color: var(--bronze-dark);
+  margin-top: 14px;
+  color: var(--bronze-light);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-weight: 700;
-  margin-bottom: 12px;
 }
 
-.team-card p {
-  color: var(--gray);
+.team-expand-detail p {
+  color: var(--gray-light);
   font-size: 1.3rem;
   line-height: 1.6;
+  margin-top: 8px;
 }
 
-.team-link {
+.team-expand-detail .team-link {
   display: inline-block;
-  margin-top: 12px;
-
+  margin-top: 10px;
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--bronze-dark);
-  border-bottom: 1px solid var(--bronze);
+  color: var(--bronze-light);
+  border-bottom: 1px solid var(--bronze-light);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .team-expand-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: clamp(420px, 55vh, 640px);
+  }
+
+  .team-expand-card {
+    flex: 1;
+    aspect-ratio: auto;
+    height: 170px;
+    cursor: pointer;
+    transition: height 0.5s var(--ease);
+  }
+
+  .team-expand-card:focus-visible {
+    outline: 2px solid var(--bronze);
+    outline-offset: -4px;
+  }
+
+  .team-expand-detail {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s var(--ease), opacity 0.3s ease;
+  }
+
+  .team-expand-card:hover,
+  .team-expand-card:focus-within,
+  .team-expand-card:focus-visible {
+    height: 100%;
+  }
+
+  .team-expand-card:hover .team-expand-detail,
+  .team-expand-card:focus-within .team-expand-detail {
+    max-height: 280px;
+    opacity: 1;
+  }
+
+  .team-expand-card:hover .team-expand-name,
+  .team-expand-card:focus-within .team-expand-name {
+    font-size: 2.1rem;
+  }
 }
 
 /* =========================================================
@@ -1826,10 +1921,6 @@ section[id],
 ========================================================= */
 
 @media (max-width: 1100px) {
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .areas-head {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -1849,11 +1940,6 @@ section[id],
 @media (max-width: 760px) {
   .container {
     width: min(calc(100% - 36px), var(--container));
-  }
-
-  .team-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
   }
 
   .header-inner {

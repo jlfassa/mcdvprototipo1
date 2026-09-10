@@ -477,86 +477,122 @@
         </div>
       </section>
 
-      <!-- EQUIPO — lista + panel cuadrado, justo después de Áreas.
-        Solo Pablo tiene foto real (reusada de su propio sitio); el resto
-        queda con el espacio marcado como "Foto de perfil" hasta que el
-        estudio mande las fotos. -->
+      <!-- EQUIPO — fila de tarjetas que se expanden en hover, según
+        referencia (video) que mandó la clienta. Pablo primero (tiene
+        foto real, reusada de su propio sitio); el resto queda con el
+        espacio marcado como "Foto de perfil" hasta que el estudio
+        mande las fotos.
+
+        Efecto SOLO en dispositivos con mouse fino
+        (hover:hover)+(pointer:fine): la tarjeta bajo el mouse (o con
+        foco de teclado, :focus-within/:focus-visible — cada tarjeta
+        es tabulable) crece hasta el tope de la fila revelando rol +
+        bio; las demás quedan cortas mostrando solo el nombre. En
+        mobile/tablet/táctil, donde no hay :hover persistente, cae a
+        una grilla simple con todo (foto + nombre + rol + bio) visible
+        siempre — mismo criterio que el resto del sitio: el efecto es
+        una mejora progresiva, nunca la única forma de ver el
+        contenido. -->
       <section class="section team hairline-top" id="equipo">
         <div class="container">
-          <div class="areas-head">
-            <div class="manifesto-index" data-reveal>
-              <h2 class="manifesto-index-label">Equipo</h2>
-            </div>
-
-            <p data-reveal>
+          <div class="team-head-centered" data-reveal>
+            <h2>El Equipo</h2>
+            <span class="team-underline" aria-hidden="true"></span>
+            <p>
               Un equipo interdisciplinario de profesionales, cada uno con
               su propia área de dedicación dentro del estudio.
             </p>
           </div>
 
-          <!-- Grid simple: fotos grandes, todo visible siempre, sin
-               hover que revele nada ni JS de carrusel — en la línea de
-               cómo Setia Law (setialaw.com/team) presenta a su equipo
-               en la vida real: lista clara, sin efectos. -->
-          <div class="team-grid">
-            <article class="team-card" data-reveal>
-              <div class="team-card-photo team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <h3>Maria Belen Diaz Carrizo</h3>
-              <span class="team-role">Abogada</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-            </article>
-
-            <article class="team-card" data-reveal>
-              <div class="team-card-photo team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <h3>Fiorella Albertoli</h3>
-              <span class="team-role">Abogada</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-            </article>
-
-            <article class="team-card" data-reveal>
-              <div class="team-card-photo team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <h3>Danilo Sepulveda</h3>
-              <span class="team-role">Abogado</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-            </article>
-
-            <article class="team-card" data-reveal>
-              <div class="team-card-photo team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <h3>Victoria Garcia Vilches</h3>
-              <span class="team-role">Abogada</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-            </article>
-
-            <article class="team-card" data-reveal>
-              <div class="team-card-photo team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <h3>Manuel Alfredo Magri</h3>
-              <span class="team-role">Abogado</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-            </article>
-
-            <article class="team-card" data-reveal>
-              <div class="team-card-photo photo-duo">
+          <div class="team-expand-row" data-reveal>
+            <article class="team-expand-card" tabindex="0">
+              <div class="team-expand-media photo-duo">
                 <picture>
                   <source srcset="img/pablo.webp" type="image/webp" />
                   <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
                 </picture>
               </div>
-              <h3>Pablo Luis Crespo</h3>
-              <span class="team-role">Abogado</span>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-              <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
-                Ver perfil completo ↗
-              </a>
+              <div class="team-expand-scrim" aria-hidden="true"></div>
+              <div class="team-expand-body">
+                <span class="team-expand-name">Pablo Luis Crespo</span>
+                <div class="team-expand-detail">
+                  <span class="team-role">Abogado</span>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                  <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
+                    Ver perfil completo ↗
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="team-expand-card" tabindex="0">
+              <div class="team-expand-media team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <div class="team-expand-scrim" aria-hidden="true"></div>
+              <div class="team-expand-body">
+                <span class="team-expand-name">Maria Belen Diaz Carrizo</span>
+                <div class="team-expand-detail">
+                  <span class="team-role">Abogada</span>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="team-expand-card" tabindex="0">
+              <div class="team-expand-media team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <div class="team-expand-scrim" aria-hidden="true"></div>
+              <div class="team-expand-body">
+                <span class="team-expand-name">Fiorella Albertoli</span>
+                <div class="team-expand-detail">
+                  <span class="team-role">Abogada</span>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="team-expand-card" tabindex="0">
+              <div class="team-expand-media team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <div class="team-expand-scrim" aria-hidden="true"></div>
+              <div class="team-expand-body">
+                <span class="team-expand-name">Danilo Sepulveda</span>
+                <div class="team-expand-detail">
+                  <span class="team-role">Abogado</span>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="team-expand-card" tabindex="0">
+              <div class="team-expand-media team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <div class="team-expand-scrim" aria-hidden="true"></div>
+              <div class="team-expand-body">
+                <span class="team-expand-name">Victoria Garcia Vilches</span>
+                <div class="team-expand-detail">
+                  <span class="team-role">Abogada</span>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="team-expand-card" tabindex="0">
+              <div class="team-expand-media team-avatar-placeholder">
+                <span>Foto de<br />perfil</span>
+              </div>
+              <div class="team-expand-scrim" aria-hidden="true"></div>
+              <div class="team-expand-body">
+                <span class="team-expand-name">Manuel Alfredo Magri</span>
+                <div class="team-expand-detail">
+                  <span class="team-role">Abogado</span>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+              </div>
             </article>
           </div>
         </div>
