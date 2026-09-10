@@ -779,8 +779,8 @@ section[id],
 ========================================================= */
 
 .hero-message {
-  background: var(--graphite-950);
-  color: var(--paper);
+  background: var(--paper);
+  color: var(--graphite-950);
   padding: 140px 0 130px;
 }
 
@@ -800,12 +800,11 @@ section[id],
   height: auto;
   margin-bottom: 30px;
 
-  /* El escudo pasó a ser el negro (antes el crema). Sobre la foto
-     oscura del hero, un negro liso se pierde — en vez de un fondo
-     claro (eso queda para otra vuelta), se le pone un halo claro
-     difuso detrás, que hace de "luz" para que el contorno se lea. */
-  filter: drop-shadow(0 0 22px rgba(247, 246, 244, 0.65))
-    drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  /* El escudo negro ahora vive sobre fondo blanco (.hero-message), no
+     sobre la foto oscura del portal — ya no hace falta el halo claro
+     que lo hacía legible ahí; alcanza con una sombra de asiento
+     chica, igual que cualquier otro elemento flotando sobre --paper. */
+  filter: drop-shadow(0 6px 14px rgba(23, 24, 26, 0.18));
 }
 
 .hero-eyebrow {
@@ -815,7 +814,7 @@ section[id],
   border-left: 3px solid var(--bronze);
   padding-left: 16px;
 
-  color: var(--bronze-light);
+  color: var(--bronze-dark);
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -826,21 +825,21 @@ section[id],
   border-left: 0;
   padding-left: 0;
 
-  /* La línea sobre el h1 pasa a la serif del sitio (Forum, la misma
-     del logo/h1) en vez de la sans del cuerpo — más editorial. Forum
-     solo carga en weight 400 (ver <link> de Google Fonts), por eso se
-     baja de 700 acá para no depender de negrita sintética. */
-  font-family: var(--font-display);
-  font-weight: 400;
+  /* Prueba puntual de Cormorant Garamond en vez de la serif del
+     sitio (Forum) — a evaluar si se extiende al resto de la página. */
+  font-family: "Cormorant Garamond", var(--font-display);
+  font-weight: 500;
 }
 
 .hero-huge {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(4.6rem, 6.4vw, 8.4rem);
-  line-height: 0.96;
+  /* Prueba puntual de Cormorant Garamond (ver <link> de Google Fonts
+     en <head>) en vez de Forum — misma lógica que el eyebrow. */
+  font-family: "Cormorant Garamond", var(--font-display);
+  font-weight: 500;
+  font-size: clamp(5.2rem, 7.2vw, 9.6rem);
+  line-height: 0.98;
   letter-spacing: -0.01em;
-  color: var(--paper);
+  color: var(--graphite-950);
   max-width: 780px;
 }
 
@@ -850,14 +849,15 @@ section[id],
 
 .hero-huge em {
   font-style: italic;
-  color: var(--bronze-light);
+  font-weight: 500;
+  color: var(--bronze-dark);
 }
 
 .hero-lead {
   max-width: 480px;
   margin-top: 34px;
 
-  color: var(--gray-light);
+  color: var(--gray);
   font-size: 1.75rem;
   line-height: 1.65;
 }
@@ -882,14 +882,14 @@ section[id],
 .hero-scroll-link {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--gray-light);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--gray);
+  border-bottom: 1px solid rgba(23, 24, 26, 0.25);
   padding-bottom: 3px;
 }
 
 .hero-scroll-link:hover {
   border-color: var(--bronze);
-  color: var(--bronze-light);
+  color: var(--bronze-dark);
 }
 
 /* =========================================================
