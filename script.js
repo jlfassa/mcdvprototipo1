@@ -270,36 +270,22 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   }
 
   // Áreas de práctica: la sección queda FIJA en pantalla (pin real,
-  // la página no baja) mientras cada área es una "solapa" opaca a
-  // pantalla completa (foto propia + degradé, sin caja) que sube
-  // desde abajo y tapa por completo a la anterior — sin opacity,
-  // nunca se ven ni se cruzan dos textos a la vez. La primera
-  // (Derecho de Familia) ya se ve completa apenas engancha el pin —
-  // nada de arrancar "vacío" esperando a que suba la primera solapa,
-  // eso quedaba raro. El título queda fijo arriba todo el recorrido.
-  // Recién al terminar la última (Derecho Civil) se libera el pin y
-  // el scroll normal continúa. Solo en desktop/tablet ancho: en
-  // pantallas angostas el pin de scroll se siente raro con teclados
-  // táctiles, así que ahí se usa el fallback seguro (lista simple
-  // sobre fondo grafito liso, sin fotos, ver valores por defecto en
-  // el CSS).
+  // la página no baja) mientras cada área es una "solapa" (tarjeta +
+  // descripción, ya no foto a pantalla completa — se sacó a pedido
+  // explícito) que sube desde abajo y tapa por completo a la
+  // anterior dentro de un cuadro chico y centrado — sin opacity,
+  // nunca se ven ni se cruzan dos a la vez. La primera (Derecho de
+  // Familia) ya se ve completa apenas engancha el pin. Recién al
+  // terminar la última (Derecho Civil) se libera el pin y el scroll
+  // normal continúa. Solo en desktop/tablet ancho: en pantallas
+  // angostas el pin de scroll se siente raro con teclados táctiles,
+  // así que ahí se usa el fallback seguro (lista simple sobre fondo
+  // grafito liso, ver valores por defecto en el CSS).
   const areasPin = document.querySelector("[data-areas-pin]");
   const areasPinPanels = document.querySelectorAll(".areas-pin-panel");
 
   if (areasPin && areasPinPanels.length && window.matchMedia("(min-width: 900px)").matches) {
     areasPin.classList.add("is-stacked");
-
-    // La foto la pone JS (vía data-bg), no el HTML/CSS: así el modo
-    // simple (fallback) nunca llega a pedir estas imágenes de más.
-    // image-set() pide la versión WebP (bastante más liviana) con la
-    // misma foto en JPG como respaldo si el navegador no soporta WebP.
-    areasPinPanels.forEach(panel => {
-      const bg = panel.getAttribute("data-bg");
-      if (!bg) return;
-      const webp = bg.replace(/\.jpe?g$/i, ".webp");
-      panel.style.backgroundImage =
-        `image-set(url('${webp}') type('image/webp'), url('${bg}') type('image/jpeg'))`;
-    });
 
     // Todas arrancan ocultas debajo (yPercent 100) salvo la primera,
     // que arranca ya puesta (yPercent 0) — se ve completa desde el

@@ -1112,28 +1112,30 @@ section[id],
   margin-bottom: 16px;
 }
 
-/* Con el pin activo, la sección ocupa toda la pantalla y el stack de
-   solapas pasa a cubrirla ENTERA (inset:0 sobre .areas-pin, ya no
-   adentro de .container): la foto de cada área llega de punta a
-   punta, sin márgenes. El encabezado queda flotando arriba, fijo,
-   encima de todo (z-index), todo el recorrido. La primera solapa
+/* Con el pin activo, la sección ya NO ocupa toda la pantalla con una
+   foto — a pedido explícito, quedaba "abrupto" cubrir todo el
+   monitor. El .areas-pin-stack pasa a ser un cuadro chico y acotado
+   (clamp de alto, ver abajo), centrado verticalmente junto con el
+   encabezado (ambos en flujo normal dentro de un flex-column) —
+   queda fondo grafito y margen visible alrededor, el .container que
+   ya trae la clase mantiene su ancho/gutter normal (ya no se anula
+   como en la versión anterior). Cada área es tarjeta (número + ícono
+   + nombre) a la izquierda y su descripción a la derecha. La primera
    (Derecho de Familia) arranca ya puesta (yPercent 0, ver script.js)
    para que no haya un momento "vacío" al enganchar el pin; las
    siguientes arrancan fuera de vista, debajo del recuadro, y al subir
-   a yPercent 0 tapan por completo a la anterior — nada de opacity,
-   nunca hay dos visibles ni texto cruzado. Al ser position:absolute +
-   orden normal del DOM, la que sube siempre tapa a la anterior sin
-   necesitar z-index manual por índice. */
+   a yPercent 0 tapan por completo a la anterior — nunca hay dos
+   visibles ni texto cruzado. Al ser position:absolute + orden normal
+   del DOM, la que sube siempre tapa a la anterior sin necesitar
+   z-index manual por índice. */
 .areas-pin.is-stacked {
   height: 100svh;
   padding: 0;
-}
 
-.areas-pin.is-stacked .areas-pin-head {
-  position: absolute;
-  top: 70px;
-  left: 0;
-  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
 }
 
 .areas-pin.is-stacked .areas-head-centered {
@@ -1141,14 +1143,8 @@ section[id],
 }
 
 .areas-pin.is-stacked .areas-pin-stack {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  overflow: hidden;
+  position: relative;
+  height: clamp(360px, 52vh, 520px);
 }
 
 /* Sin transform acá a propósito: la posición inicial (fuera de
@@ -1161,72 +1157,76 @@ section[id],
   position: absolute;
   inset: 0;
 
-  justify-content: center;
-  /* Padding-top grande a propósito: dentro de este cuadro, el
-     contenido se centra verticalmente (justify-content:center), y el
-     encabezado fijo (.areas-pin-head, arriba de todo) necesita ese
-     margen para no pisarse con el "01"/ícono cuando ambos están
-     visibles al mismo tiempo. */
-  padding: clamp(180px, 24vh, 240px) 30px 60px;
+  display: grid;
+  grid-template-columns: minmax(200px, 0.85fr) 1fr;
+  align-items: center;
+  gap: 12px;
 
+  padding: 0 clamp(20px, 3vw, 48px);
+  /* Opaco a propósito, cubriendo el fallback (background:
+     rgba(255,255,255,.03), casi transparente): sin esto, la solapa
+     que sube no tapa a la anterior — se transparentaba y se veían
+     dos áreas cruzadas al mismo tiempo (confirmado con captura de
+     pantalla, no a ojo). */
   background-color: var(--graphite-950);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   border: none;
 }
 
-/* A pantalla completa el ícono/número/título crecen un poco respecto
-   del modo lista compacta (fallback) — con toda esa foto de fondo,
-   el texto chico quedaba perdido. Insignia circular para el ícono en
-   vez de solo el trazo suelto, para que no se sienta genérico. */
+/* Por defecto (fallback) hereda el centrado de .areas-pin-panel; en
+   modo pin pasa a alineada a la izquierda (columna angosta al lado
+   de la descripción). */
+.areas-pin-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.areas-pin.is-stacked .areas-pin-card {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Insignia circular para el ícono en vez de solo el trazo suelto, y
+   número/título un poco más grandes que en el modo lista (fallback)
+   — para que no se sientan genéricos ahora que tienen su propio
+   espacio, sin foto de fondo compitiendo. */
 .areas-pin.is-stacked .areas-pin-number {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   letter-spacing: 0.06em;
   margin-bottom: 14px;
 }
 
-.areas-pin.is-stacked .areas-pin-panel .areas-icon {
-  width: 32px;
-  height: 32px;
-  padding: 20px;
-  margin-bottom: 24px;
+.areas-pin.is-stacked .areas-pin-card .areas-icon {
+  width: 28px;
+  height: 28px;
+  padding: 16px;
+  margin-bottom: 20px;
   border: 1px solid rgba(200, 154, 104, 0.45);
   border-radius: 50%;
   box-sizing: content-box;
 }
 
-.areas-pin.is-stacked .areas-pin-panel h3 {
-  font-size: clamp(3.4rem, 5.5vw, 6rem);
+.areas-pin.is-stacked .areas-pin-card h3 {
+  font-size: clamp(2.6rem, 3.6vw, 4rem);
+  margin-bottom: 0;
+}
+
+.areas-pin.is-stacked .areas-pin-detail {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  border-left: 1px solid rgba(200, 154, 104, 0.3);
+  padding-left: clamp(30px, 4vw, 56px);
+}
+
+.areas-pin.is-stacked .areas-pin-detail p {
+  max-width: 420px;
+  color: var(--gray-light);
+  font-size: 1.6rem;
+  line-height: 1.7;
   margin-bottom: 20px;
-}
-
-.areas-pin.is-stacked .areas-pin-panel p {
-  max-width: 560px;
-  font-size: 1.55rem;
-  margin-bottom: 22px;
-}
-
-/* Degradé opaco sobre la foto de cada solapa, para que el texto se
-   lea bien — no es transparencia entre solapas, es solo contraste
-   sobre la propia foto de esa solapa. */
-.areas-pin.is-stacked .areas-pin-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-
-  background: linear-gradient(
-    180deg,
-    rgba(14, 16, 22, 0.5) 0%,
-    rgba(14, 16, 22, 0.78) 60%,
-    rgba(14, 16, 22, 0.92) 100%
-  );
-}
-
-.areas-pin.is-stacked .areas-pin-panel > * {
-  position: relative;
-  z-index: 1;
 }
 
 /* =========================================================
