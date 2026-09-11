@@ -1,0 +1,5 @@
+# Sitio estático puro (HTML/CSS/JS, sin build) — no hace falta build
+# command, Netlify solo tiene que servir los archivos tal cual están
+# en el repo.
+[build]
+  publish = "."
