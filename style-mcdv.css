@@ -1071,8 +1071,8 @@ section[id],
 
 /* =========================================================
    ÁREAS DE PRÁCTICA — sistema de tarjetas con reveal fijo (Equipo
-   usaba este mismo mecanismo pero se rehizo con otro enfoque, ver
-   .team-featured/.team-roster más abajo — las dos juntas se sentían
+   usaba este mismo mecanismo al principio pero se rehizo con otro
+   enfoque, ver .team-index-* más abajo — las dos juntas se sentían
    repetidas): foto + número + nombre siempre visibles; descripción
    + "Ver más" se revelan en
    :hover/:focus-visible DENTRO del mismo alto fijo de la tarjeta —
@@ -1333,21 +1333,21 @@ section[id],
 }
 
 /* =========================================================
-   EQUIPO — rehecho por completo a pedido explícito: el sistema de
-   tarjetas que crecían en hover quedó idéntico al de Áreas de
-   práctica (dos secciones seguidas con el mismo componente) y
-   encima 5 de 6 tarjetas mostraban un casillero gris "Foto de
-   perfil" — se sentía repetido y sin terminar.
-
-   Nuevo enfoque, deliberadamente distinto del resto del sitio:
-   - .team-featured: el socio con foto real (Pablo) en un layout
-     editorial de dos columnas, TODO visible siempre (sin
-     hover-reveal — variación de ritmo a propósito frente al resto
-     del sitio, que sí usa mucho hover-reveal).
-   - .team-roster: el resto del equipo en un directorio simple —
-     avatar circular con iniciales (no un placeholder gris de "foto
-     pendiente") + nombre + cargo, separados por hairlines. Nada
-     escondido detrás de hover porque no hay nada que esconder.
+   EQUIPO — tercera vuelta de diseño (historial, por si se vuelve a
+   tocar):
+   1) tarjetas que crecían en hover, igual que Áreas de práctica —
+      se sentía repetido, y 5/6 tarjetas mostraban un casillero gris
+      "Foto de perfil" sin terminar de resolver nada.
+   2) "perfil destacado" (Pablo) + roster simple para el resto — a
+      pedido explícito, quedó sin jerarquía real entre Pablo y los
+      demás y el roster se sentía pobre.
+   3) (actual) .team-index-*: índice de filas, mismo trato para los
+      6 — nombre siempre visible a la izquierda, foto al medio y
+      cargo+bio a la derecha, ambas ocultas hasta hover/foco de
+      teclado (alto de fila fijo siempre, ver el media query). Los 5
+      sin foto real usan un círculo con iniciales en el lugar de la
+      foto. Fuera de ese media (mobile/táctil) todo queda visible
+      siempre.
 ========================================================= */
 
 .team {
@@ -1383,149 +1383,148 @@ section[id],
   margin-inline: auto;
 }
 
-.team-featured {
-  display: grid;
-  grid-template-columns: minmax(200px, 300px) 1fr;
-  gap: clamp(28px, 4vw, 56px);
+.team-index {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Base (mobile/sin soporte de hover): todo en flujo normal y
+   siempre visible — foto chica al lado del nombre, detalle debajo.
+   Ver el media de abajo para el layout de escritorio (nombre | foto
+   | detalle en columnas, foto+detalle ocultos hasta hover/foco). */
+.team-index-row {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 18px;
 
-  margin-bottom: 40px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 22px 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.team-featured-media {
-  aspect-ratio: 4 / 5;
-  border: 1px solid rgba(200, 154, 104, 0.3);
-}
+.team-index-name {
+  flex: 1 1 100%;
+  order: 1;
 
-.team-featured-media img {
-  width: 100%;
-}
-
-.team-featured-eyebrow {
-  display: block;
-  margin-bottom: 10px;
-  color: var(--bronze-dark);
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-}
-
-.team-featured-name {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(3.2rem, 4.4vw, 4.6rem);
-  line-height: 1.05;
+  font-size: clamp(2rem, 2.2vw, 2.4rem);
   color: var(--graphite-900);
 }
 
-.team-featured-body .team-role {
+.team-index-photo {
+  order: 2;
+  flex: 0 0 auto;
+
+  width: 84px;
+  height: 84px;
+  border: 1px solid rgba(200, 154, 104, 0.35);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.team-index-photo picture,
+.team-index-photo img {
   display: block;
-  margin-top: 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-index-photo--placeholder {
+  display: grid;
+  place-items: center;
+
+  background: var(--graphite-950);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--bronze-light);
+}
+
+.team-index-detail {
+  order: 3;
+  flex: 1 1 260px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.team-index-detail .team-role {
   color: var(--bronze-dark);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
-.team-featured-body p {
+.team-index-bio {
   max-width: 480px;
-  margin-top: 16px;
   color: var(--gray);
-  font-size: 1.5rem;
-  line-height: 1.65;
+  font-size: 1.3rem;
+  line-height: 1.6;
 }
 
-.team-featured-body .team-link {
+.team-index-detail .team-link {
   display: inline-block;
-  margin-top: 16px;
-  font-size: 1.1rem;
+  margin-top: 4px;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--bronze-dark);
   border-bottom: 1px solid var(--bronze-dark);
 }
 
-/* Label + tipografía más chica/atenuada que .team-featured-* a
-   propósito — el contraste de tamaño y color ES la jerarquía entre
-   el perfil destacado y el resto (no hay datos reales de seniority
-   para basarla en otra cosa). */
-.team-roster-label {
-  display: block;
-  margin-bottom: 14px;
-  color: var(--gray);
-  font-size: 1.05rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+.team-index-row:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: -4px;
 }
 
-.team-roster {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.team-roster-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
-
-  padding: 15px 6px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
-  transition: background-color 0.3s ease;
-}
-
-.team-roster-avatar {
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(200, 154, 104, 0.35);
-  border-radius: 50%;
-  background: var(--graphite-950);
-
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  color: var(--bronze-light);
-}
-
-.team-roster-name {
-  flex: 1 1 auto;
-  min-width: 0;
-
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.6rem, 1.7vw, 1.9rem);
-  color: var(--graphite-800);
-}
-
-.team-roster-role {
-  flex: 0 0 auto;
-  color: var(--gray);
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
+/* Escritorio con mouse real: nombre | foto | detalle en columnas, con
+   foto y detalle ocultos (opacity) hasta hover/foco — el alto de la
+   fila queda fijo siempre (las celdas de foto/detalle ya ocupan su
+   lugar en el grid, solo cambian de opacidad), así que nada se mueve
+   ni reserva espacio vacío al revelar. */
 @media (hover: hover) and (pointer: fine) {
-  .team-roster-row:hover {
+  .team-index-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) 110px 1fr;
+    align-items: center;
+    gap: clamp(24px, 3vw, 56px);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .team-index-name {
+    transition: color 0.3s ease;
+  }
+
+  .team-index-photo {
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+  }
+
+  .team-index-detail {
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+  }
+
+  .team-index-row:hover,
+  .team-index-row:focus-within {
     background-color: rgba(173, 125, 76, 0.06);
   }
-}
 
-@media (max-width: 760px) {
-  .team-featured {
-    grid-template-columns: 1fr;
+  .team-index-row:hover .team-index-name,
+  .team-index-row:focus-within .team-index-name {
+    color: var(--bronze-dark);
   }
 
-  .team-featured-media {
-    max-width: 260px;
+  .team-index-row:hover .team-index-photo,
+  .team-index-row:focus-within .team-index-photo,
+  .team-index-row:hover .team-index-detail,
+  .team-index-row:focus-within .team-index-detail {
+    opacity: 1;
+    transform: none;
   }
 }
 

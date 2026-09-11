@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910t" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910u" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -494,30 +494,21 @@
         </div>
       </section>
 
-      <!-- EQUIPO — a pedido explícito, se rehizo por completo: el
-           sistema de tarjetas que crecían en hover quedó IDÉNTICO al
-           de Áreas de práctica (misma sección, dos veces seguidas) y
-           encima con 5 de 6 tarjetas mostrando un placeholder gris
-           "Foto de perfil" — se sentía repetido y sin terminar. Una
-           vuelta después: "sigue sin gustarme, no hay jerarquía, son
-           todos por igual" — se reforzó el contraste entre el perfil
-           destacado y el resto (ver CSS) y se agregó el label "Resto
-           del equipo" para separar los dos grupos con claridad. De
-           paso se sacó el eyebrow "Socio fundador" de Pablo — era un
-           título no confirmado, inventado por error; ahora dice
-           "Perfil destacado" (describe la presentación, no un cargo
-           real sin confirmar).
-
-           Nuevo enfoque, distinto del resto del sitio a propósito:
-           perfil destacado (Pablo, único con foto real hoy) arriba en
-           un layout editorial de dos columnas, con TODO el contenido
-           visible siempre (sin hover-reveal, para variar el ritmo);
-           el resto del equipo pasa a un roster simple tipo directorio
-           — avatar circular con iniciales en vez de un casillero gris
-           de "foto pendiente", nombre y cargo en una fila con hairline,
-           nada escondido detrás de hover porque no hay nada que
-           esconder. Mismo texto/datos que antes (nombres, cargos, bio
-           de Pablo), solo cambia la forma. -->
+      <!-- EQUIPO — tercera vuelta, a pedido explícito del usuario tras
+           ver la anterior ("Pablo no tiene por qué aparecer como
+           principal, el modo de mostrar los nombres es una porquería"):
+           se sacó por completo la idea de "perfil destacado + resto"
+           (ya no hay jerarquía entre Pablo y los demás, mismo trato
+           para los 6) y se reemplazó por un índice de filas — nombre
+           siempre visible a la izquierda, foto al medio y cargo+bio a
+           la derecha, ambas ocultas hasta hover/foco de teclado. El
+           alto de cada fila es fijo siempre (la foto/detalle solo
+           cambian de opacidad, nunca de tamaño), así que revelar el
+           contenido no mueve nada ni reserva espacio vacío. Fuera de
+           ese media (mobile/táctil) todo queda visible siempre — el
+           reveal es mejora progresiva, nunca la única forma de ver el
+           contenido. Los 5 sin foto real usan un círculo con iniciales
+           en el mismo lugar donde va la foto de Pablo. -->
       <section class="section team hairline-top" id="equipo">
         <div class="container">
           <div class="team-head-centered" data-reveal>
@@ -529,58 +520,97 @@
             </p>
           </div>
 
-          <div class="team-featured" data-reveal>
-            <div class="team-featured-media photo-duo">
-              <picture>
-                <source srcset="img/pablo.webp" type="image/webp" />
-                <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
-              </picture>
-            </div>
-            <div class="team-featured-body">
-              <span class="team-featured-eyebrow">Perfil destacado</span>
-              <h3 class="team-featured-name">Pablo Luis Crespo</h3>
-              <span class="team-role">Abogado</span>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore.
-              </p>
-              <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
-                Ver perfil completo ↗
-              </a>
-            </div>
-          </div>
+          <div class="team-index" data-reveal>
+            <div class="team-index-row" tabindex="0">
+              <span class="team-index-name">Pablo Luis Crespo</span>
 
-          <div class="team-roster" data-reveal>
-            <span class="team-roster-label">Resto del equipo</span>
+              <span class="team-index-photo photo-duo" aria-hidden="true">
+                <picture>
+                  <source srcset="img/pablo.webp" type="image/webp" />
+                  <img src="img/pablo.jpeg" alt="" loading="lazy" width="800" height="1004" />
+                </picture>
+              </span>
 
-            <div class="team-roster-row">
-              <span class="team-roster-avatar" aria-hidden="true">MB</span>
-              <span class="team-roster-name">Maria Belen Diaz Carrizo</span>
-              <span class="team-roster-role">Abogada</span>
+              <span class="team-index-detail">
+                <span class="team-role">Abogado</span>
+                <span class="team-index-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore.
+                </span>
+                <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
+                  Ver perfil completo ↗
+                </a>
+              </span>
             </div>
 
-            <div class="team-roster-row">
-              <span class="team-roster-avatar" aria-hidden="true">FA</span>
-              <span class="team-roster-name">Fiorella Albertoli</span>
-              <span class="team-roster-role">Abogada</span>
+            <div class="team-index-row" tabindex="0">
+              <span class="team-index-name">Maria Belen Diaz Carrizo</span>
+
+              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">MB</span>
+
+              <span class="team-index-detail">
+                <span class="team-role">Abogada</span>
+                <span class="team-index-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore.
+                </span>
+              </span>
             </div>
 
-            <div class="team-roster-row">
-              <span class="team-roster-avatar" aria-hidden="true">DS</span>
-              <span class="team-roster-name">Danilo Sepulveda</span>
-              <span class="team-roster-role">Abogado</span>
+            <div class="team-index-row" tabindex="0">
+              <span class="team-index-name">Fiorella Albertoli</span>
+
+              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">FA</span>
+
+              <span class="team-index-detail">
+                <span class="team-role">Abogada</span>
+                <span class="team-index-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore.
+                </span>
+              </span>
             </div>
 
-            <div class="team-roster-row">
-              <span class="team-roster-avatar" aria-hidden="true">VG</span>
-              <span class="team-roster-name">Victoria Garcia Vilches</span>
-              <span class="team-roster-role">Abogada</span>
+            <div class="team-index-row" tabindex="0">
+              <span class="team-index-name">Danilo Sepulveda</span>
+
+              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">DS</span>
+
+              <span class="team-index-detail">
+                <span class="team-role">Abogado</span>
+                <span class="team-index-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore.
+                </span>
+              </span>
             </div>
 
-            <div class="team-roster-row">
-              <span class="team-roster-avatar" aria-hidden="true">MM</span>
-              <span class="team-roster-name">Manuel Alfredo Magri</span>
-              <span class="team-roster-role">Abogado</span>
+            <div class="team-index-row" tabindex="0">
+              <span class="team-index-name">Victoria Garcia Vilches</span>
+
+              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">VG</span>
+
+              <span class="team-index-detail">
+                <span class="team-role">Abogada</span>
+                <span class="team-index-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore.
+                </span>
+              </span>
+            </div>
+
+            <div class="team-index-row" tabindex="0">
+              <span class="team-index-name">Manuel Alfredo Magri</span>
+
+              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">MM</span>
+
+              <span class="team-index-detail">
+                <span class="team-role">Abogado</span>
+                <span class="team-index-bio">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore.
+                </span>
+              </span>
             </div>
           </div>
         </div>
@@ -747,6 +777,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910t" defer></script>
+    <script src="./script.js?v=20260910u" defer></script>
   </body>
 </html>
