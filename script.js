@@ -269,9 +269,9 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
   }
 
-  // Áreas de práctica y Equipo: sistema de tarjetas, resuelto 100%
-  // en CSS (ver .areas-card-*/.team-expand-* en style-mcdv.css) —
-  // no necesitan JS.
+  // Áreas de práctica (tarjetas) y Equipo (destacado + roster):
+  // resuelto 100% en CSS (ver .areas-card-*/.team-featured/
+  // .team-roster-* en style-mcdv.css) — no necesitan JS.
 
   gsap.utils.toArray("[data-reveal]:not(#home [data-reveal])").forEach(element => {
     gsap.fromTo(

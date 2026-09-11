@@ -1090,10 +1090,11 @@ section[id],
 }
 
 /* =========================================================
-   ÁREAS DE PRÁCTICA — sistema de tarjetas, mismo mecanismo que
-   .team-expand-* (unificado a pedido explícito, para que ambas
-   secciones sean coherentes entre sí): foto + número + nombre
-   siempre visibles; descripción + "Ver más" se revelan en
+   ÁREAS DE PRÁCTICA — sistema de tarjetas con reveal fijo (Equipo
+   usaba este mismo mecanismo pero se rehizo con otro enfoque, ver
+   .team-featured/.team-roster más abajo — las dos juntas se sentían
+   repetidas): foto + número + nombre siempre visibles; descripción
+   + "Ver más" se revelan en
    :hover/:focus-visible DENTRO del mismo alto fijo de la tarjeta —
    la tarjeta nunca cambia de tamaño, así que nunca hace falta
    reservar espacio vacío de más (el problema que tenía la versión
@@ -1130,8 +1131,8 @@ section[id],
   color: inherit;
 }
 
-/* Esquinas tipo "marca de registro", mismo detalle que
-   .team-expand-card. */
+/* Esquinas tipo "marca de registro" (detalle de museo/plano de
+   arquitecto), en dos de las cuatro esquinas. */
 .areas-card::before,
 .areas-card::after {
   content: "";
@@ -1374,32 +1375,23 @@ section[id],
 }
 
 /* =========================================================
-   EQUIPO — fila de tarjetas que se expanden en hover (referencia:
-   video que mandó la clienta de goldmanwolfe.com, sección "Our
-   Services": tarjetas parejas, la que está bajo el mouse crece por
-   encima de las demás revelando texto). Acá el crecimiento llega
-   hasta el tope de la fila (más marcado que la referencia, a pedido
-   explícito), y en vez de servicios son las 6 personas del equipo.
+   EQUIPO — rehecho por completo a pedido explícito: el sistema de
+   tarjetas que crecían en hover quedó idéntico al de Áreas de
+   práctica (dos secciones seguidas con el mismo componente) y
+   encima 5 de 6 tarjetas mostraban un casillero gris "Foto de
+   perfil" — se sentía repetido y sin terminar.
 
-   Por defecto (base, sin gatear por media query) es una GRILLA
-   simple con todo visible siempre — el mismo contenido, sin ningún
-   estado oculto — porque es el fallback seguro para mobile/tablet/
-   táctil, donde no existe :hover persistente. Recién dentro de
-   @media (hover:hover) and (pointer:fine) el layout pasa a fila +
-   alto colapsado + expansión en :hover/:focus-within/:focus-visible
-   (cada tarjeta tiene tabindex="0", así el teclado también puede
-   expandirla, no es un efecto hover-only). El "&&" con pointer:fine
-   evita que una tablet con mouse Bluetooth pero pantalla táctil
-   quede en un estado intermedio raro.
+   Nuevo enfoque, deliberadamente distinto del resto del sitio:
+   - .team-featured: el socio con foto real (Pablo) en un layout
+     editorial de dos columnas, TODO visible siempre (sin
+     hover-reveal — variación de ritmo a propósito frente al resto
+     del sitio, que sí usa mucho hover-reveal).
+   - .team-roster: el resto del equipo en un directorio simple —
+     avatar circular con iniciales (no un placeholder gris de "foto
+     pendiente") + nombre + cargo, separados por hairlines. Nada
+     escondido detrás de hover porque no hay nada que esconder.
 ========================================================= */
 
-/* Padding y encabezado achicados a propósito (antes: 80px/clamp
-   hasta 5rem/margen 60px) — mismo motivo que .areas-index/.manifesto:
-   coherencia entre secciones y menos "vacío" arriba de las tarjetas.
-   El alto de la fila de tarjetas (abajo, dentro del media de hover)
-   también se acortó, pero sin tocar el alto colapsado de cada
-   tarjeta (230px, pedido explícito de una vuelta anterior) — sigue
-   habiendo margen real para que la apertura en hover se note. */
 .team {
   background: var(--paper);
   padding: 56px 0 70px;
@@ -1433,175 +1425,135 @@ section[id],
   margin-inline: auto;
 }
 
-.team-expand-row {
+.team-featured {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
+  grid-template-columns: minmax(200px, 300px) 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.team-expand-card {
-  position: relative;
-  overflow: hidden;
+.team-featured-media {
   aspect-ratio: 4 / 5;
-  background: var(--graphite-900);
+  border: 1px solid rgba(200, 154, 104, 0.3);
 }
 
-/* Detalle: esquinas tipo "marca de registro" (tarjeta de museo/plano
-   de arquitecto) en dos de las cuatro esquinas — sutil, no un marco
-   completo. Prueba puntual en Equipo + Áreas de práctica antes de
-   extenderlo al resto del sitio. */
-.team-expand-card::before,
-.team-expand-card::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  width: 18px;
-  height: 18px;
-  border-color: var(--bronze-light);
-  border-style: solid;
-  opacity: 0.85;
-  pointer-events: none;
+.team-featured-media img {
+  width: 100%;
 }
 
-.team-expand-card::before {
-  top: 10px;
-  left: 10px;
-  border-width: 1.5px 0 0 1.5px;
-}
-
-.team-expand-card::after {
-  bottom: 10px;
-  right: 10px;
-  border-width: 0 1.5px 1.5px 0;
-}
-
-.team-expand-media {
-  position: absolute;
-  inset: 0;
-}
-
-.team-expand-media img {
-  height: 100%;
-  object-fit: cover;
-}
-
-.team-expand-media.team-avatar-placeholder {
-  display: grid;
-  place-items: center;
-  background: linear-gradient(150deg, var(--graphite-900) 0%, var(--graphite-850) 100%);
-}
-
-.team-avatar-placeholder span {
-  color: var(--gray-light);
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-align: center;
-  line-height: 1.5;
-}
-
-.team-expand-scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(14, 16, 22, 0) 35%, rgba(14, 16, 22, 0.85) 100%);
-}
-
-.team-expand-body {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 22px;
-}
-
-.team-expand-name {
-  color: var(--paper);
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  line-height: 1.2;
-}
-
-.team-expand-detail .team-role {
+.team-featured-eyebrow {
   display: block;
-  margin-top: 14px;
-  color: var(--bronze-light);
-  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--bronze-dark);
+  font-size: 1.1rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-weight: 700;
 }
 
-.team-expand-detail p {
-  color: var(--gray-light);
-  font-size: 1.3rem;
-  line-height: 1.6;
+.team-featured-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 3.6vw, 3.6rem);
+  line-height: 1.1;
+  color: var(--graphite-900);
+}
+
+.team-featured-body .team-role {
+  display: block;
   margin-top: 8px;
-}
-
-.team-expand-detail .team-link {
-  display: inline-block;
-  margin-top: 10px;
+  color: var(--bronze-dark);
   font-size: 1.05rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.team-featured-body p {
+  max-width: 480px;
+  margin-top: 16px;
+  color: var(--gray);
+  font-size: 1.5rem;
+  line-height: 1.65;
+}
+
+.team-featured-body .team-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--bronze-dark);
+  border-bottom: 1px solid var(--bronze-dark);
+}
+
+.team-roster {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.team-roster-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+
+  padding: 18px 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  transition: background-color 0.3s ease;
+}
+
+.team-roster-avatar {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(200, 154, 104, 0.4);
+  border-radius: 50%;
+  background: var(--graphite-950);
+
+  font-family: var(--font-display);
+  font-size: 1.3rem;
   color: var(--bronze-light);
-  border-bottom: 1px solid var(--bronze-light);
+}
+
+.team-roster-name {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 2vw, 2.2rem);
+  color: var(--graphite-900);
+}
+
+.team-roster-role {
+  flex: 0 0 auto;
+  color: var(--bronze-dark);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  /* Antes la tarjeta colapsada (230px) vivía dentro de una fila más
-     alta (300-400px), ancladas abajo, y crecía hacia arriba ocupando
-     ese espacio reservado — a pedido explícito, ese hueco vacío
-     arriba de las tarjetas en reposo quedaba molesto. Ahora la fila
-     mide exactamente lo que miden las tarjetas (alto fijo, sin
-     reservar nada de más) y lo que se revela en hover/foco es el
-     detalle DENTRO de esa misma altura (la tarjeta no cambia de
-     tamaño) — mismo contenido, cero espacio de sobra en reposo. */
-  .team-expand-row {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-    height: clamp(260px, 30vh, 340px);
+  .team-roster-row:hover {
+    background-color: rgba(173, 125, 76, 0.06);
+  }
+}
+
+@media (max-width: 760px) {
+  .team-featured {
+    grid-template-columns: 1fr;
   }
 
-  .team-expand-card {
-    flex: 1;
-    aspect-ratio: auto;
-    cursor: pointer;
-  }
-
-  .team-expand-card:focus-visible {
-    outline: 2px solid var(--bronze);
-    outline-offset: -4px;
-  }
-
-  .team-expand-scrim {
-    transition: background 0.4s var(--ease);
-  }
-
-  .team-expand-card:hover .team-expand-scrim,
-  .team-expand-card:focus-within .team-expand-scrim {
-    background: linear-gradient(180deg, rgba(14, 16, 22, 0) 10%, rgba(14, 16, 22, 0.92) 100%);
-  }
-
-  .team-expand-detail {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s var(--ease), opacity 0.3s ease;
-  }
-
-  .team-expand-card:hover .team-expand-detail,
-  .team-expand-card:focus-within .team-expand-detail {
-    max-height: 190px;
-    opacity: 1;
-  }
-
-  .team-expand-card:hover .team-expand-name,
-  .team-expand-card:focus-within .team-expand-name {
-    font-size: 2.1rem;
+  .team-featured-media {
+    max-width: 260px;
   }
 }
 

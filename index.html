@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910q" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910r" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -374,15 +374,14 @@
         </div>
       </section>
 
-      <!-- ÁREAS DE PRÁCTICA — pasa a ser un sistema de tarjetas, igual
-           que .team-expand-* (a pedido explícito, para que las dos
-           secciones sean coherentes entre sí): foto real + nombre
-           siempre visibles, descripción + "Ver más" revelados en
-           hover/foco DENTRO del mismo alto fijo de la tarjeta (no
-           crece, no reserva espacio vacío — mismo mecanismo que se
-           usó para arreglar el hueco molesto de Equipo). Fuera de
-           ese media (mobile/táctil) es una grilla simple con todo
-           visible siempre. -->
+      <!-- ÁREAS DE PRÁCTICA — sistema de tarjetas con foto real +
+           nombre siempre visibles; descripción + "Ver más" se
+           revelan en hover/foco DENTRO del mismo alto fijo de la
+           tarjeta (nunca crece, nunca reserva espacio vacío de más).
+           Fuera de ese media (mobile/táctil) es una grilla simple con
+           todo visible siempre. Nota: Equipo usaba este mismo
+           mecanismo pero se rehizo con un enfoque distinto (ver esa
+           sección) porque las dos juntas se sentían repetidas. -->
       <section class="areas-index hairline-top" id="areas">
         <div class="container">
           <div class="areas-head-centered" data-reveal>
@@ -501,22 +500,22 @@
         </div>
       </section>
 
-      <!-- EQUIPO — fila de tarjetas que se expanden en hover, según
-        referencia (video) que mandó la clienta. Pablo primero (tiene
-        foto real, reusada de su propio sitio); el resto queda con el
-        espacio marcado como "Foto de perfil" hasta que el estudio
-        mande las fotos.
+      <!-- EQUIPO — a pedido explícito, se rehizo por completo: el
+           sistema de tarjetas que crecían en hover quedó IDÉNTICO al
+           de Áreas de práctica (misma sección, dos veces seguidas) y
+           encima con 5 de 6 tarjetas mostrando un placeholder gris
+           "Foto de perfil" — se sentía repetido y sin terminar.
 
-        Efecto SOLO en dispositivos con mouse fino
-        (hover:hover)+(pointer:fine): la tarjeta bajo el mouse (o con
-        foco de teclado, :focus-within/:focus-visible — cada tarjeta
-        es tabulable) crece hasta el tope de la fila revelando rol +
-        bio; las demás quedan cortas mostrando solo el nombre. En
-        mobile/tablet/táctil, donde no hay :hover persistente, cae a
-        una grilla simple con todo (foto + nombre + rol + bio) visible
-        siempre — mismo criterio que el resto del sitio: el efecto es
-        una mejora progresiva, nunca la única forma de ver el
-        contenido. -->
+           Nuevo enfoque, distinto del resto del sitio a propósito:
+           socio destacado (Pablo, único con foto real hoy) arriba en
+           un layout editorial de dos columnas, con TODO el contenido
+           visible siempre (sin hover-reveal, para variar el ritmo);
+           el resto del equipo pasa a un roster simple tipo directorio
+           — avatar circular con iniciales en vez de un casillero gris
+           de "foto pendiente", nombre y cargo en una fila con hairline,
+           nada escondido detrás de hover porque no hay nada que
+           esconder. Mismo texto/datos que antes (nombres, cargos, bio
+           de Pablo), solo cambia la forma. -->
       <section class="section team hairline-top" id="equipo">
         <div class="container">
           <div class="team-head-centered" data-reveal>
@@ -528,96 +527,57 @@
             </p>
           </div>
 
-          <div class="team-expand-row" data-reveal>
-            <article class="team-expand-card" tabindex="0">
-              <div class="team-expand-media photo-duo">
-                <picture>
-                  <source srcset="img/pablo.webp" type="image/webp" />
-                  <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
-                </picture>
-              </div>
-              <div class="team-expand-scrim" aria-hidden="true"></div>
-              <div class="team-expand-body">
-                <span class="team-expand-name">Pablo Luis Crespo</span>
-                <div class="team-expand-detail">
-                  <span class="team-role">Abogado</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                  <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
-                    Ver perfil completo ↗
-                  </a>
-                </div>
-              </div>
-            </article>
+          <div class="team-featured" data-reveal>
+            <div class="team-featured-media photo-duo">
+              <picture>
+                <source srcset="img/pablo.webp" type="image/webp" />
+                <img src="img/pablo.jpeg" alt="Pablo Luis Crespo" loading="lazy" width="800" height="1004" />
+              </picture>
+            </div>
+            <div class="team-featured-body">
+              <span class="team-featured-eyebrow">Socio fundador</span>
+              <h3 class="team-featured-name">Pablo Luis Crespo</h3>
+              <span class="team-role">Abogado</span>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                sed do eiusmod tempor incididunt ut labore.
+              </p>
+              <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
+                Ver perfil completo ↗
+              </a>
+            </div>
+          </div>
 
-            <article class="team-expand-card" tabindex="0">
-              <div class="team-expand-media team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <div class="team-expand-scrim" aria-hidden="true"></div>
-              <div class="team-expand-body">
-                <span class="team-expand-name">Maria Belen Diaz Carrizo</span>
-                <div class="team-expand-detail">
-                  <span class="team-role">Abogada</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                </div>
-              </div>
-            </article>
+          <div class="team-roster" data-reveal>
+            <div class="team-roster-row">
+              <span class="team-roster-avatar" aria-hidden="true">MB</span>
+              <span class="team-roster-name">Maria Belen Diaz Carrizo</span>
+              <span class="team-roster-role">Abogada</span>
+            </div>
 
-            <article class="team-expand-card" tabindex="0">
-              <div class="team-expand-media team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <div class="team-expand-scrim" aria-hidden="true"></div>
-              <div class="team-expand-body">
-                <span class="team-expand-name">Fiorella Albertoli</span>
-                <div class="team-expand-detail">
-                  <span class="team-role">Abogada</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                </div>
-              </div>
-            </article>
+            <div class="team-roster-row">
+              <span class="team-roster-avatar" aria-hidden="true">FA</span>
+              <span class="team-roster-name">Fiorella Albertoli</span>
+              <span class="team-roster-role">Abogada</span>
+            </div>
 
-            <article class="team-expand-card" tabindex="0">
-              <div class="team-expand-media team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <div class="team-expand-scrim" aria-hidden="true"></div>
-              <div class="team-expand-body">
-                <span class="team-expand-name">Danilo Sepulveda</span>
-                <div class="team-expand-detail">
-                  <span class="team-role">Abogado</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                </div>
-              </div>
-            </article>
+            <div class="team-roster-row">
+              <span class="team-roster-avatar" aria-hidden="true">DS</span>
+              <span class="team-roster-name">Danilo Sepulveda</span>
+              <span class="team-roster-role">Abogado</span>
+            </div>
 
-            <article class="team-expand-card" tabindex="0">
-              <div class="team-expand-media team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <div class="team-expand-scrim" aria-hidden="true"></div>
-              <div class="team-expand-body">
-                <span class="team-expand-name">Victoria Garcia Vilches</span>
-                <div class="team-expand-detail">
-                  <span class="team-role">Abogada</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                </div>
-              </div>
-            </article>
+            <div class="team-roster-row">
+              <span class="team-roster-avatar" aria-hidden="true">VG</span>
+              <span class="team-roster-name">Victoria Garcia Vilches</span>
+              <span class="team-roster-role">Abogada</span>
+            </div>
 
-            <article class="team-expand-card" tabindex="0">
-              <div class="team-expand-media team-avatar-placeholder">
-                <span>Foto de<br />perfil</span>
-              </div>
-              <div class="team-expand-scrim" aria-hidden="true"></div>
-              <div class="team-expand-body">
-                <span class="team-expand-name">Manuel Alfredo Magri</span>
-                <div class="team-expand-detail">
-                  <span class="team-role">Abogado</span>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                </div>
-              </div>
-            </article>
+            <div class="team-roster-row">
+              <span class="team-roster-avatar" aria-hidden="true">MM</span>
+              <span class="team-roster-name">Manuel Alfredo Magri</span>
+              <span class="team-roster-role">Abogado</span>
+            </div>
           </div>
         </div>
       </section>
@@ -776,6 +736,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910q" defer></script>
+    <script src="./script.js?v=20260910r" defer></script>
   </body>
 </html>
