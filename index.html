@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260911b" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260911c" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -117,6 +117,60 @@
             "name": "MCDV & Asociados",
             "inLanguage": "es-AR",
             "publisher": { "@id": "https://mcdvasociados.com.ar/#studio" }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://mcdvasociados.com.ar/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿Cómo puedo solicitar una consulta?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Podés escribirnos por WhatsApp o completar el formulario de contacto de esta página; coordinamos una entrevista presencial o virtual según lo que te resulte más cómodo."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Atienden de forma presencial y virtual?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí, el estudio ofrece atención presencial y virtual, para que la distancia no sea un obstáculo a la hora de recibir asesoramiento."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿En qué áreas del derecho pueden ayudarme?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Trabajamos en Derecho de Familia, Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Qué tengo que llevar a la primera consulta?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Alcanza con tu documento y cualquier papel relacionado con tu situación (contratos, notificaciones, estudios médicos, etc.); en la consulta te indicamos qué más hace falta según el caso."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Puedo hacer una consulta urgente?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí, contemplamos consultas urgentes. Contanos la situación por WhatsApp y te respondemos a la brevedad para definir los próximos pasos."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿En qué zona atienden?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Atendemos en toda la provincia de Chubut, de forma presencial y virtual."
+                }
+              }
+            ]
           }
         ]
       }
@@ -390,9 +444,10 @@
               <div class="areas-accordion-collapse">
                 <div class="areas-accordion-body">
                   <p>
-                    Alimentos, Divorcios, Cuidado Personal, Régimen de
-                    Comunicación, Violencia Familiar y de Género,
-                    Mediaciones.
+                    Acompañamos a las familias en los momentos donde más
+                    se necesita claridad y contención: Alimentos,
+                    Divorcios, Cuidado Personal, Régimen de Comunicación,
+                    Violencia Familiar y de Género, Mediaciones.
                   </p>
                   <a href="areas/derecho-de-familia.html" class="area-card-link">Ver más ↗</a>
                 </div>
@@ -408,8 +463,9 @@
               <div class="areas-accordion-collapse">
                 <div class="areas-accordion-body">
                   <p>
-                    Declaratorias, Particiones, Inscripción de Bienes,
-                    Acuerdos Particionarios.
+                    Guiamos a las familias en el proceso sucesorio de
+                    principio a fin: Declaratorias, Particiones,
+                    Inscripción de Bienes, Acuerdos Particionarios.
                   </p>
                   <a href="areas/sucesiones.html" class="area-card-link">Ver más ↗</a>
                 </div>
@@ -425,8 +481,9 @@
               <div class="areas-accordion-collapse">
                 <div class="areas-accordion-body">
                   <p>
-                    ART, Despidos, Violencia Laboral, Conciliaciones,
-                    Audiencias SRT.
+                    Asesoramos a trabajadores y empleadores buscando
+                    siempre la vía más rápida y efectiva: ART, Despidos,
+                    Violencia Laboral, Conciliaciones, Audiencias SRT.
                   </p>
                   <a href="areas/derecho-laboral.html" class="area-card-link">Ver más ↗</a>
                 </div>
@@ -441,7 +498,11 @@
               </summary>
               <div class="areas-accordion-collapse">
                 <div class="areas-accordion-body">
-                  <p>Obras Sociales, Prepagas, Medicamentos, Tratamientos.</p>
+                  <p>
+                    Defendemos el derecho a la salud cuando obras
+                    sociales o prepagas no responden a tiempo: Obras
+                    Sociales, Prepagas, Medicamentos, Tratamientos.
+                  </p>
                   <a href="areas/amparos-de-salud.html" class="area-card-link">Ver más ↗</a>
                 </div>
               </div>
@@ -456,6 +517,8 @@
               <div class="areas-accordion-collapse">
                 <div class="areas-accordion-body">
                   <p>
+                    Representamos a personas y empresas en conflictos
+                    civiles y contractuales con una estrategia clara:
                     Daños y Perjuicios, Desalojos, Ejecuciones
                     Contractuales.
                   </p>
@@ -626,6 +689,89 @@
         </div>
       </section>
 
+      <!-- PREGUNTAS FRECUENTES — sección nueva, a pedido explícito
+           ("agregar mas secciones... que mejore el seo"). Contenido
+           real: nada de estadísticas/precios/promesas inventadas,
+           solo logística (cómo consultar, zonas, qué llevar) y datos
+           que ya existían en otro lado del sitio (las 5 áreas,
+           "presencial y virtual", Chubut — ver el JSON-LD del
+           <head>). Layout deliberadamente distinto de Áreas
+           (acordeón <details>) y de Equipo (directorio con radios):
+           acá no hace falta ocultar nada, así que va todo visible de
+           entrada en una grilla de 2 columnas — mejor para SEO/
+           accesibilidad (nada depende de un click para que el
+           contenido exista) y punto de comparación en las capturas
+           por si más adelante hay más FAQ que un layout con
+           interacción sí justifique. Fondo claro (--paper): statement
+           y contact son las dos secciones oscuras que quedaban
+           seguidas; esta rompe esa racha y vuelve a alternar. Mismas
+           preguntas en el FAQPage del JSON-LD, ver <head>. -->
+      <section class="faq hairline-top" id="preguntas-frecuentes">
+        <div class="container">
+          <div class="faq-head-centered" data-reveal>
+            <h2>Preguntas frecuentes</h2>
+            <span class="faq-underline" aria-hidden="true"></span>
+            <p>Antes de escribirnos, puede que ya tengas la respuesta acá.</p>
+          </div>
+
+          <div class="faq-grid" data-reveal>
+            <div class="faq-item">
+              <h3>¿Cómo puedo solicitar una consulta?</h3>
+              <p>
+                Podés escribirnos por WhatsApp o completar el formulario
+                de contacto de esta página; coordinamos una entrevista
+                presencial o virtual según lo que te resulte más cómodo.
+              </p>
+            </div>
+
+            <div class="faq-item">
+              <h3>¿Atienden de forma presencial y virtual?</h3>
+              <p>
+                Sí, el estudio ofrece atención presencial y virtual,
+                para que la distancia no sea un obstáculo a la hora de
+                recibir asesoramiento.
+              </p>
+            </div>
+
+            <div class="faq-item">
+              <h3>¿En qué áreas del derecho pueden ayudarme?</h3>
+              <p>
+                Trabajamos en Derecho de Familia, Sucesiones, Derecho
+                Laboral, Amparos de Salud y Derecho Civil — podés ver el
+                detalle de cada una en Áreas de práctica.
+              </p>
+            </div>
+
+            <div class="faq-item">
+              <h3>¿Qué tengo que llevar a la primera consulta?</h3>
+              <p>
+                Alcanza con tu documento y cualquier papel relacionado
+                con tu situación (contratos, notificaciones, estudios
+                médicos, etc.); en la consulta te indicamos qué más
+                hace falta según el caso.
+              </p>
+            </div>
+
+            <div class="faq-item">
+              <h3>¿Puedo hacer una consulta urgente?</h3>
+              <p>
+                Sí, contemplamos consultas urgentes — contanos la
+                situación por WhatsApp y te respondemos a la brevedad
+                para definir los próximos pasos.
+              </p>
+            </div>
+
+            <div class="faq-item">
+              <h3>¿En qué zona atienden?</h3>
+              <p>
+                Atendemos en toda la provincia de Chubut, de forma
+                presencial y virtual.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- CONTACTO — antes: todo en una columna centrada verticalmente
            (label "Contacto" chico, link gigante de WhatsApp, nota,
            Instagram, y el formulario abajo de todo eso). Ahora: dos
@@ -642,7 +788,7 @@
             <span class="contact-kicker">Contacto</span>
 
             <a href="#" id="waContact" class="contact-mega" target="_blank" rel="noopener">
-              Hablemos por WhatsApp <span aria-hidden="true">↗</span>
+              Envianos tu consulta <span aria-hidden="true">↗</span>
             </a>
 
             <p class="contact-note">
@@ -768,6 +914,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260911b" defer></script>
+    <script src="./script.js?v=20260911c" defer></script>
   </body>
 </html>
