@@ -1070,17 +1070,13 @@ section[id],
 
 
 /* =========================================================
-   ÁREAS DE PRÁCTICA — sistema de tarjetas con reveal fijo (Equipo
-   usaba este mismo mecanismo al principio pero se rehizo con otro
-   enfoque, ver .team-index-* más abajo — las dos juntas se sentían
-   repetidas): foto + número + nombre siempre visibles; descripción
-   + "Ver más" se revelan en
-   :hover/:focus-visible DENTRO del mismo alto fijo de la tarjeta —
-   la tarjeta nunca cambia de tamaño, así que nunca hace falta
-   reservar espacio vacío de más (el problema que tenía la versión
-   anterior de Equipo). Fuera de ese media (mobile/táctil) es una
-   grilla simple con todo visible siempre — mejora progresiva, nunca
-   la única forma de ver el nombre de un área o entrar a su página.
+   ÁREAS DE PRÁCTICA — índice de filas, misma "familia" visual que
+   .team-index-* (hairlines, columnas, serif) sin ser un calco: acá
+   SÍ hay foto real y descripción ya escrita para las 5, así que todo
+   queda visible SIEMPRE — nada oculto detrás de hover, a diferencia
+   de Equipo (esconde foto/bio porque la mayoría no tiene foto real
+   todavía). Lo único que cambia en hover/foco es que la foto pasa de
+   apagada/gris a iluminada — mejora decorativa, no esconde nada.
 ========================================================= */
 
 .areas-index {
@@ -1090,162 +1086,115 @@ section[id],
   padding: 48px 0 60px;
 }
 
-.areas-card-row {
-  margin-top: 24px;
-
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+.areas-row-list {
+  margin-top: 20px;
+  border-top: 1px solid rgba(200, 154, 104, 0.25);
 }
 
-.areas-card {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
+.areas-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(16px, 2.5vw, 32px);
 
-  display: block;
-  aspect-ratio: 4 / 5;
-  background: var(--graphite-900);
+  padding: 22px 8px;
+  border-bottom: 1px solid rgba(200, 154, 104, 0.25);
 
   text-decoration: none;
   color: inherit;
+
+  transition: background-color 0.3s ease;
 }
 
-/* Esquinas tipo "marca de registro" (detalle de museo/plano de
-   arquitecto), en dos de las cuatro esquinas. */
-.areas-card::before,
-.areas-card::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  width: 18px;
-  height: 18px;
-  border-color: var(--bronze-light);
-  border-style: solid;
-  opacity: 0.85;
-  pointer-events: none;
+.areas-row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+
+  flex: 0 0 auto;
+  min-width: 240px;
 }
 
-.areas-card::before {
-  top: 10px;
-  left: 10px;
-  border-width: 1.5px 0 0 1.5px;
+.areas-row-number {
+  min-width: 2.4ch;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--bronze);
 }
 
-.areas-card::after {
-  bottom: 10px;
-  right: 10px;
-  border-width: 0 1.5px 1.5px 0;
+.areas-row-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 2.4vw, 2.6rem);
+  color: var(--paper);
+  transition: color 0.3s ease;
 }
 
-.areas-card-media {
-  position: absolute;
-  inset: 0;
+.areas-row-desc {
+  flex: 1 1 280px;
+  margin: 0;
+  color: var(--gray-light);
+  font-size: 1.3rem;
+  line-height: 1.5;
 }
 
-.areas-card-media img {
+.areas-row-media {
+  order: 3;
+  flex: 0 0 auto;
+
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(200, 154, 104, 0.3);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.areas-row-media img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: grayscale(0.4) brightness(0.5);
+  transition: filter 0.4s var(--ease), transform 0.4s var(--ease);
 }
 
-.areas-card-scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(14, 16, 22, 0) 35%, rgba(14, 16, 22, 0.88) 100%);
-}
+.areas-row-arrow {
+  order: 4;
+  flex: 0 0 auto;
 
-.areas-card-body {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 22px;
-}
-
-.areas-card-number {
-  display: block;
-  margin-bottom: 4px;
+  font-size: 1.4rem;
   color: var(--bronze-light);
-  font-family: var(--font-display);
-  font-size: 1.2rem;
+  opacity: 0;
+  transform: translate(-6px, 6px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
 }
 
-.areas-card-name {
-  color: var(--paper);
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.8rem;
-  line-height: 1.2;
-}
-
-.areas-card-detail p {
-  color: var(--gray-light);
-  font-size: 1.25rem;
-  line-height: 1.55;
-  margin-top: 10px;
-}
-
-.areas-card-link {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--bronze-light);
-  border-bottom: 1px solid var(--bronze-light);
-}
-
-.areas-card:focus-visible {
+.areas-row:focus-visible {
   outline: 2px solid var(--bronze);
   outline-offset: -4px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  /* Alto fijo — ver comentario largo arriba del bloque: la tarjeta
-     nunca crece, el detalle se revela adentro. */
-  .areas-card-row {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-    height: clamp(260px, 30vh, 340px);
+  .areas-row:hover,
+  .areas-row:focus-visible {
+    background-color: rgba(173, 125, 76, 0.06);
   }
 
-  .areas-card {
-    flex: 1;
-    aspect-ratio: auto;
-    cursor: pointer;
+  .areas-row:hover .areas-row-name,
+  .areas-row:focus-visible .areas-row-name {
+    color: var(--bronze-light);
   }
 
-  .areas-card-scrim {
-    transition: background 0.4s var(--ease);
+  .areas-row:hover .areas-row-media img,
+  .areas-row:focus-visible .areas-row-media img {
+    filter: grayscale(0) brightness(0.9);
+    transform: scale(1.08);
   }
 
-  .areas-card:hover .areas-card-scrim,
-  .areas-card:focus-visible .areas-card-scrim {
-    background: linear-gradient(180deg, rgba(14, 16, 22, 0) 10%, rgba(14, 16, 22, 0.92) 100%);
-  }
-
-  .areas-card-detail {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition:
-      max-height 0.4s var(--ease),
-      opacity 0.3s ease;
-  }
-
-  .areas-card:hover .areas-card-detail,
-  .areas-card:focus-visible .areas-card-detail {
-    max-height: 170px;
+  .areas-row:hover .areas-row-arrow,
+  .areas-row:focus-visible .areas-row-arrow {
     opacity: 1;
-  }
-
-  .areas-card:hover .areas-card-name,
-  .areas-card:focus-visible .areas-card-name {
-    font-size: 2.1rem;
+    transform: none;
   }
 }
 

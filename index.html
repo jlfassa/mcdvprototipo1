@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910u" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910v" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -368,14 +368,20 @@
         </div>
       </section>
 
-      <!-- ÁREAS DE PRÁCTICA — sistema de tarjetas con foto real +
-           nombre siempre visibles; descripción + "Ver más" se
-           revelan en hover/foco DENTRO del mismo alto fijo de la
-           tarjeta (nunca crece, nunca reserva espacio vacío de más).
-           Fuera de ese media (mobile/táctil) es una grilla simple con
-           todo visible siempre. Nota: Equipo usaba este mismo
-           mecanismo pero se rehizo con un enfoque distinto (ver esa
-           sección) porque las dos juntas se sentían repetidas. -->
+      <!-- ÁREAS DE PRÁCTICA — a pedido explícito, pasa de tarjetas a un
+           índice de filas para que la sección quede de la misma
+           "familia" visual que .team-index-* (hairlines, columnas,
+           serif) sin ser un calco: acá SÍ hay foto real y descripción
+           ya escrita para las 5, así que todo queda visible SIEMPRE
+           (número + nombre + descripción + foto chica) — nada oculto
+           detrás de hover, a diferencia de Equipo (que esconde
+           foto/bio porque 5 de 6 personas no tienen foto real
+           todavía). Lo único que cambia en hover/foco es que la foto
+           se ilumina (deja de estar en gris/oscurecida) — mejora
+           puramente decorativa, no esconde contenido. Investigado
+           mirando setialaw.com (su índice de "Specialist Areas":
+           filas con hairlines, sin tarjetas) con Playwright antes de
+           diseñar esto. -->
       <section class="areas-index hairline-top" id="areas">
         <div class="container">
           <div class="areas-head-centered" data-reveal>
@@ -387,108 +393,93 @@
             </p>
           </div>
 
-          <div class="areas-card-row">
-            <a href="areas/derecho-de-familia.html" class="areas-card">
-              <div class="areas-card-media">
+          <div class="areas-row-list" data-reveal>
+            <a href="areas/derecho-de-familia.html" class="areas-row">
+              <span class="areas-row-head">
+                <span class="areas-row-number">01</span>
+                <span class="areas-row-name">Derecho de Familia</span>
+              </span>
+              <p class="areas-row-desc">
+                Alimentos, Divorcios, Cuidado Personal, Régimen de
+                Comunicación, Violencia Familiar y de Género,
+                Mediaciones.
+              </p>
+              <span class="areas-row-media" aria-hidden="true">
                 <picture>
                   <source srcset="img/hero_1.webp" type="image/webp" />
                   <img src="img/hero_1.jpg" alt="" loading="lazy" width="1920" height="1280" />
                 </picture>
-              </div>
-              <div class="areas-card-scrim" aria-hidden="true"></div>
-              <div class="areas-card-body">
-                <span class="areas-card-number">01</span>
-                <h3 class="areas-card-name">Derecho de Familia</h3>
-                <div class="areas-card-detail">
-                  <p>
-                    Alimentos, Divorcios, Cuidado Personal, Régimen de
-                    Comunicación, Violencia Familiar y de Género,
-                    Mediaciones.
-                  </p>
-                  <span class="areas-card-link">Ver más ↗</span>
-                </div>
-              </div>
+              </span>
+              <span class="areas-row-arrow" aria-hidden="true">↗</span>
             </a>
 
-            <a href="areas/sucesiones.html" class="areas-card">
-              <div class="areas-card-media">
+            <a href="areas/sucesiones.html" class="areas-row">
+              <span class="areas-row-head">
+                <span class="areas-row-number">02</span>
+                <span class="areas-row-name">Sucesiones</span>
+              </span>
+              <p class="areas-row-desc">
+                Declaratorias, Particiones, Inscripción de Bienes,
+                Acuerdos Particionarios.
+              </p>
+              <span class="areas-row-media" aria-hidden="true">
                 <picture>
                   <source srcset="img/parallax_1.webp" type="image/webp" />
                   <img src="img/parallax_1.jpg" alt="" loading="lazy" width="1920" height="1280" />
                 </picture>
-              </div>
-              <div class="areas-card-scrim" aria-hidden="true"></div>
-              <div class="areas-card-body">
-                <span class="areas-card-number">02</span>
-                <h3 class="areas-card-name">Sucesiones</h3>
-                <div class="areas-card-detail">
-                  <p>
-                    Declaratorias, Particiones, Inscripción de Bienes,
-                    Acuerdos Particionarios.
-                  </p>
-                  <span class="areas-card-link">Ver más ↗</span>
-                </div>
-              </div>
+              </span>
+              <span class="areas-row-arrow" aria-hidden="true">↗</span>
             </a>
 
-            <a href="areas/derecho-laboral.html" class="areas-card">
-              <div class="areas-card-media">
+            <a href="areas/derecho-laboral.html" class="areas-row">
+              <span class="areas-row-head">
+                <span class="areas-row-number">03</span>
+                <span class="areas-row-name">Derecho Laboral</span>
+              </span>
+              <p class="areas-row-desc">
+                ART, Despidos, Violencia Laboral, Conciliaciones,
+                Audiencias SRT.
+              </p>
+              <span class="areas-row-media" aria-hidden="true">
                 <picture>
                   <source srcset="img/parallax_2.webp" type="image/webp" />
                   <img src="img/parallax_2.jpg" alt="" loading="lazy" width="1920" height="3065" />
                 </picture>
-              </div>
-              <div class="areas-card-scrim" aria-hidden="true"></div>
-              <div class="areas-card-body">
-                <span class="areas-card-number">03</span>
-                <h3 class="areas-card-name">Derecho Laboral</h3>
-                <div class="areas-card-detail">
-                  <p>
-                    ART, Despidos, Violencia Laboral, Conciliaciones,
-                    Audiencias SRT.
-                  </p>
-                  <span class="areas-card-link">Ver más ↗</span>
-                </div>
-              </div>
+              </span>
+              <span class="areas-row-arrow" aria-hidden="true">↗</span>
             </a>
 
-            <a href="areas/amparos-de-salud.html" class="areas-card">
-              <div class="areas-card-media">
+            <a href="areas/amparos-de-salud.html" class="areas-row">
+              <span class="areas-row-head">
+                <span class="areas-row-number">04</span>
+                <span class="areas-row-name">Amparos de Salud</span>
+              </span>
+              <p class="areas-row-desc">Obras Sociales, Prepagas, Medicamentos, Tratamientos.</p>
+              <span class="areas-row-media" aria-hidden="true">
                 <picture>
                   <source srcset="img/hero_2.webp" type="image/webp" />
                   <img src="img/hero_2.jpg" alt="" loading="lazy" width="1920" height="1280" />
                 </picture>
-              </div>
-              <div class="areas-card-scrim" aria-hidden="true"></div>
-              <div class="areas-card-body">
-                <span class="areas-card-number">04</span>
-                <h3 class="areas-card-name">Amparos de Salud</h3>
-                <div class="areas-card-detail">
-                  <p>Obras Sociales, Prepagas, Medicamentos, Tratamientos.</p>
-                  <span class="areas-card-link">Ver más ↗</span>
-                </div>
-              </div>
+              </span>
+              <span class="areas-row-arrow" aria-hidden="true">↗</span>
             </a>
 
-            <a href="areas/derecho-civil.html" class="areas-card">
-              <div class="areas-card-media">
+            <a href="areas/derecho-civil.html" class="areas-row">
+              <span class="areas-row-head">
+                <span class="areas-row-number">05</span>
+                <span class="areas-row-name">Derecho Civil</span>
+              </span>
+              <p class="areas-row-desc">
+                Daños y Perjuicios, Desalojos, Ejecuciones
+                Contractuales.
+              </p>
+              <span class="areas-row-media" aria-hidden="true">
                 <picture>
                   <source srcset="img/hero_3.webp" type="image/webp" />
                   <img src="img/hero_3.jpg" alt="" loading="lazy" width="1920" height="2560" />
                 </picture>
-              </div>
-              <div class="areas-card-scrim" aria-hidden="true"></div>
-              <div class="areas-card-body">
-                <span class="areas-card-number">05</span>
-                <h3 class="areas-card-name">Derecho Civil</h3>
-                <div class="areas-card-detail">
-                  <p>
-                    Daños y Perjuicios, Desalojos, Ejecuciones
-                    Contractuales.
-                  </p>
-                  <span class="areas-card-link">Ver más ↗</span>
-                </div>
-              </div>
+              </span>
+              <span class="areas-row-arrow" aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
@@ -777,6 +768,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910u" defer></script>
+    <script src="./script.js?v=20260910v" defer></script>
   </body>
 </html>
