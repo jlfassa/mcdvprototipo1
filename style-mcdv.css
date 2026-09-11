@@ -736,33 +736,20 @@ section[id],
   height: 100svh;
 }
 
-.hero-portal-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.hero-portal-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(0.2) contrast(1.08) brightness(0.92);
-}
-
-/* Carrusel de video sobre la foto (ver comentario largo en
-   index.html sobre la fuente/licencia). Vive DENTRO de
-   .hero-portal-media, después del <picture> en el DOM, así queda
-   pintado arriba de la foto pero todavía debajo del duotone/viñeta
-   (que sí deben teñir el video igual que a la foto) — mismo z-index
-   0 que la foto, el orden en el HTML alcanza para el layering. Cada
-   <video> arranca en opacity:0 SIEMPRE por CSS (no solo cuando no
-   hay JS): script.js recién les pone .src y les agrega .is-active
-   cuando corresponde, así que si algo falla ahí el fallback es
-   simplemente "no pasa nada, se ve la foto de siempre" — nunca una
-   pantalla negra o un video roto tapando el hero. */
+/* Ya no hay foto de fondo fija — el carrusel de video ocupa
+   directamente el lugar que tenía .hero-portal-media (mismo
+   inset:0/z-index:0, primero en el DOM del stage, debajo del
+   duotone/viñeta que sí deben teñirlo). El primer <video> arranca con
+   .is-active puesto en el HTML (ver index.html) — visible desde el
+   primer render, sin esperar a JS. Los otros dos arrancan en
+   opacity:0 hasta que initHeroVideoCarousel (script.js) les pone
+   .src y los activa. Si JS fallara del todo, el primero sigue
+   reproduciéndose solo por sus atributos autoplay/loop nativos —
+   nunca queda una pantalla negra. */
 .hero-portal-video-carousel {
   position: absolute;
   inset: 0;
+  z-index: 0;
 }
 
 .hero-portal-video {
@@ -864,11 +851,10 @@ section[id],
   opacity: 0;
   white-space: nowrap;
 
-  /* No depende de qué tan oscura sea la foto de fondo en ese punto
-     exacto — con la foto de la lapicera (más clara que la anterior,
-     de piedra) el "&" en bronce claro casi no se leía contra el
-     papel de fondo. Esta sombra da margen de contraste sea cual sea
-     la imagen que termine usando esta sección. */
+  /* No depende de qué tan oscuro sea el video/foto de fondo en ese
+     punto exacto — sin esto el "&" en bronce claro casi no se leía
+     contra fondos claros. Esta sombra da margen de contraste sea cual
+     sea el clip que esté activo en ese momento. */
   text-shadow: 0 2px 14px rgba(14, 16, 22, 0.55), 0 1px 4px rgba(14, 16, 22, 0.75);
 }
 
@@ -879,25 +865,57 @@ section[id],
   text-shadow: 0 2px 14px rgba(14, 16, 22, 0.7), 0 1px 5px rgba(14, 16, 22, 0.85);
 }
 
-/* Metadata de esquina — decorativo, da un aire editorial/de portada.
-   Oculta por defecto: solo tiene sentido cuando el efecto de portal
-   está activo (ver JS); en el fallback (mobile o sin JS) se solapaba
-   con el título/CTA del hero clásico. */
+/* Aviso de "scroll" — a pedido explícito: un usuario que no esté
+   acostumbrado a un hero con scroll-jack (edad adulta, poco
+   familiarizado con sitios "novedosos") necesita una señal clara de
+   que hay más contenido bajando. Por eso, a diferencia del resto de
+   este portal, NO depende del efecto de escritorio para mostrarse:
+   visible por defecto en cualquier tamaño de pantalla (mismo criterio
+   que .hero-portal-message — seguro primero, JS solo lo apaga cuando
+   el scroll-jack SÍ va a correr, y el propio timeline lo vuelve a
+   mostrar/ocultar en su momento). Centrado abajo (antes vivía en la
+   esquina, como un dato editorial más discreto) y con una flecha que
+   rebota suave — apagada con reduced-motion, queda estática pero
+   igual de visible. */
 .hero-portal-meta {
   position: absolute;
   z-index: 6;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(247, 246, 244, 0.55);
-  opacity: 0;
+  color: rgba(247, 246, 244, 0.8);
+  text-shadow: 0 2px 10px rgba(14, 16, 22, 0.6);
+  pointer-events: none;
 }
 
-.hero-portal-meta--br {
-  bottom: 28px;
-  right: 28px;
+.hero-portal-meta-arrow {
+  font-size: 1.3rem;
+  color: var(--bronze-light);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-portal-meta-arrow {
+    animation: hero-scroll-bounce 2s ease-in-out infinite;
+  }
+}
+
+@keyframes hero-scroll-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
 }
 
 /* Degradé de legibilidad para el contenido real del hero (escudo,

@@ -71,11 +71,18 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260911f" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260911g" />
 
-    <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
-         fallback pesa 94KB) — es la que hace falta para el LCP. -->
-    <link rel="preload" as="image" href="img/hero_facade.webp" type="image/webp" fetchpriority="high" />
+    <!-- El hero ya no muestra una foto fija (ahora es el carrusel de
+         video) — img/hero_facade.jpg sigue en uso solo como imagen de
+         Open Graph/Twitter para cuando se comparte el link (ver
+         meta og:image más arriba), no hace falta precargarla. Lo que
+         sí conviene precargar es el poster del primer video (se ve
+         un instante antes de que el .mp4 termine de cargar) y el
+         propio clip, que ahora es contenido crítico del primer
+         render. -->
+    <link rel="preload" as="image" href="img/hero_video_poster.jpg" fetchpriority="high" />
+    <link rel="preload" as="video" href="video/hero-1.mp4" fetchpriority="high" />
 
     <!-- El directorio de Equipo (radios + :has()) y el hero-portal-message
          ya son visibles/funcionales sin JS por diseño — no necesitan
@@ -245,11 +252,11 @@
       </button>
 
       <nav class="menu-navigation" aria-label="Navegación principal">
-        <a href="#home" data-menu-link><em>01</em><span class="menu-link-text">Inicio</span></a>
-        <a href="#el-estudio" data-menu-link><em>02</em><span class="menu-link-text">El Estudio</span></a>
-        <a href="#areas" data-menu-link><em>03</em><span class="menu-link-text">Áreas de práctica</span></a>
-        <a href="#equipo" data-menu-link><em>04</em><span class="menu-link-text">Equipo</span></a>
-        <a href="#contact" data-menu-link><em>05</em><span class="menu-link-text">Contacto</span></a>
+        <a href="#home" data-menu-link><em>I</em><span class="menu-link-text">Inicio</span></a>
+        <a href="#el-estudio" data-menu-link><em>II</em><span class="menu-link-text">El Estudio</span></a>
+        <a href="#areas" data-menu-link><em>III</em><span class="menu-link-text">Áreas de práctica</span></a>
+        <a href="#equipo" data-menu-link><em>IV</em><span class="menu-link-text">Equipo</span></a>
+        <a href="#contact" data-menu-link><em>V</em><span class="menu-link-text">Contacto</span></a>
       </nav>
 
       <div class="menu-foot">
@@ -265,26 +272,24 @@
     </div>
 
     <main id="main">
-      <!-- HERO "PORTAL" — acto único, ya no dos secciones separadas.
-        Dos paneles sólidos arrancan cerrados, tapando la foto de
-        fondo; al hacer scroll se abren hacia los bordes revelándola,
-        mientras el nombre apilado ("MCDV" / "&" / "Asociados") crece,
-        aprieta su tracking y MCDV/Asociados se separan hacia los
-        costados. Sticky (no pin de GSAP) sobre una sección de 280vh —
-        mismo patrón ya usado en el telón entre Hero y Nosotros de
-        rondas anteriores: más simple/robusto que un pin real para un
-        efecto que es puro scrub.
+      <!-- HERO "PORTAL" — acto único. Dos paneles sólidos arrancan
+        cerrados, tapando el carrusel de video de fondo (ver más abajo
+        — ya no hay foto fija, a pedido explícito); al hacer scroll se
+        abren hacia los bordes revelándolo, mientras el nombre apilado
+        ("MCDV" / "&" / "Asociados") crece, aprieta su tracking y
+        MCDV/Asociados se separan hacia los costados. Sticky (no pin
+        de GSAP) sobre una sección de 280vh — mismo patrón ya usado en
+        el telón entre Hero y Nosotros de rondas anteriores: más
+        simple/robusto que un pin real para un efecto que es puro
+        scrub. Este scroll-jack (puertas + wordmark + mensaje
+        apareciendo en su lugar) sigue siendo SOLO de escritorio ancho
+        — el carrusel de video, en cambio, corre en cualquier tamaño
+        de pantalla, independiente de este efecto (ver script.js).
 
-        Antes había una sección .hero-message aparte, justo debajo,
-        que recién aparecía cuando el scroll-jack del portal terminaba
-        del todo — dejaba un tramo del pin "muerto" (nombre ya
-        desvanecido, nada más pasando) y después un bloque blanco
-        propio que se sentía desconectado ("el hero queda muy vacío...
-        esa sección de abajo queda al pedo"). Ahora .hero-portal-message
-        (escudo textual, "Estudio Jurídico", h1, bajada, CTA) vive
-        ADENTRO del mismo portal, sobre la misma foto: ocupa el lugar
-        del nombre justo cuando termina de desvanecerse, sin sección
-        aparte ni salto de fondo.
+        .hero-portal-message (eyebrow "Estudio Jurídico", h1, bajada,
+        CTA) vive ADENTRO del mismo portal, sobre el mismo video: ocupa
+        el lugar del nombre justo cuando termina de desvanecerse, sin
+        sección aparte ni salto de fondo.
 
         Fallback seguro (sin JS, reduced-motion, o mobile <900px donde
         el scroll-jack se desactiva): los paneles y el wordmark parten
@@ -294,51 +299,67 @@
         el header: seguro por defecto, JS lo oculta con gsap.set() y
         recién ahí lo revela con el scrub — si heroPortalReady es
         false ese gsap.set() nunca corre, así que el mensaje queda
-        visible de entrada, superpuesto a la foto ya estática). -->
+        visible de entrada, superpuesto al video ya reproduciéndose). -->
       <section class="hero-portal" id="home" data-hero-portal>
         <div class="hero-portal-stage">
-          <figure class="hero-portal-media" data-hero-portal-image>
-            <picture>
-              <source srcset="img/hero_facade.webp" type="image/webp" />
-              <img
-                src="img/hero_facade.jpg"
-                alt="MCDV & Asociados, estudio jurídico"
-                width="1700"
-                height="1511"
-                fetchpriority="high"
-              />
-            </picture>
+          <!-- Carrusel de video — ya no hay foto fija de fondo (a
+               pedido explícito: "elimina la imagen de la lapicera...
+               que ya se vean los videos de entrada"). El primero
+               (persona firmando un contrato) tiene src directo +
+               autoplay/muted/loop/playsinline NATIVOS en el HTML, sin
+               depender de JS — funciona incluso sin JavaScript. Los
+               otros dos (referentes a un estudio jurídico, con o sin
+               personas) cargan diferido vía data-src, recién cuando
+               initHeroVideoCarousel corre (ver script.js) — no gatea
+               a heroPortalReady/GSAP como antes: ahora el carrusel es
+               independiente del scroll-jack de escritorio, corre en
+               cualquier ancho de pantalla. Con reduced-motion, ese
+               mismo init pausa el primer video y no arranca el
+               carrusel — el navegador ya lo empezó a reproducir por
+               el atributo autoplay antes de que JS llegue a
+               frenarlo, así que puede haber un instante brevísimo de
+               movimiento; es el mismo trade-off que cualquier
+               autoplay nativo.
 
-            <!-- Carrusel de video — placeholder de stock con licencia
-                 comercial libre (Pexels License, sin atribución
-                 obligatoria: pexels.com/video/man-signing-the-paper-8061370,
-                 .../person-writing-on-a-document-7841608,
-                 .../close-up-video-of-a-person-signing-documents-8725944 —
-                 720p, tal cual los entrega la fuente porque acá no
-                 hay forma de recomprimir video; reemplazar por
-                 filmación propia cuando el estudio la tenga. El
-                 primer candidato que se probó, "a-lawyer-signing-a-
-                 document-7841652", se descartó al revisar los frames:
-                 tenía una bandera de EEUU de fondo, fuera de lugar en
-                 un estudio argentino — ver frames de más de un video
-                 antes de darlo por bueno, un título/tag no alcanza.
-                 Los 3 <video> arrancan
-                 SIN src (solo data-src): no se descarga ni un byte
-                 hasta que heroPortalTl llega al punto donde el h1 ya
-                 terminó de aparecer (ver startHeroVideoCarousel en
-                 script.js) — ese punto solo existe cuando
-                 heroPortalReady es true (desktop ancho + GSAP + sin
-                 reduced-motion), así que en mobile/reduced-motion/sin
-                 JS esto no pesa nada, ni un request. La foto de
-                 arriba sigue siendo el fondo real en todo momento
-                 hasta ese instante, y sigue ahí debajo si el video
-                 fallara. -->
-            <div class="hero-portal-video-carousel" data-hero-portal-video-carousel aria-hidden="true">
-              <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-1.mp4"></video>
-              <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-2.mp4"></video>
-              <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-3.mp4"></video>
-            </div>
-          </figure>
+               placeholder de stock, licencia comercial libre (Pexels
+               License, sin atribución obligatoria) porque no hay
+               filmación propia del estudio todavía, 720p tal cual la
+               entrega la fuente (acá no hay forma de recomprimir
+               video):
+               - video/hero-1.mp4 — pexels.com/video/man-signing-the-paper-8061370
+                 (persona firmando un contrato — el único de este tipo,
+                 a pedido explícito, para no repetir la misma escena).
+               - video/hero-2.mp4 — pexels.com/video/balance-scales-and-gavel-placed-on-a-wooden-desk-5636977
+                 (mazo + balanza, sin personas).
+               - video/hero-3.mp4 — pexels.com/video/lawyer-using-laptop-8061570
+                 (estatua de la Justicia + abogado desenfocado de fondo).
+               El primer candidato para el signing (a-lawyer-signing-
+               a-document-7841652) se descartó al revisar los frames
+               reales: tenía una bandera de EEUU de fondo, fuera de
+               lugar acá — un título/tag nunca alcanza, hay que mirar
+               el video.
+
+               img/hero_video_poster.jpg: frame propio (no de Pexels)
+               capturado del primer clip con Playwright y comprimido a
+               JPEG — es lo que se ve un instante antes de que el
+               video termine de cargar, así nunca hay un flash negro. -->
+          <div class="hero-portal-video-carousel" data-hero-portal-video-carousel aria-hidden="true">
+            <video
+              class="hero-portal-video is-active"
+              data-hero-portal-video
+              src="video/hero-1.mp4"
+              poster="img/hero_video_poster.jpg"
+              width="1280"
+              height="720"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+            ></video>
+            <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-2.mp4"></video>
+            <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-3.mp4"></video>
+          </div>
 
           <div class="hero-portal-duotone" aria-hidden="true" data-hero-portal-duotone></div>
           <div class="hero-portal-vignette" aria-hidden="true"></div>
@@ -381,7 +402,10 @@
             </div>
           </div>
 
-          <span class="hero-portal-meta hero-portal-meta--br" data-hero-portal-meta>Scroll <span aria-hidden="true">↓</span></span>
+          <span class="hero-portal-meta" data-hero-portal-meta>
+            Scroll
+            <span class="hero-portal-meta-arrow" aria-hidden="true">↓</span>
+          </span>
         </div>
       </section>
 
@@ -467,7 +491,7 @@
           <div class="areas-accordion" data-reveal>
             <details class="areas-accordion-item" name="areas-accordion">
               <summary class="areas-accordion-summary">
-                <span class="areas-accordion-number">01</span>
+                <span class="areas-accordion-number">I</span>
                 <span class="areas-accordion-name">Derecho de Familia</span>
                 <span class="areas-accordion-icon" aria-hidden="true"></span>
               </summary>
@@ -486,7 +510,7 @@
 
             <details class="areas-accordion-item" name="areas-accordion">
               <summary class="areas-accordion-summary">
-                <span class="areas-accordion-number">02</span>
+                <span class="areas-accordion-number">II</span>
                 <span class="areas-accordion-name">Sucesiones</span>
                 <span class="areas-accordion-icon" aria-hidden="true"></span>
               </summary>
@@ -504,7 +528,7 @@
 
             <details class="areas-accordion-item" name="areas-accordion">
               <summary class="areas-accordion-summary">
-                <span class="areas-accordion-number">03</span>
+                <span class="areas-accordion-number">III</span>
                 <span class="areas-accordion-name">Derecho Laboral</span>
                 <span class="areas-accordion-icon" aria-hidden="true"></span>
               </summary>
@@ -522,7 +546,7 @@
 
             <details class="areas-accordion-item" name="areas-accordion">
               <summary class="areas-accordion-summary">
-                <span class="areas-accordion-number">04</span>
+                <span class="areas-accordion-number">IV</span>
                 <span class="areas-accordion-name">Amparos de Salud</span>
                 <span class="areas-accordion-icon" aria-hidden="true"></span>
               </summary>
@@ -540,7 +564,7 @@
 
             <details class="areas-accordion-item" name="areas-accordion">
               <summary class="areas-accordion-summary">
-                <span class="areas-accordion-number">05</span>
+                <span class="areas-accordion-number">V</span>
                 <span class="areas-accordion-name">Derecho Civil</span>
                 <span class="areas-accordion-icon" aria-hidden="true"></span>
               </summary>
@@ -953,6 +977,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260911f" defer></script>
+    <script src="./script.js?v=20260911g" defer></script>
   </body>
 </html>

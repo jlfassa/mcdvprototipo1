@@ -155,6 +155,121 @@ document.addEventListener("keydown", event => {
 });
 
 
+/* =========================================================
+   HERO — CARRUSEL DE VIDEO
+   Independiente del efecto de scroll-jack de más abajo (ese sigue
+   siendo solo de escritorio ancho): ya no hay foto fija de fondo, así
+   que este carrusel es el único fondo del hero y tiene que correr en
+   cualquier tamaño de pantalla, no solo ahí. El primer <video> ya
+   tiene src + autoplay/muted/loop/playsinline puestos directo en el
+   HTML (arranca incluso sin este script); acá solo se encarga de
+   cargar diferido los otros 2 clips, ir turnándolos, y respetar
+   reduced-motion.
+========================================================= */
+
+const heroPortal = document.querySelector("[data-hero-portal]");
+const heroPortalVideos = document.querySelectorAll("[data-hero-portal-video]");
+
+// Los clips originales duran 8-10s reales — más de lo que le sirve a
+// un fondo de hero. En vez de recortar los .mp4 (no hay forma de
+// hacerlo acá, no hay ffmpeg), cada clip se corta solo a este tope
+// mientras reproduce, sea cual sea su duración real.
+const HERO_VIDEO_MAX_SECONDS = 6;
+
+function initHeroVideoCarousel() {
+  if (!heroPortalVideos.length) return;
+
+  // El primer video ya viene reproduciéndose por su atributo autoplay
+  // nativo antes de que este script llegue a correr. Con
+  // reduced-motion lo frenamos acá apenas se puede y no arrancamos
+  // nada más del carrusel — ni siquiera se llega a pedir el .src de
+  // los otros dos clips, así que no hay descarga de más para alguien
+  // que pidió menos movimiento.
+  if (reducedMotion.matches) {
+    heroPortalVideos[0].pause();
+    return;
+  }
+
+  let current = 0;
+
+  function playAt(index, restart) {
+    heroPortalVideos.forEach((video, i) => {
+      video.classList.toggle("is-active", i === index);
+      if (i !== index && !video.paused) video.pause();
+    });
+
+    const video = heroPortalVideos[index];
+    // El carrusel repite en loop (advance() vuelve a 0 después del
+    // último) — sin este reset, la segunda vuelta de un clip
+    // arrancaría desde donde había quedado pausado la vez anterior
+    // (justo en HERO_VIDEO_MAX_SECONDS), y el primer "timeupdate"
+    // dispararía advance() casi al instante.
+    if (restart) video.currentTime = 0;
+    video.play().catch(() => {});
+  }
+
+  function advance() {
+    current = (current + 1) % heroPortalVideos.length;
+    playAt(current, true);
+  }
+
+  heroPortalVideos.forEach((video, i) => {
+    const source = video.dataset.src;
+    if (source) video.src = source;
+
+    // Dos formas de pasar al siguiente clip, lo que llegue primero:
+    // el clip termina solo (por si algún día es más corto que el
+    // tope), o llega a HERO_VIDEO_MAX_SECONDS de reproducción real
+    // (timeupdate, no un timer — así no cuenta tiempo mientras está
+    // pausado/fuera de pantalla). El primer video tiene loop nativo
+    // como red de seguridad sin JS, pero loop nunca dispara "ended" —
+    // por eso el corte real depende de timeupdate, no de esperar a
+    // que termine.
+    video.addEventListener("ended", () => {
+      if (i === current) advance();
+    });
+
+    video.addEventListener("timeupdate", () => {
+      if (i === current && video.currentTime >= HERO_VIDEO_MAX_SECONDS) advance();
+    });
+  });
+
+  // El primero ya está reproduciendo por el autoplay nativo — no lo
+  // reiniciamos para no generar un salto visible apenas carga la
+  // página; solo lo arrancamos "a mano" si todavía no arrancó (el
+  // navegador bloqueó el autoplay pese a estar muted, algo que pasa
+  // en algunos contextos).
+  if (heroPortalVideos[0].paused) {
+    playAt(0, true);
+  } else {
+    heroPortalVideos[0].classList.add("is-active");
+  }
+
+  // Cortesía de rendimiento: si el usuario sigue bajando y el hero
+  // sale de pantalla, pausa el video activo en vez de dejarlo
+  // corriendo invisible; lo retoma solo si vuelve a subir.
+  if ("IntersectionObserver" in window && heroPortal) {
+    const heroVisibilityObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          const active = heroPortalVideos[current];
+          if (!active) return;
+          if (entry.isIntersecting) {
+            active.play().catch(() => {});
+          } else {
+            active.pause();
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+    heroVisibilityObserver.observe(heroPortal);
+  }
+}
+
+initHeroVideoCarousel();
+
+
 /* Áreas de práctica es ahora un grid compacto ícono + texto,
    sin interacción propia (ver style-mcdv.css) — el reveal al
    hacer scroll lo maneja el bloque genérico de [data-reveal]
@@ -173,19 +288,22 @@ document.addEventListener("keydown", event => {
 if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   gsap.registerPlugin(ScrollTrigger);
 
-  // Hero "portal": dos paneles arrancan cerrados tapando la foto de
-  // fondo; al scrollear se abren hacia los bordes revelándola,
-  // mientras "MCDV" / "&" / "Asociados" (apiladas al centro) crecen,
-  // aprietan su tracking y MCDV/Asociados se separan hacia los
-  // costados del centro, mientras el "&" se desvanece en el lugar.
-  // Sticky + scrub (sin pin de GSAP) sobre una sección de 280vh. Solo
-  // en desktop ancho: en mobile este scroll-jacking largo se siente
-  // pesado, así que ahí se usa el fallback seguro (paneles y wordmark
-  // quedan ocultos por sus valores por defecto en el CSS).
+  // Hero "portal": dos paneles arrancan cerrados tapando el carrusel
+  // de video de fondo (ver initHeroVideoCarousel más arriba — corre
+  // aparte, no depende de este bloque); al scrollear se abren hacia
+  // los bordes revelándolo, mientras "MCDV" / "&" / "Asociados"
+  // (apiladas al centro) crecen, aprietan su tracking y MCDV/Asociados
+  // se separan hacia los costados del centro, mientras el "&" se
+  // desvanece en el lugar. Sticky + scrub (sin pin de GSAP) sobre una
+  // sección de 280vh. Solo en desktop ancho: en mobile este
+  // scroll-jacking largo se siente pesado, así que ahí se usa el
+  // fallback seguro (paneles y wordmark quedan ocultos por sus
+  // valores por defecto en el CSS) — el video de fondo, en cambio,
+  // sigue andando igual, gracias a initHeroVideoCarousel.
   //
   // El "segundo acto" (eyebrow, h1, bajada, CTA — .hero-portal-message
-  // en index.html) vive ADENTRO de este mismo portal, superpuesto a
-  // la foto en el mismo lugar donde el nombre se acaba de desvanecer.
+  // en index.html) vive ADENTRO de este mismo portal, superpuesto al
+  // video en el mismo lugar donde el nombre se acaba de desvanecer.
   // Antes era una sección .hero-message aparte que recién arrancaba
   // su propio reveal al entrar en pantalla, después de un tramo de
   // pin "muerto" sin nada pasando — se sentía como hero vacío seguido
@@ -194,8 +312,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   // (fallback seguro sin este efecto), así que acá solo hace falta
   // ocultarla al arrancar y volver a mostrarla cuando el nombre ya
   // se apagó.
-  const heroPortal = document.querySelector("[data-hero-portal]");
-  const heroPortalImage = document.querySelector("[data-hero-portal-image] img");
+  const heroPortalVideoWrap = document.querySelector("[data-hero-portal-video-carousel]");
   const heroPortalDuotone = document.querySelector("[data-hero-portal-duotone]");
   const heroPortalPanelLeft = document.querySelector('[data-hero-portal-panel="left"]');
   const heroPortalPanelRight = document.querySelector('[data-hero-portal-panel="right"]');
@@ -204,11 +321,10 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
   const heroPortalMessage = document.querySelector("[data-hero-portal-message]");
-  const heroPortalVideos = document.querySelectorAll("[data-hero-portal-video]");
 
   const heroPortalReady =
     heroPortal &&
-    heroPortalImage &&
+    heroPortalVideoWrap &&
     heroPortalPanelLeft &&
     heroPortalPanelRight &&
     heroPortalWordLeft &&
@@ -271,17 +387,23 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // El header (botón Menú), oculto hasta acá, aparece junto con
       // las puertas abriéndose.
       .fromTo(header, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "none" }, 0)
-      // La foto: arranca sobre-escalada y se asienta; el wash de color
-      // aparece encima.
-      .fromTo(heroPortalImage, { scale: 1.15 }, { scale: 1, duration: 0.55, ease: "none" }, 0)
+      // El video: arranca sobre-escalado y se asienta (mismo efecto
+      // que antes tenía la foto, ahora sobre el wrapper del carrusel
+      // — cualquiera sea el clip activo en ese momento); el wash de
+      // color aparece encima.
+      .fromTo(heroPortalVideoWrap, { scale: 1.15 }, { scale: 1, duration: 0.55, ease: "none" }, 0)
       .fromTo(heroPortalDuotone, { opacity: 0 }, { opacity: 0.4, duration: 0.45, ease: "none" }, 0.05)
-      // La metadata de esquina aparece de a poco.
-      .fromTo(heroPortalMeta, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.1)
-      // El wordmark y la metadata se apagan...
+      // El aviso de "Scroll" ya está visible por defecto (CSS, mismo
+      // criterio que .hero-portal-message) — acá no hace falta un
+      // fromTo trayéndolo de opacity:0, con eso ya alcanzaría para
+      // que arranque invisible en reposo (fromTo siempre renderiza el
+      // estado "from" al crearse). Solo se apaga junto con el
+      // wordmark, un poco más abajo.
+      // El wordmark y el aviso de "Scroll" se apagan...
       .to([heroPortalWordLeft, heroPortalWordRight], { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
-      // ...y en el mismo lugar que dejan libre, sobre la foto ya
-      // asentada, entra el mensaje real (eyebrow + h1 + bajada + CTA)
+      // ...y en el mismo lugar que dejan libre, sobre el video ya
+      // asentado, entra el mensaje real (eyebrow + h1 + bajada + CTA)
       // — el tramo que antes quedaba "muerto" (nombre ya invisible,
       // nada más pasando hasta que despinchaba la sección) ahora tiene
       // contenido. Un solo fromTo para todo el bloque, no uno por
@@ -301,107 +423,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // del timeline, sin animar nada — el resto del scroll dentro de
       // los 280vh lo pasa con el mensaje ya asentado antes de soltar
       // el pin y seguir a "El Estudio".
-      .to({}, { duration: 0.28 })
-      // Recién acá, con el h1 ya asentado (no a mitad de aparecer),
-      // arranca el carrusel de video sobre la foto — ver
-      // startHeroVideoCarousel más abajo. .call() en vez de un tween:
-      // no hay nada que animar con scrub acá, es un disparador único.
-      .call(startHeroVideoCarousel, [], 0.95);
-  }
-
-  // Carrusel de video del hero: 3 <video> mudos que se van turnando
-  // (crossfade de opacity) sobre la foto, arrancando recién cuando
-  // heroPortalTl llega al punto de arriba — nunca antes. Se les pone
-  // .src acá (no en el HTML) para no descargar ni un byte hasta ese
-  // momento; type="video/mp4" fue confirmado al bajarlos, así que no
-  // hace falta un <source> con fallback de formato. Si falta algún
-  // elemento (o el navegador bloquea el autoplay pese a estar muted),
-  // .play() rechaza la promesa y el catch la ignora — la foto de
-  // fondo sigue ahí debajo sin cambios, nunca queda una pantalla
-  // rota.
-  let heroVideoCarouselStarted = false;
-
-  // Los clips originales duran 8-16s reales — más de lo que le
-  // sirve a un fondo de hero. En vez de recortar los .mp4 (no hay
-  // forma de hacerlo acá, no hay ffmpeg), cada clip se corta solo a
-  // este tope mientras reproduce, sea cual sea su duración real.
-  const HERO_VIDEO_MAX_SECONDS = 6;
-
-  function startHeroVideoCarousel() {
-    // El scrub puede pasar por este punto del timeline más de una vez
-    // si el usuario scrollea para atrás y para adelante justo ahí —
-    // .call() lo dispararía cada vez. Sin este guard, cada llamada de
-    // más volvería a poner el mismo .src (recarga el video) y
-    // agregaría otro listener de "ended"/"timeupdate" duplicado (el
-    // carrusel terminaría saltando de a 2 o 3 en vez de 1 por cada
-    // clip que termina).
-    if (heroVideoCarouselStarted || !heroPortalVideos.length) return;
-    heroVideoCarouselStarted = true;
-
-    let current = 0;
-
-    function playAt(index) {
-      heroPortalVideos.forEach((video, i) => {
-        video.classList.toggle("is-active", i === index);
-        if (i !== index && !video.paused) video.pause();
-      });
-
-      const video = heroPortalVideos[index];
-      // El carrusel repite en loop (advance() vuelve a 0 después del
-      // último) — sin este reset, la segunda vuelta de un clip
-      // arrancaría desde donde había quedado pausado la vez anterior
-      // (justo en HERO_VIDEO_MAX_SECONDS), y el primer "timeupdate"
-      // dispararía advance() casi al instante.
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    }
-
-    function advance() {
-      current = (current + 1) % heroPortalVideos.length;
-      playAt(current);
-    }
-
-    heroPortalVideos.forEach((video, i) => {
-      const source = video.dataset.src;
-      if (source) video.src = source;
-
-      // Dos formas de pasar al siguiente clip, lo que llegue primero:
-      // el clip termina solo (por si algún día es más corto que el
-      // tope), o llega a HERO_VIDEO_MAX_SECONDS de reproducción real
-      // (timeupdate, no un timer — así no cuenta tiempo mientras está
-      // pausado/fuera de pantalla). Nunca usa loop en el <video>
-      // porque loop no dispara "ended".
-      video.addEventListener("ended", () => {
-        if (i === current) advance();
-      });
-
-      video.addEventListener("timeupdate", () => {
-        if (i === current && video.currentTime >= HERO_VIDEO_MAX_SECONDS) advance();
-      });
-    });
-
-    playAt(current);
-
-    // Cortesía de rendimiento: si el usuario sigue bajando y el hero
-    // sale de pantalla, pausa el video activo en vez de dejarlo
-    // corriendo invisible; lo retoma solo si vuelve a subir.
-    if ("IntersectionObserver" in window) {
-      const heroVisibilityObserver = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            const active = heroPortalVideos[current];
-            if (!active) return;
-            if (entry.isIntersecting) {
-              active.play().catch(() => {});
-            } else {
-              active.pause();
-            }
-          });
-        },
-        { threshold: 0 }
-      );
-      heroVisibilityObserver.observe(heroPortal);
-    }
+      .to({}, { duration: 0.28 });
   }
 
   // Áreas de práctica (acordeón, <details>/<summary> nativo) y
