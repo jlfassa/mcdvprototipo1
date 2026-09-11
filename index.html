@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910r" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910t" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -316,61 +316,55 @@
         </div>
       </section>
 
-      <!-- EL ESTUDIO — antes tenía un banner de "portada" propio (foto
-           + título superpuesto, ~260-420px de alto) separado del
-           texto; a pedido explícito se sacó por ocupar espacio de más
-           "al pedo" con el título solo — ahora es un encabezado chico
-           (mismo lenguaje que .areas-head-centered/.team-head-centered,
-           coherencia entre secciones) directamente arriba del texto,
-           todo junto y compacto. La foto/placeholder también se sacó
-           (era solo un gradiente sin foto real todavía); cuando haya
-           una foto real del estudio, puede volver como elemento chico
-           dentro de .manifesto-copy en vez de banner de pantalla
-           completa. -->
+      <!-- EL ESTUDIO — antes: encabezado centrado ("El Estudio" + línea)
+           arriba de una columna de párrafos, todo centrado — bloque de
+           texto genérico. Ahora: la primera oración real (tal cual del
+           posteo de bienvenida de Instagram @dradiazcarrizobelen, no es
+           lorem ipsum) pasa a ser un pull-quote grande en la columna
+           izquierda; el resto del texto (real + lorem ipsum de relleno,
+           sin texto real de sobra todavía) queda en la columna derecha
+           con el nombre de la sección como kicker chico. Dos data-reveal
+           (uno por columna) en vez de uno por párrafo — mismo motivo que
+           .hero-message: que aparezca como bloque, no en cascada. -->
       <section class="manifesto hairline-top" id="el-estudio">
-        <div class="container manifesto-copy">
-          <div class="manifesto-head-centered" data-reveal>
-            <h2>El Estudio</h2>
-            <span class="manifesto-underline" aria-hidden="true"></span>
-          </div>
-
-          <!-- Texto real, tomado tal cual del posteo de bienvenida de
-               Instagram (@dradiazcarrizobelen) que compartió el
-               usuario — no es lorem ipsum. Único cambio: "trabajó" →
-               "trabajamos" (typo evidente del posteo original). -->
-          <p data-reveal>
+        <div class="container manifesto-grid">
+          <p class="manifesto-pull" data-reveal>
             Este espacio nace con el objetivo de brindar información,
             orientación y acompañamiento jurídico a quienes necesitan
             respuestas claras y asesoramiento profesional.
           </p>
 
-          <p data-reveal>
-            Sabemos que detrás de cada consulta hay una situación
-            personal importante. Por eso, trabajamos con compromiso,
-            cercanía y responsabilidad para acompañarte en cada etapa
-            del proceso.
-          </p>
+          <div class="manifesto-body" data-reveal>
+            <span class="manifesto-kicker">El Estudio</span>
 
-          <!-- A partir de acá, contenido de relleno (lorem ipsum) para
-               dar más cuerpo a la sección hasta contar con más texto
-               real del estudio. -->
-          <p data-reveal>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            do eiusmod tempor incididunt ut labore et dolore magna
-            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-            ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
+            <p>
+              Sabemos que detrás de cada consulta hay una situación
+              personal importante. Por eso, trabajamos con compromiso,
+              cercanía y responsabilidad para acompañarte en cada etapa
+              del proceso.
+            </p>
 
-          <p data-reveal>
-            Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-            occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum.
-          </p>
+            <!-- A partir de acá, contenido de relleno (lorem ipsum) para
+                 dar más cuerpo a la sección hasta contar con más texto
+                 real del estudio. -->
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
 
-          <a href="#contact" class="btn-outline" data-reveal>
-            <span>Solicitar consulta</span>
-          </a>
+            <p>
+              Duis aute irure dolor in reprehenderit in voluptate velit
+              esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+              occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.
+            </p>
+
+            <a href="#contact" class="btn-outline">
+              <span>Solicitar consulta</span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -504,10 +498,18 @@
            sistema de tarjetas que crecían en hover quedó IDÉNTICO al
            de Áreas de práctica (misma sección, dos veces seguidas) y
            encima con 5 de 6 tarjetas mostrando un placeholder gris
-           "Foto de perfil" — se sentía repetido y sin terminar.
+           "Foto de perfil" — se sentía repetido y sin terminar. Una
+           vuelta después: "sigue sin gustarme, no hay jerarquía, son
+           todos por igual" — se reforzó el contraste entre el perfil
+           destacado y el resto (ver CSS) y se agregó el label "Resto
+           del equipo" para separar los dos grupos con claridad. De
+           paso se sacó el eyebrow "Socio fundador" de Pablo — era un
+           título no confirmado, inventado por error; ahora dice
+           "Perfil destacado" (describe la presentación, no un cargo
+           real sin confirmar).
 
            Nuevo enfoque, distinto del resto del sitio a propósito:
-           socio destacado (Pablo, único con foto real hoy) arriba en
+           perfil destacado (Pablo, único con foto real hoy) arriba en
            un layout editorial de dos columnas, con TODO el contenido
            visible siempre (sin hover-reveal, para variar el ritmo);
            el resto del equipo pasa a un roster simple tipo directorio
@@ -535,7 +537,7 @@
               </picture>
             </div>
             <div class="team-featured-body">
-              <span class="team-featured-eyebrow">Socio fundador</span>
+              <span class="team-featured-eyebrow">Perfil destacado</span>
               <h3 class="team-featured-name">Pablo Luis Crespo</h3>
               <span class="team-role">Abogado</span>
               <p>
@@ -549,6 +551,8 @@
           </div>
 
           <div class="team-roster" data-reveal>
+            <span class="team-roster-label">Resto del equipo</span>
+
             <div class="team-roster-row">
               <span class="team-roster-avatar" aria-hidden="true">MB</span>
               <span class="team-roster-name">Maria Belen Diaz Carrizo</span>
@@ -582,15 +586,16 @@
         </div>
       </section>
 
-      <!-- STATEMENT — antes en lorem ipsum; frase de valores/misión,
-           no son datos/hechos verificables (fechas, cifras, casos)
-           así que no choca con la regla de no inventar contenido
-           real del estudio. -->
+      <!-- STATEMENT — frase de valores/misión (no son datos/hechos
+           verificables, así que no choca con la regla de no inventar
+           contenido real). Antes tenía una palabra en italic/bronce
+           adentro del título (típico "tell" de diseño genérico); se
+           reemplazó por una comilla grande decorativa como el
+           elemento gráfico, y el título queda uniforme. -->
       <section class="statement hairline-top">
         <div class="container statement-inner">
-          <h2 data-reveal>
-            Cada caso es <em>una persona</em>, no un expediente más.
-          </h2>
+          <span class="statement-mark" aria-hidden="true">&ldquo;</span>
+          <h2 data-reveal>Cada caso es una persona, no un expediente más.</h2>
 
           <p data-reveal>
             Escuchamos primero, después actuamos: buscamos siempre la
@@ -600,35 +605,41 @@
         </div>
       </section>
 
-      <!-- CONTACTO -->
+      <!-- CONTACTO — antes: todo en una columna centrada verticalmente
+           (label "Contacto" chico, link gigante de WhatsApp, nota,
+           Instagram, y el formulario abajo de todo eso). Ahora: dos
+           columnas — canales de contacto a la izquierda, formulario a
+           la derecha — para que ambos caminos (escribir por WhatsApp
+           o completar el formulario) tengan el mismo peso visual en
+           vez de uno apilado como si fuera secundario. También se
+           sacó el punto medio de "Atención confidencial · Consultas
+           urgentes" (separador de meta-dato genérico) por una frase
+           corrida normal. -->
       <section class="contact hairline-top" id="contact">
-        <div class="container">
-          <div class="areas-head">
-            <div class="manifesto-index manifesto-index--light" data-reveal>
-              <h2 class="manifesto-index-label">Contacto</h2>
-            </div>
+        <div class="container contact-grid">
+          <div class="contact-intro" data-reveal>
+            <span class="contact-kicker">Contacto</span>
+
+            <a href="#" id="waContact" class="contact-mega" target="_blank" rel="noopener">
+              Hablemos por WhatsApp <span aria-hidden="true">↗</span>
+            </a>
+
+            <p class="contact-note">
+              No todos los conflictos requieren la misma respuesta.
+              Escribinos o completá el formulario y coordinamos una
+              entrevista presencial o virtual. Atención confidencial y
+              consultas urgentes.
+            </p>
+
+            <a
+              href="https://www.instagram.com/mcdv.asociados/"
+              target="_blank"
+              rel="noopener"
+              class="contact-instagram"
+            >
+              @mcdv.asociados
+            </a>
           </div>
-
-          <a href="#" id="waContact" class="contact-mega" target="_blank" rel="noopener" data-reveal>
-            Hablemos por WhatsApp <span aria-hidden="true">↗</span>
-          </a>
-
-          <p class="contact-note" data-reveal>
-            No todos los conflictos requieren la misma respuesta. Escribinos
-            o completá el formulario y coordinamos una entrevista
-            presencial o virtual. Atención confidencial · Consultas
-            urgentes.
-          </p>
-
-          <a
-            href="https://www.instagram.com/mcdv.asociados/"
-            target="_blank"
-            rel="noopener"
-            class="contact-instagram"
-            data-reveal
-          >
-            @mcdv.asociados
-          </a>
 
           <form class="contact-form" id="contactForm" data-reveal>
             <div class="field-row">
@@ -736,6 +747,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910r" defer></script>
+    <script src="./script.js?v=20260910t" defer></script>
   </body>
 </html>
