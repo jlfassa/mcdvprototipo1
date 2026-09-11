@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260911d" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260911e" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -308,6 +308,36 @@
                 fetchpriority="high"
               />
             </picture>
+
+            <!-- Carrusel de video — placeholder de stock con licencia
+                 comercial libre (Pexels License, sin atribución
+                 obligatoria: pexels.com/video/man-signing-the-paper-8061370,
+                 .../person-writing-on-a-document-7841608,
+                 .../close-up-video-of-a-person-signing-documents-8725944 —
+                 720p, tal cual los entrega la fuente porque acá no
+                 hay forma de recomprimir video; reemplazar por
+                 filmación propia cuando el estudio la tenga. El
+                 primer candidato que se probó, "a-lawyer-signing-a-
+                 document-7841652", se descartó al revisar los frames:
+                 tenía una bandera de EEUU de fondo, fuera de lugar en
+                 un estudio argentino — ver frames de más de un video
+                 antes de darlo por bueno, un título/tag no alcanza.
+                 Los 3 <video> arrancan
+                 SIN src (solo data-src): no se descarga ni un byte
+                 hasta que heroPortalTl llega al punto donde el h1 ya
+                 terminó de aparecer (ver startHeroVideoCarousel en
+                 script.js) — ese punto solo existe cuando
+                 heroPortalReady es true (desktop ancho + GSAP + sin
+                 reduced-motion), así que en mobile/reduced-motion/sin
+                 JS esto no pesa nada, ni un request. La foto de
+                 arriba sigue siendo el fondo real en todo momento
+                 hasta ese instante, y sigue ahí debajo si el video
+                 fallara. -->
+            <div class="hero-portal-video-carousel" data-hero-portal-video-carousel aria-hidden="true">
+              <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-1.mp4"></video>
+              <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-2.mp4"></video>
+              <video class="hero-portal-video" data-hero-portal-video muted playsinline preload="none" data-src="video/hero-3.mp4"></video>
+            </div>
           </figure>
 
           <div class="hero-portal-duotone" aria-hidden="true" data-hero-portal-duotone></div>
@@ -889,7 +919,7 @@
       </div>
 
       <div class="container footer-bottom">
-        <span>Chubut, Argentina (dirección a confirmar)</span>
+        <span>Dirección a confirmar</span>
 
         <a
           href="https://www.instagram.com/mcdv.asociados/"
@@ -923,6 +953,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260911d" defer></script>
+    <script src="./script.js?v=20260911e" defer></script>
   </body>
 </html>

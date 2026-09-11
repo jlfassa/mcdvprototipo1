@@ -204,6 +204,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
   const heroPortalMessage = document.querySelector("[data-hero-portal-message]");
+  const heroPortalVideos = document.querySelectorAll("[data-hero-portal-video]");
 
   const heroPortalReady =
     heroPortal &&
@@ -300,7 +301,84 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // del timeline, sin animar nada — el resto del scroll dentro de
       // los 280vh lo pasa con el mensaje ya asentado antes de soltar
       // el pin y seguir a "El Estudio".
-      .to({}, { duration: 0.28 });
+      .to({}, { duration: 0.28 })
+      // Recién acá, con el h1 ya asentado (no a mitad de aparecer),
+      // arranca el carrusel de video sobre la foto — ver
+      // startHeroVideoCarousel más abajo. .call() en vez de un tween:
+      // no hay nada que animar con scrub acá, es un disparador único.
+      .call(startHeroVideoCarousel, [], 0.95);
+  }
+
+  // Carrusel de video del hero: 3 <video> mudos que se van turnando
+  // (crossfade de opacity) sobre la foto, arrancando recién cuando
+  // heroPortalTl llega al punto de arriba — nunca antes. Se les pone
+  // .src acá (no en el HTML) para no descargar ni un byte hasta ese
+  // momento; type="video/mp4" fue confirmado al bajarlos, así que no
+  // hace falta un <source> con fallback de formato. Si falta algún
+  // elemento (o el navegador bloquea el autoplay pese a estar muted),
+  // .play() rechaza la promesa y el catch la ignora — la foto de
+  // fondo sigue ahí debajo sin cambios, nunca queda una pantalla
+  // rota.
+  let heroVideoCarouselStarted = false;
+
+  function startHeroVideoCarousel() {
+    // El scrub puede pasar por este punto del timeline más de una vez
+    // si el usuario scrollea para atrás y para adelante justo ahí —
+    // .call() lo dispararía cada vez. Sin este guard, cada llamada de
+    // más volvería a poner el mismo .src (recarga el video) y
+    // agregaría otro listener de "ended" duplicado (el carrusel
+    // terminaría saltando de a 2 o 3 en vez de 1 por cada clip que
+    // termina).
+    if (heroVideoCarouselStarted || !heroPortalVideos.length) return;
+    heroVideoCarouselStarted = true;
+
+    let current = 0;
+
+    function playAt(index) {
+      heroPortalVideos.forEach((video, i) => {
+        video.classList.toggle("is-active", i === index);
+        if (i !== index && !video.paused) video.pause();
+      });
+
+      const video = heroPortalVideos[index];
+      video.play().catch(() => {});
+    }
+
+    heroPortalVideos.forEach((video, i) => {
+      const source = video.dataset.src;
+      if (source) video.src = source;
+
+      // Al terminar un clip, pasa al siguiente (y vuelve al primero
+      // después del último) — nunca usa loop en el <video> porque
+      // loop nunca dispara "ended".
+      video.addEventListener("ended", () => {
+        current = (current + 1) % heroPortalVideos.length;
+        playAt(current);
+      });
+    });
+
+    playAt(current);
+
+    // Cortesía de rendimiento: si el usuario sigue bajando y el hero
+    // sale de pantalla, pausa el video activo en vez de dejarlo
+    // corriendo invisible; lo retoma solo si vuelve a subir.
+    if ("IntersectionObserver" in window) {
+      const heroVisibilityObserver = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            const active = heroPortalVideos[current];
+            if (!active) return;
+            if (entry.isIntersecting) {
+              active.play().catch(() => {});
+            } else {
+              active.pause();
+            }
+          });
+        },
+        { threshold: 0 }
+      );
+      heroVisibilityObserver.observe(heroPortal);
+    }
   }
 
   // Áreas de práctica (acordeón, <details>/<summary> nativo) y
