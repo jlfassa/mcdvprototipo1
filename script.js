@@ -321,14 +321,20 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   // rota.
   let heroVideoCarouselStarted = false;
 
+  // Los clips originales duran 8-16s reales — más de lo que le
+  // sirve a un fondo de hero. En vez de recortar los .mp4 (no hay
+  // forma de hacerlo acá, no hay ffmpeg), cada clip se corta solo a
+  // este tope mientras reproduce, sea cual sea su duración real.
+  const HERO_VIDEO_MAX_SECONDS = 6;
+
   function startHeroVideoCarousel() {
     // El scrub puede pasar por este punto del timeline más de una vez
     // si el usuario scrollea para atrás y para adelante justo ahí —
     // .call() lo dispararía cada vez. Sin este guard, cada llamada de
     // más volvería a poner el mismo .src (recarga el video) y
-    // agregaría otro listener de "ended" duplicado (el carrusel
-    // terminaría saltando de a 2 o 3 en vez de 1 por cada clip que
-    // termina).
+    // agregaría otro listener de "ended"/"timeupdate" duplicado (el
+    // carrusel terminaría saltando de a 2 o 3 en vez de 1 por cada
+    // clip que termina).
     if (heroVideoCarouselStarted || !heroPortalVideos.length) return;
     heroVideoCarouselStarted = true;
 
@@ -341,19 +347,36 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       });
 
       const video = heroPortalVideos[index];
+      // El carrusel repite en loop (advance() vuelve a 0 después del
+      // último) — sin este reset, la segunda vuelta de un clip
+      // arrancaría desde donde había quedado pausado la vez anterior
+      // (justo en HERO_VIDEO_MAX_SECONDS), y el primer "timeupdate"
+      // dispararía advance() casi al instante.
+      video.currentTime = 0;
       video.play().catch(() => {});
+    }
+
+    function advance() {
+      current = (current + 1) % heroPortalVideos.length;
+      playAt(current);
     }
 
     heroPortalVideos.forEach((video, i) => {
       const source = video.dataset.src;
       if (source) video.src = source;
 
-      // Al terminar un clip, pasa al siguiente (y vuelve al primero
-      // después del último) — nunca usa loop en el <video> porque
-      // loop nunca dispara "ended".
+      // Dos formas de pasar al siguiente clip, lo que llegue primero:
+      // el clip termina solo (por si algún día es más corto que el
+      // tope), o llega a HERO_VIDEO_MAX_SECONDS de reproducción real
+      // (timeupdate, no un timer — así no cuenta tiempo mientras está
+      // pausado/fuera de pantalla). Nunca usa loop en el <video>
+      // porque loop no dispara "ended".
       video.addEventListener("ended", () => {
-        current = (current + 1) % heroPortalVideos.length;
-        playAt(current);
+        if (i === current) advance();
+      });
+
+      video.addEventListener("timeupdate", () => {
+        if (i === current && video.currentTime >= HERO_VIDEO_MAX_SECONDS) advance();
       });
     });
 
