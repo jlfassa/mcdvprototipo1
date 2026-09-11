@@ -1070,14 +1070,16 @@ section[id],
 
 
 /* =========================================================
-   ÁREAS DE PRÁCTICA — acordeón, estructuralmente distinto de
-   .team-index-* a propósito (sin fotos, sin filas hover-reveal): el
-   índice de filas con foto circular quedó demasiado parecido a
-   Equipo. Clic en el nombre expande la descripción adentro de la
-   misma fila (grid-template-rows: 0fr → 1fr, 100% CSS, sin JS); el
-   ícono +/− rota con el mismo lenguaje de líneas finas que
-   .menu-icon. <details name="areas-accordion"> las hace mutuamente
-   excluyentes (una sola abierta a la vez), como un acordeón real.
+   ÁREAS DE PRÁCTICA — acordeón: clic en el nombre expande la
+   descripción adentro de la misma fila (grid-template-rows: 0fr →
+   1fr, 100% CSS, sin JS); el ícono +/− rota con el mismo lenguaje de
+   líneas finas que .menu-icon. <details name="areas-accordion"> las
+   hace mutuamente excluyentes (una sola abierta a la vez), como un
+   acordeón real. Comparte con Equipo (.team-directory-*) el
+   lenguaje tipográfico de las filas — nombre serif + hairlines —
+   pero la interacción es otra: acá cada fila se expande en el lugar,
+   en Equipo un clic en el nombre cambia qué panel se ve en una
+   columna aparte.
 ========================================================= */
 
 .areas-index {
@@ -1296,7 +1298,7 @@ section[id],
 }
 
 /* =========================================================
-   EQUIPO — tercera vuelta de diseño (historial, por si se vuelve a
+   EQUIPO — quinta vuelta de diseño (historial, por si se vuelve a
    tocar):
    1) tarjetas que crecían en hover, igual que Áreas de práctica —
       se sentía repetido, y 5/6 tarjetas mostraban un casillero gris
@@ -1304,13 +1306,30 @@ section[id],
    2) "perfil destacado" (Pablo) + roster simple para el resto — a
       pedido explícito, quedó sin jerarquía real entre Pablo y los
       demás y el roster se sentía pobre.
-   3) (actual) .team-index-*: índice de filas, mismo trato para los
-      6 — nombre siempre visible a la izquierda, foto al medio y
-      cargo+bio a la derecha, ambas ocultas hasta hover/foco de
-      teclado (alto de fila fijo siempre, ver el media query). Los 5
-      sin foto real usan un círculo con iniciales en el lugar de la
-      foto. Fuera de ese media (mobile/táctil) todo queda visible
-      siempre.
+   3) .team-index-*: índice de filas (nombre | foto circular | cargo
+      revelados en hover/foco) — funcionaba, pero cuando Áreas de
+      práctica se rehizo terminó con la misma forma (filas + foto
+      circular) y el usuario lo notó: "repetiste el diseño de los
+      abogados".
+   4) .team-collage-*: collage tipográfico asimétrico sin fotos —
+      descartado antes de llegar a producción; el usuario pidió en
+      cambio un formato más organizado.
+   5) (actual) .team-directory-*: directorio maestro-detalle, spec
+      exacta del usuario ("a la izquierda los nombres estilo tabla
+      como Áreas, en el medio una franja, a la derecha foto + texto").
+      Lista de nombres a la izquierda (mismo lenguaje tipográfico que
+      Áreas: nombre serif + hairlines), franja vertical bronce al
+      medio, panel de foto+cargo+bio a la derecha que cambia según
+      qué nombre está marcado. 100% CSS: <input type="radio"> nativos
+      (círculo visible, foco de teclado nativo, sin necesidad del
+      truco hit-slop) + :has() para mostrar el panel correspondiente
+      (bajo @supports selector(:has(*)), con el panel de Pablo como
+      fallback fijo si el navegador no soporta :has()). Selección por
+      click/tap, no por hover — funciona igual en mouse y en touch, y
+      no repite el patrón "contenido detrás de hover" de la versión 3.
+      Solo Pablo tiene foto real; el resto usa una silueta rectangular
+      con iniciales (a propósito NO circular, para no repetir la
+      forma de foto de la versión 3).
 ========================================================= */
 
 .team {
@@ -1346,148 +1365,212 @@ section[id],
   margin-inline: auto;
 }
 
-.team-index {
+.team-directory {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1px 1fr;
+  align-items: stretch;
+  gap: 0 clamp(24px, 4vw, 64px);
+
+  margin-top: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Base (mobile/sin soporte de hover): todo en flujo normal y
-   siempre visible — foto chica al lado del nombre, detalle debajo.
-   Ver el media de abajo para el layout de escritorio (nombre | foto
-   | detalle en columnas, foto+detalle ocultos hasta hover/foco). */
-.team-index-row {
+.team-directory-list {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 18px;
-
-  padding: 22px 6px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  flex-direction: column;
 }
 
-.team-index-name {
-  flex: 1 1 100%;
-  order: 1;
+.team-directory-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 
+  padding: 20px 12px 20px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+/* Radio nativo, estilizado como un punto de selección — visible a
+   propósito (no oculto con opacity:0) para que el foco de teclado
+   nativo caiga exactamente donde está la marca visual. */
+.team-directory-row-input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  border: 1.5px solid rgba(200, 154, 104, 0.5);
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.25s ease;
+}
+
+.team-directory-row-input::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--bronze);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.team-directory-row-input:checked {
+  border-color: var(--bronze);
+}
+
+.team-directory-row-input:checked::after {
+  opacity: 1;
+}
+
+.team-directory-row-input:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: 3px;
+}
+
+.team-directory-name {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(2rem, 2.2vw, 2.4rem);
+  font-size: clamp(1.9rem, 2vw, 2.2rem);
   color: var(--graphite-900);
+  transition: color 0.25s ease;
 }
 
-.team-index-photo {
-  order: 2;
-  flex: 0 0 auto;
+.team-directory-row:has(.team-directory-row-input:checked) .team-directory-name {
+  color: var(--bronze-dark);
+}
 
-  width: 84px;
-  height: 84px;
-  border: 1px solid rgba(200, 154, 104, 0.35);
-  border-radius: 50%;
+@media (hover: hover) and (pointer: fine) {
+  .team-directory-row:hover {
+    background-color: rgba(173, 125, 76, 0.05);
+  }
+}
+
+.team-directory-divider {
+  background: rgba(173, 125, 76, 0.3);
+}
+
+.team-directory-detail {
+  display: grid;
+  padding: 8px 6px;
+}
+
+.team-detail-panel {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 32px);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Fallback sin :has(): el panel de Pablo queda siempre visible. Con
+   :has() soportado, el bloque de abajo pisa esto y deja que el panel
+   visible sea el que corresponde al radio marcado. */
+.team-detail-panel[data-panel="1"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@supports selector(:has(*)) {
+  .team-detail-panel[data-panel="1"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .team-directory:has(#team-tab-1:checked) .team-detail-panel[data-panel="1"],
+  .team-directory:has(#team-tab-2:checked) .team-detail-panel[data-panel="2"],
+  .team-directory:has(#team-tab-3:checked) .team-detail-panel[data-panel="3"],
+  .team-directory:has(#team-tab-4:checked) .team-detail-panel[data-panel="4"],
+  .team-directory:has(#team-tab-5:checked) .team-detail-panel[data-panel="5"],
+  .team-directory:has(#team-tab-6:checked) .team-detail-panel[data-panel="6"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.team-detail-photo {
+  flex: 0 0 auto;
+  width: clamp(140px, 14vw, 184px);
+  height: clamp(175px, 17.5vw, 230px);
+  border-radius: 6px;
   overflow: hidden;
 }
 
-.team-index-photo picture,
-.team-index-photo img {
+.team-detail-photo picture,
+.team-detail-photo img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.team-index-photo--placeholder {
+.team-detail-photo--placeholder {
   display: grid;
   place-items: center;
 
   background: var(--graphite-950);
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 2.4rem;
   color: var(--bronze-light);
 }
 
-.team-index-detail {
-  order: 3;
-  flex: 1 1 260px;
-
+.team-detail-copy {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  max-width: 440px;
 }
 
-.team-index-detail .team-role {
+.team-detail-copy .team-role {
   color: var(--bronze-dark);
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
-.team-index-bio {
-  max-width: 480px;
+.team-detail-bio {
   color: var(--gray);
-  font-size: 1.3rem;
-  line-height: 1.6;
+  font-size: 1.35rem;
+  line-height: 1.65;
 }
 
-.team-index-detail .team-link {
+.team-detail-copy .team-link {
   display: inline-block;
   margin-top: 4px;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--bronze-dark);
   border-bottom: 1px solid var(--bronze-dark);
+  width: fit-content;
 }
 
-.team-index-row:focus-visible {
-  outline: 2px solid var(--bronze);
-  outline-offset: -4px;
-}
-
-/* Escritorio con mouse real: nombre | foto | detalle en columnas, con
-   foto y detalle ocultos (opacity) hasta hover/foco — el alto de la
-   fila queda fijo siempre (las celdas de foto/detalle ya ocupan su
-   lugar en el grid, solo cambian de opacidad), así que nada se mueve
-   ni reserva espacio vacío al revelar. */
-@media (hover: hover) and (pointer: fine) {
-  .team-index-row {
-    display: grid;
-    grid-template-columns: minmax(220px, 300px) 110px 1fr;
-    align-items: center;
-    gap: clamp(24px, 3vw, 56px);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* Mobile: columna única — lista arriba, franja fuera (no tiene
+   sentido una línea vertical de 1px de alto), panel debajo con foto
+   apilada sobre el texto. */
+@media (max-width: 760px) {
+  .team-directory {
+    grid-template-columns: 1fr;
   }
 
-  .team-index-name {
-    transition: color 0.3s ease;
+  .team-directory-divider {
+    display: none;
   }
 
-  .team-index-photo {
-    opacity: 0;
-    transform: scale(0.88);
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+  .team-directory-detail {
+    padding: 24px 6px 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  .team-index-detail {
-    opacity: 0;
-    transform: translateX(-12px);
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-  }
-
-  .team-index-row:hover,
-  .team-index-row:focus-within {
-    background-color: rgba(173, 125, 76, 0.06);
-  }
-
-  .team-index-row:hover .team-index-name,
-  .team-index-row:focus-within .team-index-name {
-    color: var(--bronze-dark);
-  }
-
-  .team-index-row:hover .team-index-photo,
-  .team-index-row:focus-within .team-index-photo,
-  .team-index-row:hover .team-index-detail,
-  .team-index-row:focus-within .team-index-detail {
-    opacity: 1;
-    transform: none;
+  .team-detail-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
   }
 }
 

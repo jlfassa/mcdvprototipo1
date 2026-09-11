@@ -270,9 +270,9 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   }
 
   // Áreas de práctica (acordeón, <details>/<summary> nativo) y
-  // Equipo (índice de filas): resueltos 100% en HTML/CSS, sin una
-  // línea de JS (ver .areas-accordion-*/.team-index-* en
-  // style-mcdv.css).
+  // Equipo (directorio maestro-detalle, <input type="radio"> + :has()):
+  // resueltos 100% en HTML/CSS, sin una línea de JS (ver
+  // .areas-accordion-*/.team-directory-* en style-mcdv.css).
 
   gsap.utils.toArray("[data-reveal]:not(#home [data-reveal])").forEach(element => {
     gsap.fromTo(

@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910w" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260911a" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -482,21 +482,26 @@
         </div>
       </section>
 
-      <!-- EQUIPO — tercera vuelta, a pedido explícito del usuario tras
-           ver la anterior ("Pablo no tiene por qué aparecer como
-           principal, el modo de mostrar los nombres es una porquería"):
-           se sacó por completo la idea de "perfil destacado + resto"
-           (ya no hay jerarquía entre Pablo y los demás, mismo trato
-           para los 6) y se reemplazó por un índice de filas — nombre
-           siempre visible a la izquierda, foto al medio y cargo+bio a
-           la derecha, ambas ocultas hasta hover/foco de teclado. El
-           alto de cada fila es fijo siempre (la foto/detalle solo
-           cambian de opacidad, nunca de tamaño), así que revelar el
-           contenido no mueve nada ni reserva espacio vacío. Fuera de
-           ese media (mobile/táctil) todo queda visible siempre — el
-           reveal es mejora progresiva, nunca la única forma de ver el
-           contenido. Los 5 sin foto real usan un círculo con iniciales
-           en el mismo lugar donde va la foto de Pablo. -->
+      <!-- EQUIPO — quinta vuelta, spec exacta del usuario: "a la
+           izquierda los nombres [estilo tabla, como Áreas de
+           práctica], en el medio una franja [divisoria] y a la
+           derecha el espacio en donde ira el texto y foto". Es un
+           directorio maestro-detalle: la columna izquierda es una
+           lista de nombres (mismo lenguaje tipográfico que las filas
+           de Áreas — nombre serif + hairlines), clickear/tocar un
+           nombre cambia cuál panel (foto + cargo + bio) se muestra a
+           la derecha de la franja. Selección por click/tap, NO por
+           hover — funciona igual en mouse y en touch, y evita repetir
+           el patrón "contenido detrás de hover" que ya se descartó en
+           una vuelta anterior. 100% CSS: <input type="radio"> nativos
+           (con su propio círculo visible, foco de teclado nativo) +
+           :has() para mostrar el panel del nombre marcado
+           (`.team-directory:has(#team-tab-N:checked) [data-panel="N"]`,
+           bajo @supports para no romper en navegadores sin :has()).
+           Solo Pablo tiene foto real y link a perfil externo; el
+           resto usa una silueta con iniciales en el mismo formato de
+           foto (rectángulo, no círculo — a propósito distinto del
+           círculo que usaba la versión de Equipo ya descartada). -->
       <section class="section team hairline-top" id="equipo">
         <div class="container">
           <div class="team-head-centered" data-reveal>
@@ -508,97 +513,110 @@
             </p>
           </div>
 
-          <div class="team-index" data-reveal>
-            <div class="team-index-row" tabindex="0">
-              <span class="team-index-name">Pablo Luis Crespo</span>
-
-              <span class="team-index-photo photo-duo" aria-hidden="true">
-                <picture>
-                  <source srcset="img/pablo.webp" type="image/webp" />
-                  <img src="img/pablo.jpeg" alt="" loading="lazy" width="800" height="1004" />
-                </picture>
-              </span>
-
-              <span class="team-index-detail">
-                <span class="team-role">Abogado</span>
-                <span class="team-index-bio">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore.
-                </span>
-                <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
-                  Ver perfil completo ↗
-                </a>
-              </span>
+          <div class="team-directory" data-reveal>
+            <div class="team-directory-list">
+              <label class="team-directory-row">
+                <input type="radio" name="team-directory-tab" id="team-tab-1" class="team-directory-row-input" checked />
+                <span class="team-directory-name">Pablo Luis Crespo</span>
+              </label>
+              <label class="team-directory-row">
+                <input type="radio" name="team-directory-tab" id="team-tab-2" class="team-directory-row-input" />
+                <span class="team-directory-name">Maria Belen Diaz Carrizo</span>
+              </label>
+              <label class="team-directory-row">
+                <input type="radio" name="team-directory-tab" id="team-tab-3" class="team-directory-row-input" />
+                <span class="team-directory-name">Fiorella Albertoli</span>
+              </label>
+              <label class="team-directory-row">
+                <input type="radio" name="team-directory-tab" id="team-tab-4" class="team-directory-row-input" />
+                <span class="team-directory-name">Danilo Sepulveda</span>
+              </label>
+              <label class="team-directory-row">
+                <input type="radio" name="team-directory-tab" id="team-tab-5" class="team-directory-row-input" />
+                <span class="team-directory-name">Victoria Garcia Vilches</span>
+              </label>
+              <label class="team-directory-row">
+                <input type="radio" name="team-directory-tab" id="team-tab-6" class="team-directory-row-input" />
+                <span class="team-directory-name">Manuel Alfredo Magri</span>
+              </label>
             </div>
 
-            <div class="team-index-row" tabindex="0">
-              <span class="team-index-name">Maria Belen Diaz Carrizo</span>
+            <span class="team-directory-divider" aria-hidden="true"></span>
 
-              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">MB</span>
-
-              <span class="team-index-detail">
-                <span class="team-role">Abogada</span>
-                <span class="team-index-bio">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore.
+            <div class="team-directory-detail">
+              <div class="team-detail-panel" data-panel="1">
+                <span class="team-detail-photo photo-duo" aria-hidden="true">
+                  <picture>
+                    <source srcset="img/pablo.webp" type="image/webp" />
+                    <img src="img/pablo.jpeg" alt="" loading="lazy" width="800" height="1004" />
+                  </picture>
                 </span>
-              </span>
-            </div>
+                <div class="team-detail-copy">
+                  <span class="team-role">Abogado</span>
+                  <p class="team-detail-bio">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore.
+                  </p>
+                  <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
+                    Ver perfil completo ↗
+                  </a>
+                </div>
+              </div>
 
-            <div class="team-index-row" tabindex="0">
-              <span class="team-index-name">Fiorella Albertoli</span>
+              <div class="team-detail-panel" data-panel="2">
+                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">MB</span>
+                <div class="team-detail-copy">
+                  <span class="team-role">Abogada</span>
+                  <p class="team-detail-bio">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore.
+                  </p>
+                </div>
+              </div>
 
-              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">FA</span>
+              <div class="team-detail-panel" data-panel="3">
+                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">FA</span>
+                <div class="team-detail-copy">
+                  <span class="team-role">Abogada</span>
+                  <p class="team-detail-bio">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore.
+                  </p>
+                </div>
+              </div>
 
-              <span class="team-index-detail">
-                <span class="team-role">Abogada</span>
-                <span class="team-index-bio">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore.
-                </span>
-              </span>
-            </div>
+              <div class="team-detail-panel" data-panel="4">
+                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">DS</span>
+                <div class="team-detail-copy">
+                  <span class="team-role">Abogado</span>
+                  <p class="team-detail-bio">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore.
+                  </p>
+                </div>
+              </div>
 
-            <div class="team-index-row" tabindex="0">
-              <span class="team-index-name">Danilo Sepulveda</span>
+              <div class="team-detail-panel" data-panel="5">
+                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">VG</span>
+                <div class="team-detail-copy">
+                  <span class="team-role">Abogada</span>
+                  <p class="team-detail-bio">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore.
+                  </p>
+                </div>
+              </div>
 
-              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">DS</span>
-
-              <span class="team-index-detail">
-                <span class="team-role">Abogado</span>
-                <span class="team-index-bio">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore.
-                </span>
-              </span>
-            </div>
-
-            <div class="team-index-row" tabindex="0">
-              <span class="team-index-name">Victoria Garcia Vilches</span>
-
-              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">VG</span>
-
-              <span class="team-index-detail">
-                <span class="team-role">Abogada</span>
-                <span class="team-index-bio">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore.
-                </span>
-              </span>
-            </div>
-
-            <div class="team-index-row" tabindex="0">
-              <span class="team-index-name">Manuel Alfredo Magri</span>
-
-              <span class="team-index-photo team-index-photo--placeholder" aria-hidden="true">MM</span>
-
-              <span class="team-index-detail">
-                <span class="team-role">Abogado</span>
-                <span class="team-index-bio">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore.
-                </span>
-              </span>
+              <div class="team-detail-panel" data-panel="6">
+                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">MM</span>
+                <div class="team-detail-copy">
+                  <span class="team-role">Abogado</span>
+                  <p class="team-detail-bio">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -765,6 +783,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910w" defer></script>
+    <script src="./script.js?v=20260911a" defer></script>
   </body>
 </html>
