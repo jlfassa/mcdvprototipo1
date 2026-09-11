@@ -699,14 +699,17 @@ section[id],
 /* =========================================================
    HERO "PORTAL" — dos paneles cerrados que se abren revelando la
    foto de fondo, con el nombre partido en dos viajando hacia los
-   bordes. Por defecto (sin JS, o con reduced-motion, o en mobile) es
-   un hero normal de un viewport: paneles y wordmark ocultos por CSS
-   (nunca tapan nada a ciegas), foto + contenido real visibles de
-   entrada. JS agrega "is-portal-active" SOLO cuando el efecto va a
-   correr de verdad (desktop ancho + GSAP + sin reduced-motion): recién
-   ahí la sección crece a 250vh con el stage sticky adentro (mismo
-   patrón sticky+scrub ya usado en el telón de rondas anteriores, sin
-   pin de GSAP) y arranca el timeline.
+   bordes; después el nombre se desvanece y en su lugar aparece
+   .hero-portal-message (ver más abajo) sobre la misma foto — un solo
+   acto continuo, ya no dos secciones separadas. Por defecto (sin JS,
+   o con reduced-motion, o en mobile) es un hero normal de un
+   viewport: paneles y wordmark ocultos por CSS (nunca tapan nada a
+   ciegas), foto + .hero-portal-message visibles de entrada. JS agrega
+   "is-portal-active" SOLO cuando el efecto va a correr de verdad
+   (desktop ancho + GSAP + sin reduced-motion): recién ahí la sección
+   crece a 280vh con el stage sticky adentro (mismo patrón sticky+scrub
+   ya usado en el telón de rondas anteriores, sin pin de GSAP) y
+   arranca el timeline.
 ========================================================= */
 
 .hero-portal {
@@ -717,7 +720,7 @@ section[id],
 }
 
 .hero-portal.is-portal-active {
-  height: 250vh;
+  height: 280vh;
 }
 
 .hero-portal-stage {
@@ -889,112 +892,75 @@ section[id],
 }
 
 /* =========================================================
-   HERO — MENSAJE (segundo acto)
-   Sección propia, en el flujo normal de la página — ya no
-   superpuesta sobre la foto del portal. Fondo sólido oscuro (mismo
-   tono que el degradé del portal) para que el escudo negro + textos
-   claros seguidos funcionando sin cambiar ningún color.
+   HERO PORTAL — MENSAJE (segundo acto, ahora adentro del mismo
+   portal). Superpuesto a la misma foto, en el mismo punto centrado
+   que ocupaba el wordmark (ver .hero-portal-wordmark más arriba) —
+   por diseño no compiten al mismo tiempo: el timeline en script.js
+   apaga el nombre antes de prender esto (ver heroPortalTl). Visible
+   por defecto vía CSS (opacity:1, sin depender de scroll) — es el
+   fallback seguro para mobile/reduced-motion/sin JS, donde el portal
+   queda como un hero estático de un viewport con este mensaje ya
+   encima de la foto. Colores pensados para foto oscura (texto claro
+   + sombra de legibilidad), ya no reutiliza .hero-eyebrow/.hero-huge
+   (esas eran para el fondo --paper claro de la vieja .hero-message,
+   ahora eliminada).
 ========================================================= */
 
-.hero-message {
-  background: var(--paper);
-  color: var(--graphite-950);
-  padding: 140px 0 130px;
-}
+.hero-portal-message {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
 
-.hero-message-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 0 24px;
 }
 
-/* Escudo simple del hero: una imagen más dentro del flujo normal,
-   con el mismo fade-in que el resto (data-reveal). Sin position
-   fixed/absolute ni scroll — nada que pueda quedar "colgado" en
-   pantalla ni depender de mediciones en tiempo real. */
-.hero-crest {
-  width: clamp(78px, 8vw, 108px);
-  height: auto;
-  margin-bottom: 30px;
-
-  /* El escudo negro ahora vive sobre fondo blanco (.hero-message), no
-     sobre la foto oscura del portal — ya no hace falta el halo claro
-     que lo hacía legible ahí; alcanza con una sombra de asiento
-     chica, igual que cualquier otro elemento flotando sobre --paper. */
-  filter: drop-shadow(0 6px 14px rgba(23, 24, 26, 0.18));
-}
-
-.hero-eyebrow {
+.hero-portal-eyebrow {
   display: inline-block;
-  margin-bottom: 26px;
+  margin-bottom: 20px;
 
-  border-left: 3px solid var(--bronze);
-  padding-left: 16px;
-
-  color: var(--bronze-dark);
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-family: "Cormorant Garamond", var(--font-display);
+  font-weight: 500;
+  font-size: 1.3rem;
   text-transform: uppercase;
   letter-spacing: 0.24em;
+  color: var(--bronze-light);
+  text-shadow: 0 2px 10px rgba(14, 16, 22, 0.6);
 }
 
-.hero-eyebrow--center {
-  border-left: 0;
-  padding-left: 0;
-
-  /* Prueba puntual de Cormorant Garamond en vez de la serif del
-     sitio (Forum) — a evaluar si se extiende al resto de la página. */
+.hero-portal-title {
   font-family: "Cormorant Garamond", var(--font-display);
   font-weight: 500;
-}
-
-.hero-huge {
-  /* Prueba puntual de Cormorant Garamond (ver <link> de Google Fonts
-     en <head>) en vez de Forum — misma lógica que el eyebrow. */
-  font-family: "Cormorant Garamond", var(--font-display);
-  font-weight: 500;
-  font-size: clamp(5.2rem, 7.2vw, 9.6rem);
-  line-height: 0.98;
+  font-size: clamp(3.6rem, 6vw, 6.4rem);
+  line-height: 1.05;
   letter-spacing: -0.01em;
-  color: var(--graphite-950);
+  color: var(--paper);
   max-width: 780px;
+  text-shadow: 0 4px 24px rgba(14, 16, 22, 0.55), 0 1px 6px rgba(14, 16, 22, 0.7);
 }
 
-.hero-huge--center {
-  max-width: 920px;
-}
-
-.hero-huge em {
+.hero-portal-title em {
   font-style: italic;
   font-weight: 500;
-  color: var(--bronze-dark);
+  color: var(--bronze-light);
 }
 
-.hero-lead {
-  max-width: 480px;
+.hero-portal-lead {
+  max-width: 520px;
+  margin-top: 24px;
+
+  color: rgba(247, 246, 244, 0.85);
+  font-size: 1.5rem;
+  line-height: 1.6;
+  text-shadow: 0 2px 12px rgba(14, 16, 22, 0.5);
+}
+
+.hero-portal-cta {
   margin-top: 34px;
-
-  color: var(--gray);
-  font-size: 1.75rem;
-  line-height: 1.65;
-}
-
-.hero-lead--center {
-  max-width: 560px;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 34px;
-
-  margin-top: 46px;
-}
-
-.hero-actions--center {
-  justify-content: center;
 }
 
 /* =========================================================
@@ -1908,13 +1874,6 @@ section[id],
   margin-top: 26px;
 }
 
-/* .hero-eyebrow trae color bronze-light (pensado para fondo
-   oscuro, como el hero); acá el fondo es claro, así que se
-   oscurece para que no quede pálido sobre --paper. */
-.area-page-intro .hero-eyebrow {
-  color: var(--bronze-dark);
-}
-
 .area-detail-list {
   border-top: 1px solid rgba(23, 24, 26, 0.14);
 }
@@ -2046,8 +2005,21 @@ section[id],
     padding: 90px 0;
   }
 
-  .hero-message {
-    padding: 100px 0 90px;
+  /* .hero-portal-message queda encerrado en el mismo viewport que la
+     foto (100svh) acá — sin el scroll-jack de escritorio no hay
+     280vh de sección para respirar, así que el ritmo vertical se
+     aprieta para que entre completo sin recortarse. */
+  .hero-portal-eyebrow {
+    margin-bottom: 14px;
+  }
+
+  .hero-portal-lead {
+    margin-top: 16px;
+    font-size: 1.3rem;
+  }
+
+  .hero-portal-cta {
+    margin-top: 24px;
   }
 
   .manifesto {
@@ -2070,8 +2042,12 @@ section[id],
 }
 
 @media (max-width: 480px) {
-  .hero-huge {
-    font-size: 4.4rem;
+  .hero-portal-title {
+    font-size: 3.2rem;
+  }
+
+  .hero-portal-lead {
+    display: none;
   }
 
   .contact-mega {

@@ -63,7 +63,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Cormorant Garamond: prueba puntual en la sección .hero-message
+    <!-- Cormorant Garamond: prueba puntual en .hero-portal-message
          (título + eyebrow), no reemplaza a Forum en el resto del sitio
          todavía — a evaluar si se extiende más adelante. -->
     <link
@@ -71,16 +71,17 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260911a" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260911b" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
     <link rel="preload" as="image" href="img/hero_facade.webp" type="image/webp" fetchpriority="high" />
 
+    <!-- El directorio de Equipo (radios + :has()) y el hero-portal-message
+         ya son visibles/funcionales sin JS por diseño — no necesitan
+         reglas acá. Solo hace falta destrabar el reveal genérico. -->
     <noscript>
       <style>
-        .team-detail { grid-template-rows: 1fr !important; }
-        .team-panel { display: none !important; }
         [data-reveal] { opacity: 1 !important; transform: none !important; }
       </style>
     </noscript>
@@ -210,30 +211,36 @@
     </div>
 
     <main id="main">
-      <!-- HERO "PORTAL" — primer acto, sección propia. Dos paneles
-        sólidos arrancan cerrados, tapando la foto de fondo; al hacer
-        scroll se abren hacia los bordes revelándola, mientras el
-        nombre apilado ("MCDV" / "&" / "Asociados") crece, aprieta su
-        tracking y MCDV/Asociados se separan hacia los costados. Sticky
-        (no pin de GSAP) sobre una sección de 250vh — mismo patrón ya
-        usado en el telón entre Hero y Nosotros de rondas anteriores:
-        más simple/robusto que un pin real para un efecto que es puro
-        scrub.
+      <!-- HERO "PORTAL" — acto único, ya no dos secciones separadas.
+        Dos paneles sólidos arrancan cerrados, tapando la foto de
+        fondo; al hacer scroll se abren hacia los bordes revelándola,
+        mientras el nombre apilado ("MCDV" / "&" / "Asociados") crece,
+        aprieta su tracking y MCDV/Asociados se separan hacia los
+        costados. Sticky (no pin de GSAP) sobre una sección de 280vh —
+        mismo patrón ya usado en el telón entre Hero y Nosotros de
+        rondas anteriores: más simple/robusto que un pin real para un
+        efecto que es puro scrub.
 
-        El segundo acto (escudo, "Estudio Jurídico", h1, bajada, CTAs)
-        ya NO vive acá adentro — es la sección .hero-message, aparte,
-        justo debajo, en el flujo normal de la página (a pedido
-        explícito: que no se sienta como "dos heroes" superpuestos en
-        el mismo lugar, sino como dos momentos separados al bajar el
-        scroll).
+        Antes había una sección .hero-message aparte, justo debajo,
+        que recién aparecía cuando el scroll-jack del portal terminaba
+        del todo — dejaba un tramo del pin "muerto" (nombre ya
+        desvanecido, nada más pasando) y después un bloque blanco
+        propio que se sentía desconectado ("el hero queda muy vacío...
+        esa sección de abajo queda al pedo"). Ahora .hero-portal-message
+        (escudo textual, "Estudio Jurídico", h1, bajada, CTA) vive
+        ADENTRO del mismo portal, sobre la misma foto: ocupa el lugar
+        del nombre justo cuando termina de desvanecerse, sin sección
+        aparte ni salto de fondo.
 
-        Fallback seguro (sin JS, o reduced-motion): los paneles y el
-        wordmark parten OCULTOS por CSS (paneles fuera de pantalla,
-        wordmark en opacity:0) — JS es quien los pone en su posición
-        "cerrada" recién si el efecto va a correr de verdad. Sin JS,
-        la foto queda visible de entrada (un hero de un viewport
-        normal) y .hero-message aparece debajo como cualquier otra
-        sección. -->
+        Fallback seguro (sin JS, reduced-motion, o mobile <900px donde
+        el scroll-jack se desactiva): los paneles y el wordmark parten
+        OCULTOS por CSS — JS es quien los pone en su posición "cerrada"
+        recién si el efecto va a correr de verdad. .hero-portal-message,
+        al revés, arranca SIEMPRE VISIBLE por CSS (mismo criterio que
+        el header: seguro por defecto, JS lo oculta con gsap.set() y
+        recién ahí lo revela con el scrub — si heroPortalReady es
+        false ese gsap.set() nunca corre, así que el mensaje queda
+        visible de entrada, superpuesto a la foto ya estática). -->
       <section class="hero-portal" id="home" data-hero-portal>
         <div class="hero-portal-stage">
           <figure class="hero-portal-media" data-hero-portal-image>
@@ -265,54 +272,32 @@
             <span class="hero-portal-word hero-portal-word--right" data-hero-portal-word="right">Asociados</span>
           </div>
 
-          <span class="hero-portal-meta hero-portal-meta--br" data-hero-portal-meta>Scroll <span aria-hidden="true">↓</span></span>
-        </div>
-      </section>
+          <!-- Sin escudo/logo acá: el wordmark gigante que ya se vio
+               segundos antes cumple ese rol, uno chico al lado sería
+               redundante. -->
+          <div class="hero-portal-message" data-hero-portal-message>
+            <span class="hero-portal-eyebrow">Estudio Jurídico</span>
 
-      <!-- MENSAJE — segundo acto, sección propia (no superpuesta sobre
-           la foto del portal): recién aparece cuando el usuario sigue
-           bajando el scroll después de que el portal termina. Reveal
-           genérico de siempre (fade + deslizamiento, ver script.js),
-           ya no atado al timeline del portal — más simple, y evita
-           que se sienta como "dos heroes" superpuestos en el mismo
-           lugar. -->
-      <!-- Un solo data-reveal en el contenedor (antes: 5 independientes,
-           uno por elemento — escudo, eyebrow, h1, bajada y botón se
-           revelaban en cascada a medida que se scrolleaba, se sentía
-           muy "encadenado" para lo que es un único bloque de
-           presentación). Ahora aparece todo junto, como un solo
-           bloque — a pedido explícito de aligerar el segundo acto
-           del hero. -->
-      <section class="hero-message hairline-top">
-        <div class="container hero-message-inner" data-reveal>
-          <img
-            src="img/logo-mcdv.png"
-            alt="MCDV & Asociados"
-            class="hero-crest"
-            width="272"
-            height="284"
-          />
+            <h1 class="hero-portal-title">
+              Orientación <em>jurídica</em><br />
+              con cercanía real.
+            </h1>
 
-          <span class="hero-eyebrow hero-eyebrow--center">Estudio Jurídico</span>
+            <p class="hero-portal-lead">
+              Asesoramiento y representación legal en Derecho de Familia,
+              Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil.
+              Un equipo interdisciplinario que acompaña cada caso con
+              compromiso, cercanía y responsabilidad.
+            </p>
 
-          <h1 class="hero-huge hero-huge--center">
-            Orientación <em>jurídica</em><br />
-            con cercanía real.
-          </h1>
-
-          <p class="hero-lead hero-lead--center">
-            Asesoramiento y representación legal en Derecho de Familia,
-            Sucesiones, Derecho Laboral, Amparos de Salud y Derecho Civil. Un
-            equipo interdisciplinario que acompaña cada caso con compromiso,
-            cercanía y responsabilidad, con respuestas claras en cada etapa
-            del proceso.
-          </p>
-
-          <div class="hero-actions hero-actions--center">
-            <a href="#contact" class="btn-outline">
-              <span>Solicitar consulta</span>
-            </a>
+            <div class="hero-portal-cta">
+              <a href="#contact" class="btn-outline btn-outline--light">
+                <span>Solicitar consulta</span>
+              </a>
+            </div>
           </div>
+
+          <span class="hero-portal-meta hero-portal-meta--br" data-hero-portal-meta>Scroll <span aria-hidden="true">↓</span></span>
         </div>
       </section>
 
@@ -783,6 +768,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260911a" defer></script>
+    <script src="./script.js?v=20260911b" defer></script>
   </body>
 </html>

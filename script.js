@@ -178,16 +178,22 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   // mientras "MCDV" / "&" / "Asociados" (apiladas al centro) crecen,
   // aprietan su tracking y MCDV/Asociados se separan hacia los
   // costados del centro, mientras el "&" se desvanece en el lugar.
-  // Sticky + scrub (sin pin de GSAP) sobre una sección de 250vh. Solo
+  // Sticky + scrub (sin pin de GSAP) sobre una sección de 280vh. Solo
   // en desktop ancho: en mobile este scroll-jacking largo se siente
   // pesado, así que ahí se usa el fallback seguro (paneles y wordmark
   // quedan ocultos por sus valores por defecto en el CSS).
   //
-  // El "segundo acto" (escudo, eyebrow, h1, bajada, botones) ya NO
-  // vive adentro de este portal — es la sección .hero-message, aparte,
-  // en el flujo normal de la página (ver index.html). Se revela sola
-  // con el bloque genérico de [data-reveal] de más abajo, como
-  // cualquier otra sección del sitio — no necesita nada especial acá.
+  // El "segundo acto" (eyebrow, h1, bajada, CTA — .hero-portal-message
+  // en index.html) vive ADENTRO de este mismo portal, superpuesto a
+  // la foto en el mismo lugar donde el nombre se acaba de desvanecer.
+  // Antes era una sección .hero-message aparte que recién arrancaba
+  // su propio reveal al entrar en pantalla, después de un tramo de
+  // pin "muerto" sin nada pasando — se sentía como hero vacío seguido
+  // de una sección desconectada. Ahora es continuación del mismo
+  // scrub: por defecto (CSS) .hero-portal-message ya está visible
+  // (fallback seguro sin este efecto), así que acá solo hace falta
+  // ocultarla al arrancar y volver a mostrarla cuando el nombre ya
+  // se apagó.
   const heroPortal = document.querySelector("[data-hero-portal]");
   const heroPortalImage = document.querySelector("[data-hero-portal-image] img");
   const heroPortalDuotone = document.querySelector("[data-hero-portal-duotone]");
@@ -197,6 +203,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   const heroPortalWordRight = document.querySelector('[data-hero-portal-word="right"]');
   const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
+  const heroPortalMessage = document.querySelector("[data-hero-portal-message]");
 
   const heroPortalReady =
     heroPortal &&
@@ -206,6 +213,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     heroPortalWordLeft &&
     heroPortalWordRight &&
     heroPortalWordAmp &&
+    heroPortalMessage &&
     header &&
     window.matchMedia("(min-width: 900px)").matches;
 
@@ -224,6 +232,12 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     // Fallback seguro sin este efecto: el header queda visible normal
     // desde la carga, por CSS, sin depender de JS.
     gsap.set(header, { opacity: 0 });
+
+    // .hero-portal-message es visible por defecto (fallback seguro) —
+    // solo la ocultamos acá porque el efecto SÍ va a correr; el
+    // timeline la trae de vuelta más abajo, después de que el nombre
+    // termine de desvanecerse.
+    gsap.set(heroPortalMessage, { opacity: 0, y: 18 });
 
     const heroPortalTl = gsap.timeline({
       scrollTrigger: {
@@ -262,11 +276,31 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .fromTo(heroPortalDuotone, { opacity: 0 }, { opacity: 0.4, duration: 0.45, ease: "none" }, 0.05)
       // La metadata de esquina aparece de a poco.
       .fromTo(heroPortalMeta, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.1)
-      // El wordmark y la metadata se apagan al final del recorrido —
-      // lo que sigue después (.hero-message) es una sección aparte,
-      // con su propio reveal genérico al entrar en pantalla.
+      // El wordmark y la metadata se apagan...
       .to([heroPortalWordLeft, heroPortalWordRight], { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
-      .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
+      .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
+      // ...y en el mismo lugar que dejan libre, sobre la foto ya
+      // asentada, entra el mensaje real (eyebrow + h1 + bajada + CTA)
+      // — el tramo que antes quedaba "muerto" (nombre ya invisible,
+      // nada más pasando hasta que despinchaba la sección) ahora tiene
+      // contenido. Un solo fromTo para todo el bloque, no uno por
+      // elemento — mismo criterio que ya se usaba en la vieja
+      // .hero-message-inner (aparece como un solo bloque, no en
+      // cascada).
+      .fromTo(
+        heroPortalMessage,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.22, ease: "none" },
+        0.7
+      )
+      // Hold final: sin esto, el mensaje terminaría de aparecer justo
+      // cuando el pin se suelta (el final del timeline coincide con
+      // el 100% del recorrido de scroll) — no daría tiempo a leerlo
+      // todavía "quieto". Este tween vacío solo estira la duración
+      // del timeline, sin animar nada — el resto del scroll dentro de
+      // los 280vh lo pasa con el mensaje ya asentado antes de soltar
+      // el pin y seguir a "El Estudio".
+      .to({}, { duration: 0.28 });
   }
 
   // Áreas de práctica (acordeón, <details>/<summary> nativo) y
