@@ -269,11 +269,9 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
   }
 
-  // Áreas de práctica: índice compacto (01-05). Ya no necesita JS —
-  // la foto que se ilumina dentro de cada rectángulo al pasar el
-  // mouse o enfocar con teclado es pura CSS (variable --row-bg
-  // inline por fila + background-image gateado en
-  // "@media (hover: hover) and (pointer: fine)", ver style-mcdv.css).
+  // Áreas de práctica y Equipo: sistema de tarjetas, resuelto 100%
+  // en CSS (ver .areas-card-*/.team-expand-* en style-mcdv.css) —
+  // no necesitan JS.
 
   gsap.utils.toArray("[data-reveal]:not(#home [data-reveal])").forEach(element => {
     gsap.fromTo(
