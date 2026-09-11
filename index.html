@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260910v" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260910w" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -368,20 +368,22 @@
         </div>
       </section>
 
-      <!-- ÁREAS DE PRÁCTICA — a pedido explícito, pasa de tarjetas a un
-           índice de filas para que la sección quede de la misma
-           "familia" visual que .team-index-* (hairlines, columnas,
-           serif) sin ser un calco: acá SÍ hay foto real y descripción
-           ya escrita para las 5, así que todo queda visible SIEMPRE
-           (número + nombre + descripción + foto chica) — nada oculto
-           detrás de hover, a diferencia de Equipo (que esconde
-           foto/bio porque 5 de 6 personas no tienen foto real
-           todavía). Lo único que cambia en hover/foco es que la foto
-           se ilumina (deja de estar en gris/oscurecida) — mejora
-           puramente decorativa, no esconde contenido. Investigado
-           mirando setialaw.com (su índice de "Specialist Areas":
-           filas con hairlines, sin tarjetas) con Playwright antes de
-           diseñar esto. -->
+      <!-- ÁREAS DE PRÁCTICA — el índice de filas con foto circular
+           quedó demasiado parecido a .team-index-* (mismo esqueleto:
+           filas + hairlines + foto redonda) — a pedido explícito, se
+           reemplaza por un acordeón, sin fotos, estructuralmente
+           distinto de Equipo. Referencia real (Playwright, no
+           WebFetch): macfarlanes.com/what-we-do — lista de nombres
+           con un círculo +/− a la derecha, clic expande el texto
+           adentro de la misma fila, sin fotos ni tarjetas.
+
+           Implementado con <details>/<summary> nativo (name= las hace
+           mutuamente excluyentes, como un acordeón real) — foco de
+           teclado y semántica de "expandible" gratis, sin ARIA a
+           mano. La animación de alto (en vez del snap instantáneo por
+           defecto de <details>) es el truco de
+           "grid-template-rows: 0fr → 1fr" en .areas-accordion-collapse,
+           100% CSS. -->
       <section class="areas-index hairline-top" id="areas">
         <div class="container">
           <div class="areas-head-centered" data-reveal>
@@ -393,94 +395,89 @@
             </p>
           </div>
 
-          <div class="areas-row-list" data-reveal>
-            <a href="areas/derecho-de-familia.html" class="areas-row">
-              <span class="areas-row-head">
-                <span class="areas-row-number">01</span>
-                <span class="areas-row-name">Derecho de Familia</span>
-              </span>
-              <p class="areas-row-desc">
-                Alimentos, Divorcios, Cuidado Personal, Régimen de
-                Comunicación, Violencia Familiar y de Género,
-                Mediaciones.
-              </p>
-              <span class="areas-row-media" aria-hidden="true">
-                <picture>
-                  <source srcset="img/hero_1.webp" type="image/webp" />
-                  <img src="img/hero_1.jpg" alt="" loading="lazy" width="1920" height="1280" />
-                </picture>
-              </span>
-              <span class="areas-row-arrow" aria-hidden="true">↗</span>
-            </a>
+          <div class="areas-accordion" data-reveal>
+            <details class="areas-accordion-item" name="areas-accordion">
+              <summary class="areas-accordion-summary">
+                <span class="areas-accordion-number">01</span>
+                <span class="areas-accordion-name">Derecho de Familia</span>
+                <span class="areas-accordion-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="areas-accordion-collapse">
+                <div class="areas-accordion-body">
+                  <p>
+                    Alimentos, Divorcios, Cuidado Personal, Régimen de
+                    Comunicación, Violencia Familiar y de Género,
+                    Mediaciones.
+                  </p>
+                  <a href="areas/derecho-de-familia.html" class="area-card-link">Ver más ↗</a>
+                </div>
+              </div>
+            </details>
 
-            <a href="areas/sucesiones.html" class="areas-row">
-              <span class="areas-row-head">
-                <span class="areas-row-number">02</span>
-                <span class="areas-row-name">Sucesiones</span>
-              </span>
-              <p class="areas-row-desc">
-                Declaratorias, Particiones, Inscripción de Bienes,
-                Acuerdos Particionarios.
-              </p>
-              <span class="areas-row-media" aria-hidden="true">
-                <picture>
-                  <source srcset="img/parallax_1.webp" type="image/webp" />
-                  <img src="img/parallax_1.jpg" alt="" loading="lazy" width="1920" height="1280" />
-                </picture>
-              </span>
-              <span class="areas-row-arrow" aria-hidden="true">↗</span>
-            </a>
+            <details class="areas-accordion-item" name="areas-accordion">
+              <summary class="areas-accordion-summary">
+                <span class="areas-accordion-number">02</span>
+                <span class="areas-accordion-name">Sucesiones</span>
+                <span class="areas-accordion-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="areas-accordion-collapse">
+                <div class="areas-accordion-body">
+                  <p>
+                    Declaratorias, Particiones, Inscripción de Bienes,
+                    Acuerdos Particionarios.
+                  </p>
+                  <a href="areas/sucesiones.html" class="area-card-link">Ver más ↗</a>
+                </div>
+              </div>
+            </details>
 
-            <a href="areas/derecho-laboral.html" class="areas-row">
-              <span class="areas-row-head">
-                <span class="areas-row-number">03</span>
-                <span class="areas-row-name">Derecho Laboral</span>
-              </span>
-              <p class="areas-row-desc">
-                ART, Despidos, Violencia Laboral, Conciliaciones,
-                Audiencias SRT.
-              </p>
-              <span class="areas-row-media" aria-hidden="true">
-                <picture>
-                  <source srcset="img/parallax_2.webp" type="image/webp" />
-                  <img src="img/parallax_2.jpg" alt="" loading="lazy" width="1920" height="3065" />
-                </picture>
-              </span>
-              <span class="areas-row-arrow" aria-hidden="true">↗</span>
-            </a>
+            <details class="areas-accordion-item" name="areas-accordion">
+              <summary class="areas-accordion-summary">
+                <span class="areas-accordion-number">03</span>
+                <span class="areas-accordion-name">Derecho Laboral</span>
+                <span class="areas-accordion-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="areas-accordion-collapse">
+                <div class="areas-accordion-body">
+                  <p>
+                    ART, Despidos, Violencia Laboral, Conciliaciones,
+                    Audiencias SRT.
+                  </p>
+                  <a href="areas/derecho-laboral.html" class="area-card-link">Ver más ↗</a>
+                </div>
+              </div>
+            </details>
 
-            <a href="areas/amparos-de-salud.html" class="areas-row">
-              <span class="areas-row-head">
-                <span class="areas-row-number">04</span>
-                <span class="areas-row-name">Amparos de Salud</span>
-              </span>
-              <p class="areas-row-desc">Obras Sociales, Prepagas, Medicamentos, Tratamientos.</p>
-              <span class="areas-row-media" aria-hidden="true">
-                <picture>
-                  <source srcset="img/hero_2.webp" type="image/webp" />
-                  <img src="img/hero_2.jpg" alt="" loading="lazy" width="1920" height="1280" />
-                </picture>
-              </span>
-              <span class="areas-row-arrow" aria-hidden="true">↗</span>
-            </a>
+            <details class="areas-accordion-item" name="areas-accordion">
+              <summary class="areas-accordion-summary">
+                <span class="areas-accordion-number">04</span>
+                <span class="areas-accordion-name">Amparos de Salud</span>
+                <span class="areas-accordion-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="areas-accordion-collapse">
+                <div class="areas-accordion-body">
+                  <p>Obras Sociales, Prepagas, Medicamentos, Tratamientos.</p>
+                  <a href="areas/amparos-de-salud.html" class="area-card-link">Ver más ↗</a>
+                </div>
+              </div>
+            </details>
 
-            <a href="areas/derecho-civil.html" class="areas-row">
-              <span class="areas-row-head">
-                <span class="areas-row-number">05</span>
-                <span class="areas-row-name">Derecho Civil</span>
-              </span>
-              <p class="areas-row-desc">
-                Daños y Perjuicios, Desalojos, Ejecuciones
-                Contractuales.
-              </p>
-              <span class="areas-row-media" aria-hidden="true">
-                <picture>
-                  <source srcset="img/hero_3.webp" type="image/webp" />
-                  <img src="img/hero_3.jpg" alt="" loading="lazy" width="1920" height="2560" />
-                </picture>
-              </span>
-              <span class="areas-row-arrow" aria-hidden="true">↗</span>
-            </a>
+            <details class="areas-accordion-item" name="areas-accordion">
+              <summary class="areas-accordion-summary">
+                <span class="areas-accordion-number">05</span>
+                <span class="areas-accordion-name">Derecho Civil</span>
+                <span class="areas-accordion-icon" aria-hidden="true"></span>
+              </summary>
+              <div class="areas-accordion-collapse">
+                <div class="areas-accordion-body">
+                  <p>
+                    Daños y Perjuicios, Desalojos, Ejecuciones
+                    Contractuales.
+                  </p>
+                  <a href="areas/derecho-civil.html" class="area-card-link">Ver más ↗</a>
+                </div>
+              </div>
+            </details>
           </div>
         </div>
       </section>
@@ -768,6 +765,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260910v" defer></script>
+    <script src="./script.js?v=20260910w" defer></script>
   </body>
 </html>

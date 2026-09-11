@@ -269,9 +269,10 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55);
   }
 
-  // Áreas de práctica y Equipo: dos índices de filas, resueltos
-  // 100% en CSS (ver .areas-row-*/.team-index-* en style-mcdv.css)
-  // — no necesitan JS.
+  // Áreas de práctica (acordeón, <details>/<summary> nativo) y
+  // Equipo (índice de filas): resueltos 100% en HTML/CSS, sin una
+  // línea de JS (ver .areas-accordion-*/.team-index-* en
+  // style-mcdv.css).
 
   gsap.utils.toArray("[data-reveal]:not(#home [data-reveal])").forEach(element => {
     gsap.fromTo(
