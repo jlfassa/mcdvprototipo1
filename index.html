@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260911c" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260911d" />
 
     <!-- Precarga la imagen real del hero, en WebP (27KB; el jpg de
          fallback pesa 94KB) — es la que hace falta para el LCP. -->
@@ -530,20 +530,23 @@
         </div>
       </section>
 
-      <!-- EQUIPO — quinta vuelta, spec exacta del usuario: "a la
-           izquierda los nombres [estilo tabla, como Áreas de
-           práctica], en el medio una franja [divisoria] y a la
-           derecha el espacio en donde ira el texto y foto". Es un
-           directorio maestro-detalle: la columna izquierda es una
-           lista de nombres (mismo lenguaje tipográfico que las filas
-           de Áreas — nombre serif + hairlines), clickear/tocar un
-           nombre cambia cuál panel (foto + cargo + bio) se muestra a
-           la derecha de la franja. Selección por click/tap, NO por
-           hover — funciona igual en mouse y en touch, y evita repetir
-           el patrón "contenido detrás de hover" que ya se descartó en
-           una vuelta anterior. 100% CSS: <input type="radio"> nativos
-           (con su propio círculo visible, foco de teclado nativo) +
-           :has() para mostrar el panel del nombre marcado
+      <!-- EQUIPO — directorio maestro-detalle. Spec original del
+           usuario: "a la izquierda los nombres, en el medio una
+           franja y a la derecha el texto y foto". Ajuste posterior,
+           también explícito: dividir la caja en 3 partes casi
+           iguales (nombres | foto | texto), cada una separada por su
+           propia franja fina — la foto pasó a ocupar el 100% de su
+           columna (antes tenía un ancho fijo chico, ~184px tope) con
+           aspect-ratio en vez de alto fijo, así se agranda o achica
+           con el resto de la caja en vez de quedar suelta. Clickear/
+           tocar un nombre cambia cuál panel (foto + franja + cargo +
+           bio) se muestra a la derecha de la primera franja.
+           Selección por click/tap, NO por hover — funciona igual en
+           mouse y en touch, y evita repetir el patrón "contenido
+           detrás de hover" que ya se descartó en una vuelta anterior.
+           100% CSS: <input type="radio"> nativos (con su propio
+           círculo visible, foco de teclado nativo) + :has() para
+           mostrar el panel del nombre marcado
            (`.team-directory:has(#team-tab-N:checked) [data-panel="N"]`,
            bajo @supports para no romper en navegadores sin :has()).
            Solo Pablo tiene foto real y link a perfil externo; el
@@ -599,6 +602,7 @@
                     <img src="img/pablo.jpeg" alt="" loading="lazy" width="800" height="1004" />
                   </picture>
                 </span>
+                <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogado</span>
                   <p class="team-detail-bio">
@@ -613,6 +617,7 @@
 
               <div class="team-detail-panel" data-panel="2">
                 <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">MB</span>
+                <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogada</span>
                   <p class="team-detail-bio">
@@ -624,6 +629,7 @@
 
               <div class="team-detail-panel" data-panel="3">
                 <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">FA</span>
+                <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogada</span>
                   <p class="team-detail-bio">
@@ -635,6 +641,7 @@
 
               <div class="team-detail-panel" data-panel="4">
                 <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">DS</span>
+                <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogado</span>
                   <p class="team-detail-bio">
@@ -646,6 +653,7 @@
 
               <div class="team-detail-panel" data-panel="5">
                 <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">VG</span>
+                <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogada</span>
                   <p class="team-detail-bio">
@@ -657,6 +665,7 @@
 
               <div class="team-detail-panel" data-panel="6">
                 <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">MM</span>
+                <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogado</span>
                   <p class="team-detail-bio">
@@ -914,6 +923,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260911c" defer></script>
+    <script src="./script.js?v=20260911d" defer></script>
   </body>
 </html>

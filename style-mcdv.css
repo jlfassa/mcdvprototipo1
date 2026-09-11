@@ -1354,11 +1354,24 @@ section[id],
   margin-inline: auto;
 }
 
+/* Tres columnas casi iguales (nombres | foto | texto), separadas por
+   dos franjas finas — a pedido explícito: "dividir un rectángulo en
+   3 partes iguales casi". El grid principal ya define las 3 columnas
+   con el mismo ancho (1fr cada una) más sus dos franjas; nombres
+   ocupa la 1ª, y .team-directory-detail ocupa un solo elemento que
+   se extiende sobre la 2ª franja + foto + 3ª franja + texto
+   (columnas 3 a 6) — adentro, cada .team-detail-panel repite esas
+   mismas proporciones para que foto y texto queden igual de anchos
+   que nombres. Una sola franja "vive" acá (nombres/foto); la otra
+   (foto/texto) vive dentro de cada panel, ver más abajo, porque
+   cambia junto con la foto y el texto según qué nombre está marcado
+   — así no duplica la lógica de :has() para una segunda franja
+   suelta en el grid de afuera. */
 .team-directory {
   display: grid;
-  grid-template-columns: minmax(220px, 340px) 1px 1fr;
+  grid-template-columns: minmax(200px, 1fr) 1px minmax(160px, 1fr) 1px minmax(200px, 1fr);
   align-items: stretch;
-  gap: 0 clamp(24px, 4vw, 64px);
+  gap: 0 clamp(20px, 3vw, 48px);
 
   margin-top: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -1441,20 +1454,36 @@ section[id],
   background: rgba(173, 125, 76, 0.3);
 }
 
+/* Se extiende sobre la 2ª franja + la columna de foto + la 3ª franja
+   + la columna de texto (columnas 3 a 6 del grid de afuera) — así la
+   foto y el texto quedan tan anchos como la columna de nombres, en
+   vez de repartirse la mitad que sobraba. */
 .team-directory-detail {
+  grid-column: 3 / 6;
   display: grid;
   padding: 8px 6px;
 }
 
+/* Cada panel repite las mismas proporciones que el grid de afuera
+   (foto | franja | texto, ambas columnas 1fr) — como solo uno está
+   visible a la vez (opacity), las franjas de los paneles ocultos
+   quedan apiladas exactamente debajo de la del panel activo, sin
+   duplicarse a la vista. */
 .team-detail-panel {
   grid-area: 1 / 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 1px minmax(160px, 1fr);
   align-items: center;
-  gap: clamp(20px, 3vw, 32px);
+  gap: 0 clamp(20px, 3vw, 48px);
 
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+}
+
+.team-detail-divider {
+  align-self: stretch;
+  background: rgba(173, 125, 76, 0.3);
 }
 
 /* Fallback sin :has(): el panel de Pablo queda siempre visible. Con
@@ -1482,10 +1511,16 @@ section[id],
   }
 }
 
+/* Antes tenía un ancho fijo chico (clamp tope 184px) sin relación con
+   el espacio real disponible; ahora ocupa el 100% de su columna (~un
+   tercio de la caja) y el aspect-ratio la mantiene proporcionada sea
+   cual sea ese ancho — "más grande, respetando el tamaño de esa
+   área". El tope en max-width es solo para que no quede gigante en
+   pantallas muy anchas. */
 .team-detail-photo {
-  flex: 0 0 auto;
-  width: clamp(140px, 14vw, 184px);
-  height: clamp(175px, 17.5vw, 230px);
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 4 / 5;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -1504,7 +1539,7 @@ section[id],
 
   background: var(--graphite-950);
   font-family: var(--font-display);
-  font-size: 2.4rem;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
   color: var(--bronze-light);
 }
 
@@ -1512,7 +1547,6 @@ section[id],
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 440px;
 }
 
 .team-detail-copy .team-role {
@@ -1552,14 +1586,29 @@ section[id],
   }
 
   .team-directory-detail {
+    /* Sin esto, el grid-column:3/6 de escritorio crearía columnas
+       implícitas de más en vez de apilarse en la única columna que
+       queda acá. */
+    grid-column: 1;
     padding: 24px 6px 4px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
+  /* Ídem que .team-directory-divider: una franja horizontal de 1px
+     no suma nada acá, así que se oculta y el panel pasa a una sola
+     columna (foto arriba, texto debajo). */
   .team-detail-panel {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    justify-items: start;
     gap: 20px;
+  }
+
+  .team-detail-divider {
+    display: none;
+  }
+
+  .team-detail-photo {
+    max-width: 220px;
   }
 }
 
