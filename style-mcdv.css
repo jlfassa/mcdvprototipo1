@@ -118,8 +118,8 @@ textarea:focus-visible {
 }
 
 /* Link "saltar al contenido" para navegación por teclado: invisible
-   hasta recibir foco (primer Tab de la página), por encima incluso
-   del preloader para que sea alcanzable apenas carga. */
+   hasta recibir foco (primer Tab de la página), con el z-index más
+   alto del sitio para que nada se le pueda superponer. */
 .skip-link {
   position: fixed;
   z-index: 10000;
@@ -218,59 +218,6 @@ section[id],
 [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* =========================================================
-   PRELOADER
-========================================================= */
-
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-
-  display: grid;
-  place-items: center;
-
-  background: var(--graphite-950);
-  color: var(--paper);
-
-  transition:
-    opacity 0.7s var(--ease),
-    visibility 0.7s var(--ease);
-}
-
-.preloader.loaded {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.preloader-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.preloader-count {
-  font-family: var(--font-display);
-  font-size: clamp(6rem, 12vw, 12rem);
-  line-height: 1;
-  color: var(--bronze-light);
-}
-
-.preloader-count::after {
-  content: "%";
-  font-size: 0.4em;
-  margin-left: 4px;
-  color: var(--gray-light);
-}
-
-.preloader-word {
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  font-size: 1.1rem;
-  color: var(--gray-light);
 }
 
 /* =========================================================

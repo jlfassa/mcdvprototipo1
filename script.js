@@ -43,36 +43,6 @@ if (!hasGsap) {
 
 
 /* =========================================================
-   PRELOADER — contador 0 a 100
-========================================================= */
-
-const preloader = document.querySelector("[data-preloader]");
-const preloaderCount = document.querySelector("[data-preloader-count]");
-
-if (preloader && preloaderCount) {
-  let count = 0;
-  const duration = reducedMotion.matches ? 200 : 1400;
-  const stepTime = duration / 100;
-
-  const counter = setInterval(() => {
-    count += 1;
-    preloaderCount.textContent = count;
-
-    if (count >= 100) {
-      clearInterval(counter);
-    }
-  }, stepTime);
-
-  window.addEventListener("load", () => {
-    setTimeout(() => {
-      preloaderCount.textContent = "100";
-      preloader.classList.add("loaded");
-    }, duration + 150);
-  });
-}
-
-
-/* =========================================================
    HEADER AL HACER SCROLL — la barra ya es clara con logo negro desde
    el arranque; al scrollear más allá del hero solo se compacta un
    poco y suma sombra/borde inferior (clase "scrolled"). El punto de
