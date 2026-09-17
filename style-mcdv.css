@@ -2054,13 +2054,6 @@ section[id],
   border-color: var(--bronze);
 }
 
-.area-page-hero-content .areas-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 18px;
-  color: var(--bronze-light);
-}
-
 .area-page-hero-content h1 {
   font-family: var(--font-display);
   font-weight: 400;
