@@ -1546,12 +1546,12 @@ section[id],
     pointer-events: none;
   }
 
+  /* Solo Pablo (1) y Belén (2) por ahora — ver nota 2026-09-17 en
+     index.html. Al sumar a alguien más, agregar acá su
+     "team-directory:has(#team-tab-N:checked) .team-detail-panel[data-panel="N"]"
+     junto con su fila/panel en el HTML, nada más cambia. */
   .team-directory:has(#team-tab-1:checked) .team-detail-panel[data-panel="1"],
-  .team-directory:has(#team-tab-2:checked) .team-detail-panel[data-panel="2"],
-  .team-directory:has(#team-tab-3:checked) .team-detail-panel[data-panel="3"],
-  .team-directory:has(#team-tab-4:checked) .team-detail-panel[data-panel="4"],
-  .team-directory:has(#team-tab-5:checked) .team-detail-panel[data-panel="5"],
-  .team-directory:has(#team-tab-6:checked) .team-detail-panel[data-panel="6"] {
+  .team-directory:has(#team-tab-2:checked) .team-detail-panel[data-panel="2"] {
     opacity: 1;
     pointer-events: auto;
   }

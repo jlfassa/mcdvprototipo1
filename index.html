@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260911g" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260917a" />
 
     <!-- El hero ya no muestra una foto fija (ahora es el carrusel de
          video) — img/hero_facade.jpg sigue en uso solo como imagen de
@@ -603,10 +603,18 @@
            mostrar el panel del nombre marcado
            (`.team-directory:has(#team-tab-N:checked) [data-panel="N"]`,
            bajo @supports para no romper en navegadores sin :has()).
-           Solo Pablo tiene foto real y link a perfil externo; el
-           resto usa una silueta con iniciales en el mismo formato de
-           foto (rectángulo, no círculo — a propósito distinto del
-           círculo que usaba la versión de Equipo ya descartada). -->
+           Solo Pablo tiene foto real y link a perfil externo; Belén
+           usa una silueta con iniciales en el mismo formato de foto
+           (rectángulo, no círculo — a propósito distinto del círculo
+           que usaba la versión de Equipo ya descartada).
+
+           2026-09-17: se sacaron temporalmente Fiorella Albertoli,
+           Danilo Sepulveda, Victoria Garcia Vilches y Manuel Alfredo
+           Magri (a pedido explícito) — todavía no confirmaron sus
+           datos/foto, así que por ahora solo quedan Pablo y Belén.
+           Vuelven a sumarse cuando respondan; el mecanismo (radios +
+           :has()) ya está armado para agregar más `team-tab-N` /
+           `[data-panel="N"]` sin tocar nada más. -->
       <section class="section team hairline-top" id="equipo">
         <div class="container">
           <div class="team-head-centered" data-reveal>
@@ -627,22 +635,6 @@
               <label class="team-directory-row">
                 <input type="radio" name="team-directory-tab" id="team-tab-2" class="team-directory-row-input" />
                 <span class="team-directory-name">Maria Belen Diaz Carrizo</span>
-              </label>
-              <label class="team-directory-row">
-                <input type="radio" name="team-directory-tab" id="team-tab-3" class="team-directory-row-input" />
-                <span class="team-directory-name">Fiorella Albertoli</span>
-              </label>
-              <label class="team-directory-row">
-                <input type="radio" name="team-directory-tab" id="team-tab-4" class="team-directory-row-input" />
-                <span class="team-directory-name">Danilo Sepulveda</span>
-              </label>
-              <label class="team-directory-row">
-                <input type="radio" name="team-directory-tab" id="team-tab-5" class="team-directory-row-input" />
-                <span class="team-directory-name">Victoria Garcia Vilches</span>
-              </label>
-              <label class="team-directory-row">
-                <input type="radio" name="team-directory-tab" id="team-tab-6" class="team-directory-row-input" />
-                <span class="team-directory-name">Manuel Alfredo Magri</span>
               </label>
             </div>
 
@@ -681,53 +673,6 @@
                 </div>
               </div>
 
-              <div class="team-detail-panel" data-panel="3">
-                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">FA</span>
-                <span class="team-detail-divider" aria-hidden="true"></span>
-                <div class="team-detail-copy">
-                  <span class="team-role">Abogada</span>
-                  <p class="team-detail-bio">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore.
-                  </p>
-                </div>
-              </div>
-
-              <div class="team-detail-panel" data-panel="4">
-                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">DS</span>
-                <span class="team-detail-divider" aria-hidden="true"></span>
-                <div class="team-detail-copy">
-                  <span class="team-role">Abogado</span>
-                  <p class="team-detail-bio">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore.
-                  </p>
-                </div>
-              </div>
-
-              <div class="team-detail-panel" data-panel="5">
-                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">VG</span>
-                <span class="team-detail-divider" aria-hidden="true"></span>
-                <div class="team-detail-copy">
-                  <span class="team-role">Abogada</span>
-                  <p class="team-detail-bio">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore.
-                  </p>
-                </div>
-              </div>
-
-              <div class="team-detail-panel" data-panel="6">
-                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">MM</span>
-                <span class="team-detail-divider" aria-hidden="true"></span>
-                <div class="team-detail-copy">
-                  <span class="team-role">Abogado</span>
-                  <p class="team-detail-bio">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -977,6 +922,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260911g" defer></script>
+    <script src="./script.js?v=20260917a" defer></script>
   </body>
 </html>
