@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260917d" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260917e" />
 
     <!-- El hero ya no muestra una foto fija (ahora es el carrusel de
          video) — img/hero_facade.jpg sigue en uso solo como imagen de
@@ -595,10 +595,12 @@
            mostrar el panel del nombre marcado
            (`.team-directory:has(#team-tab-N:checked) [data-panel="N"]`,
            bajo @supports para no romper en navegadores sin :has()).
-           Solo Pablo tiene foto real y link a perfil externo; Belén
-           usa una silueta con iniciales en el mismo formato de foto
-           (rectángulo, no círculo — a propósito distinto del círculo
-           que usaba la versión de Equipo ya descartada).
+           Solo Pablo tiene link a perfil externo (drpablocrespo.com,
+           sitio propio ya existente) — Belén no, no tiene página
+           propia todavía. Ambos tienen foto real: Belén (img/belen.jpeg
+           /webp) reemplaza a la silueta con iniciales "MB" que usaba
+           antes como placeholder. Bio de Belén sigue en lorem ipsum a
+           la espera de la descripción real.
 
            2026-09-17: se sacaron temporalmente Fiorella Albertoli,
            Danilo Sepulveda, Victoria Garcia Vilches y Manuel Alfredo
@@ -654,13 +656,22 @@
               </div>
 
               <div class="team-detail-panel" data-panel="2">
-                <span class="team-detail-photo team-detail-photo--placeholder" aria-hidden="true">MB</span>
+                <span class="team-detail-photo photo-duo" aria-hidden="true">
+                  <picture>
+                    <source srcset="img/belen.webp" type="image/webp" />
+                    <img src="img/belen.jpeg" alt="" loading="lazy" width="845" height="1228" />
+                  </picture>
+                </span>
                 <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogada</span>
                   <p class="team-detail-bio">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore.
+                    sed do eiusmod tempor incididunt ut labore. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris
+                    nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                    dolor in reprehenderit in voluptate velit esse cillum
+                    dolore eu fugiat nulla pariatur.
                   </p>
                 </div>
               </div>
@@ -914,6 +925,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260917d" defer></script>
+    <script src="./script.js?v=20260917e" defer></script>
   </body>
 </html>
