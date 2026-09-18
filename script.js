@@ -261,34 +261,32 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
   // Hero "portal": dos paneles arrancan cerrados tapando el carrusel
   // de video de fondo (ver initHeroVideoCarousel más arriba — corre
   // aparte, no depende de este bloque); al scrollear se abren hacia
-  // los bordes revelándolo, mientras "MCDV" / "&" / "Asociados"
-  // (apiladas al centro) crecen, aprietan su tracking y MCDV/Asociados
-  // se separan hacia los costados del centro, mientras el "&" se
-  // desvanece en el lugar. Sticky + scrub (sin pin de GSAP) sobre una
+  // los bordes revelándolo, mientras el escudo (armado al centro, sus
+  // dos mitades juntas) crece y se parte en dos junto con los
+  // paneles — cada mitad viaja hacia su lado, mismo gesto que las
+  // puertas abriéndose. Sticky + scrub (sin pin de GSAP) sobre una
   // sección de 280vh. Solo en desktop ancho: en mobile este
   // scroll-jacking largo se siente pesado, así que ahí se usa el
-  // fallback seguro (paneles y wordmark quedan ocultos por sus
-  // valores por defecto en el CSS) — el video de fondo, en cambio,
-  // sigue andando igual, gracias a initHeroVideoCarousel.
+  // fallback seguro (paneles y escudo quedan ocultos por sus valores
+  // por defecto en el CSS) — el video de fondo, en cambio, sigue
+  // andando igual, gracias a initHeroVideoCarousel.
   //
   // El "segundo acto" (eyebrow, h1, bajada, CTA — .hero-portal-message
   // en index.html) vive ADENTRO de este mismo portal, superpuesto al
-  // video en el mismo lugar donde el nombre se acaba de desvanecer.
+  // video en el mismo lugar donde el escudo se acaba de desvanecer.
   // Antes era una sección .hero-message aparte que recién arrancaba
   // su propio reveal al entrar en pantalla, después de un tramo de
   // pin "muerto" sin nada pasando — se sentía como hero vacío seguido
   // de una sección desconectada. Ahora es continuación del mismo
   // scrub: por defecto (CSS) .hero-portal-message ya está visible
   // (fallback seguro sin este efecto), así que acá solo hace falta
-  // ocultarla al arrancar y volver a mostrarla cuando el nombre ya
+  // ocultarla al arrancar y volver a mostrarla cuando el escudo ya
   // se apagó.
   const heroPortalVideoWrap = document.querySelector("[data-hero-portal-video-carousel]");
   const heroPortalDuotone = document.querySelector("[data-hero-portal-duotone]");
   const heroPortalPanelLeft = document.querySelector('[data-hero-portal-panel="left"]');
   const heroPortalPanelRight = document.querySelector('[data-hero-portal-panel="right"]');
-  const heroPortalWordLeft = document.querySelector('[data-hero-portal-word="left"]');
-  const heroPortalWordRight = document.querySelector('[data-hero-portal-word="right"]');
-  const heroPortalWordAmp = document.querySelector('[data-hero-portal-word="amp"]');
+  const heroPortalLogo = document.querySelector("[data-hero-portal-logo]");
   const heroPortalMeta = document.querySelectorAll("[data-hero-portal-meta]");
   const heroPortalMessage = document.querySelector("[data-hero-portal-message]");
 
@@ -297,9 +295,7 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
     heroPortalVideoWrap &&
     heroPortalPanelLeft &&
     heroPortalPanelRight &&
-    heroPortalWordLeft &&
-    heroPortalWordRight &&
-    heroPortalWordAmp &&
+    heroPortalLogo &&
     heroPortalMessage &&
     header &&
     window.matchMedia("(min-width: 900px)").matches;
@@ -341,19 +337,9 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // despejar el cuadro por completo.
       .to(heroPortalPanelLeft, { xPercent: -100, duration: 0.45, ease: "none" }, 0)
       .to(heroPortalPanelRight, { xPercent: 100, duration: 0.45, ease: "none" }, 0)
-      // El nombre: crece, aprieta el tracking y se separa con las
-      // puertas — MCDV hacia el centro-izquierda, Asociados hacia el
-      // centro-derecha (no hasta el borde: quedan más cerca del medio
-      // para asentarse ahí) mientras el "&" del medio se desvanece.
-      .fromTo(
-        [heroPortalWordLeft, heroPortalWordRight],
-        { opacity: 1, fontSize: "2.2rem", letterSpacing: "0.4em" },
-        { fontSize: "5rem", letterSpacing: "0.04em", duration: 0.45, ease: "none" },
-        0
-      )
-      .fromTo(heroPortalWordLeft, { x: 0 }, { x: "-14vw", duration: 0.45, ease: "none" }, 0)
-      .fromTo(heroPortalWordRight, { x: 0 }, { x: "14vw", duration: 0.45, ease: "none" }, 0)
-      .fromTo(heroPortalWordAmp, { opacity: 1 }, { opacity: 0, duration: 0.45, ease: "none" }, 0)
+      // El escudo se queda ENTERO (no se parte) mientras las puertas
+      // se abren alrededor — solo crece un poco, sin desplazarse.
+      .fromTo(heroPortalLogo, { opacity: 1, scale: 0.86 }, { scale: 1.08, duration: 0.45, ease: "none" }, 0)
       // El header (botón Menú), oculto hasta acá, aparece junto con
       // las puertas abriéndose.
       .fromTo(header, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "none" }, 0)
@@ -369,8 +355,8 @@ if (hasGsap && typeof ScrollTrigger !== "undefined" && !reducedMotion.matches) {
       // que arranque invisible en reposo (fromTo siempre renderiza el
       // estado "from" al crearse). Solo se apaga junto con el
       // wordmark, un poco más abajo.
-      // El wordmark y el aviso de "Scroll" se apagan...
-      .to([heroPortalWordLeft, heroPortalWordRight], { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
+      // El escudo y el aviso de "Scroll" se apagan...
+      .to(heroPortalLogo, { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
       .to(heroPortalMeta, { opacity: 0, duration: 0.15, ease: "none" }, 0.55)
       // ...y en el mismo lugar que dejan libre, sobre el video ya
       // asentado, entra el mensaje real (eyebrow + h1 + bajada + CTA)

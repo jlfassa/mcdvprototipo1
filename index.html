@@ -71,7 +71,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="./style-mcdv.css?v=20260917e" />
+    <link rel="stylesheet" href="./style-mcdv.css?v=20260918h" />
 
     <!-- El hero ya no muestra una foto fija (ahora es el carrusel de
          video) — img/hero_facade.jpg sigue en uso solo como imagen de
@@ -105,10 +105,10 @@
             "image": "https://mcdvasociados.com.ar/img/hero_facade.jpg",
             "url": "https://mcdvasociados.com.ar/",
             "sameAs": ["https://www.instagram.com/mcdv.asociados/"],
-            "areaServed": {
-              "@type": "Place",
-              "name": "Chubut, Argentina"
-            },
+            "areaServed": [
+              { "@type": "Place", "name": "Ciudad Autónoma de Buenos Aires, Argentina" },
+              { "@type": "Place", "name": "Chubut, Argentina" }
+            ],
             "knowsAbout": [
               "Derecho de Familia",
               "Sucesiones",
@@ -174,7 +174,7 @@
                 "name": "¿En qué zona atienden?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Atendemos en toda la provincia de Chubut, de forma presencial y virtual."
+                  "text": "Atendemos en Ciudad Autónoma de Buenos Aires y en la provincia de Chubut (Trelew y Rawson), de forma presencial y virtual."
                 }
               }
             ]
@@ -200,6 +200,10 @@
          menú de siempre y esto se oculta. -->
     <header class="header" data-header>
       <div class="header-inner">
+        <a href="#home" class="header-brand">
+          <img src="img/logo-mcdv-light.png" alt="MCDV &amp; Asociados" width="272" height="284" />
+        </a>
+
         <nav class="header-nav" aria-label="Navegación principal">
           <a href="#home">Inicio</a>
           <a href="#el-estudio">El Estudio</a>
@@ -220,7 +224,7 @@
             </div>
           </div>
 
-          <a href="#equipo">Equipo</a>
+          <a href="#equipo">Quiénes Somos</a>
           <a href="#contact">Contacto</a>
         </nav>
 
@@ -247,7 +251,7 @@
         <a href="#home" data-menu-link><em>I</em><span class="menu-link-text">Inicio</span></a>
         <a href="#el-estudio" data-menu-link><em>II</em><span class="menu-link-text">El Estudio</span></a>
         <a href="#areas" data-menu-link><em>III</em><span class="menu-link-text">Áreas de práctica</span></a>
-        <a href="#equipo" data-menu-link><em>IV</em><span class="menu-link-text">Equipo</span></a>
+        <a href="#equipo" data-menu-link><em>IV</em><span class="menu-link-text">Quiénes Somos</span></a>
         <a href="#contact" data-menu-link><em>V</em><span class="menu-link-text">Contacto</span></a>
       </nav>
 
@@ -315,26 +319,28 @@
 
                placeholder de stock, licencia comercial libre (Pexels
                License, sin atribución obligatoria) porque no hay
-               filmación propia del estudio todavía, 720p tal cual la
-               entrega la fuente (acá no hay forma de recomprimir
-               video):
-               - video/hero-1.mp4 — pexels.com/video/man-signing-the-paper-8061370
-                 (persona firmando un contrato — el único de este tipo,
-                 a pedido explícito, para no repetir la misma escena).
+               filmación propia del estudio todavía:
+               - video/hero-1.mp4 — pexels.com/video/video-inside-a-library-854417
+                 (pasillo de biblioteca con estanterías, sin personas).
+                 2026-09-18: reemplaza al clip anterior (persona firmando
+                 un contrato, pexels.com/video/man-signing-the-paper-8061370)
+                 a pedido explícito — se buscó "algo más general" en vez
+                 de mostrar gente. Bajado en 2560×1440 (la fuente no
+                 ofrece 720p directo para este clip) y recomprimido acá
+                 a 1280×720 h264/crf21 sin pista de audio (el `<video>`
+                 va muted igual, no tiene sentido cargarla) para que
+                 pese similar a los otros dos clips.
                - video/hero-2.mp4 — pexels.com/video/balance-scales-and-gavel-placed-on-a-wooden-desk-5636977
-                 (mazo + balanza, sin personas).
+                 (mazo + balanza, sin personas), 720p tal cual la entrega
+                 la fuente.
                - video/hero-3.mp4 — pexels.com/video/lawyer-using-laptop-8061570
-                 (estatua de la Justicia + abogado desenfocado de fondo).
-               El primer candidato para el signing (a-lawyer-signing-
-               a-document-7841652) se descartó al revisar los frames
-               reales: tenía una bandera de EEUU de fondo, fuera de
-               lugar acá — un título/tag nunca alcanza, hay que mirar
-               el video.
+                 (estatua de la Justicia + abogado desenfocado de fondo),
+                 720p tal cual la entrega la fuente.
 
-               img/hero_video_poster.jpg: frame propio (no de Pexels)
-               capturado del primer clip con Playwright y comprimido a
-               JPEG — es lo que se ve un instante antes de que el
-               video termine de cargar, así nunca hay un flash negro. -->
+               img/hero_video_poster.jpg: frame propio del primer clip
+               actual (capturado con ffmpeg, no de Pexels) — es lo que se
+               ve un instante antes de que el video termine de cargar,
+               así nunca hay un flash negro. -->
           <div class="hero-portal-video-carousel" data-hero-portal-video-carousel aria-hidden="true">
             <video
               class="hero-portal-video is-active"
@@ -359,19 +365,14 @@
           <div class="hero-portal-panel hero-portal-panel--left" aria-hidden="true" data-hero-portal-panel="left"></div>
           <div class="hero-portal-panel hero-portal-panel--right" aria-hidden="true" data-hero-portal-panel="right"></div>
 
-          <!-- Arranca apilado y centrado (MCDV / & / Asociados, una
-               debajo de la otra); al abrirse el portal, MCDV viaja
-               a la izquierda y Asociados a la derecha (mismo x que
-               antes), mientras el "&" simplemente se desvanece. -->
+          <!-- Escudo entero (no se parte): a pedido explícito, partirlo
+               en dos mitades que viajan a los bordes se veía "roto".
+               Ahora se queda armado mientras las puertas se abren
+               alrededor, después se desvanece y ahí entra el texto
+               real del hero (.hero-portal-message). -->
           <div class="hero-portal-wordmark" aria-hidden="true" data-hero-portal-wordmark>
-            <span class="hero-portal-word hero-portal-word--left" data-hero-portal-word="left">MCDV</span>
-            <span class="hero-portal-word hero-portal-word--amp" data-hero-portal-word="amp">&amp;</span>
-            <span class="hero-portal-word hero-portal-word--right" data-hero-portal-word="right">Asociados</span>
+            <img class="hero-portal-logo" src="img/logo-mcdv-light.png" alt="" data-hero-portal-logo />
           </div>
-
-          <!-- Sin escudo/logo acá: el wordmark gigante que ya se vio
-               segundos antes cumple ese rol, uno chico al lado sería
-               redundante. -->
           <div class="hero-portal-message" data-hero-portal-message>
             <span class="hero-portal-eyebrow">Estudio Jurídico</span>
 
@@ -429,21 +430,18 @@
               del proceso.
             </p>
 
-            <!-- A partir de acá, contenido de relleno (lorem ipsum) para
-                 dar más cuerpo a la sección hasta contar con más texto
-                 real del estudio. -->
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-              ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              Escuchamos antes de actuar: cada consulta se analiza en
+              detalle para proponer una estrategia clara, adaptada a la
+              situación particular de cada persona, sin fórmulas
+              genéricas ni promesas que no se puedan sostener.
             </p>
 
             <p>
-              Duis aute irure dolor in reprehenderit in voluptate velit
-              esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-              occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.
+              La comunicación es directa y constante durante todo el
+              proceso: mantenemos informado a cada cliente sobre el
+              estado de su caso y los próximos pasos, ya sea en
+              encuentros presenciales o por vía virtual.
             </p>
 
             <a href="#contact" class="btn-outline">
@@ -612,7 +610,7 @@
       <section class="section team hairline-top" id="equipo">
         <div class="container">
           <div class="team-head-centered" data-reveal>
-            <h2>El Equipo</h2>
+            <h2>Quiénes Somos</h2>
             <span class="team-underline" aria-hidden="true"></span>
             <p>
               Un equipo interdisciplinario de profesionales, cada uno con
@@ -646,11 +644,17 @@
                 <div class="team-detail-copy">
                   <span class="team-role">Abogado</span>
                   <p class="team-detail-bio">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore.
+                    Abogado egresado de la Universidad de Buenos Aires,
+                    matriculado a nivel federal y provincial. Ejerce en forma
+                    privada desde 2022 en familia, sucesiones, derecho civil
+                    y derecho penal, con un recorrido previo en la
+                    Defensoría Penal Pública de Chubut y como asesor
+                    legislativo en la Legislatura provincial — una mirada
+                    que combina la práctica privada con la experiencia del
+                    otro lado del sistema judicial.
                   </p>
                   <a href="https://drpablocrespo.com/" target="_blank" rel="noopener" class="team-link">
-                    Ver perfil completo ↗
+                    Sitio Web ↗
                   </a>
                 </div>
               </div>
@@ -659,19 +663,20 @@
                 <span class="team-detail-photo photo-duo" aria-hidden="true">
                   <picture>
                     <source srcset="img/belen.webp" type="image/webp" />
-                    <img src="img/belen.jpeg" alt="" loading="lazy" width="845" height="1228" />
+                    <img src="img/belen.jpeg" alt="" loading="lazy" width="845" height="1228" class="team-photo-belen" />
                   </picture>
                 </span>
                 <span class="team-detail-divider" aria-hidden="true"></span>
                 <div class="team-detail-copy">
                   <span class="team-role">Abogada</span>
                   <p class="team-detail-bio">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore. Ut enim ad
-                    minim veniam, quis nostrud exercitation ullamco laboris
-                    nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                    dolor in reprehenderit in voluptate velit esse cillum
-                    dolore eu fugiat nulla pariatur.
+                    Abogada egresada de la Universidad Nacional de Tucumán,
+                    especializada en derecho laboral y asesoría jurídica. Se
+                    desempeña como asesora legal en la Secretaría de Trabajo
+                    y como Directora del Instituto Nacional de Seguridad
+                    Social de Jubilados y Pensionados (PAMI), una
+                    experiencia de gestión pública que enriquece su mirada
+                    dentro del estudio.
                   </p>
                 </div>
               </div>
@@ -686,8 +691,25 @@
            contenido real). Antes tenía una palabra en italic/bronce
            adentro del título (típico "tell" de diseño genérico); se
            reemplazó por una comilla grande decorativa como el
-           elemento gráfico, y el título queda uniforme. -->
+           elemento gráfico, y el título queda uniforme.
+
+           Fondo con foto + parallax (a pedido explícito, "que se note
+           el texto"): reutiliza hero_facade.jpg (lapicera sobre cartas
+           escritas a mano) que hasta ahora solo se usaba como imagen de
+           Open Graph, nunca se veía en la página — temática exacta para
+           "cada caso es una persona, no un expediente más". Parallax
+           100% CSS (background-attachment:fixed, sin GSAP/JS) y SOLO en
+           desktop con scroll normal (≥900px, mismo umbral que el resto
+           del sitio) y sin prefers-reduced-motion — en mobile/reduced-motion
+           el fondo queda fijo en su lugar (background-attachment:scroll),
+           sigue siendo una foto con scrim, nunca se pierde el efecto
+           visual de fondo, solo el desplazamiento relativo. El scrim
+           (`.statement-scrim`) es más oscuro que el `.photo-duo` normal
+           del sitio a propósito, para que el h2/p en claro sigan
+           legibles encima de la foto sin depender solo del text-shadow. -->
       <section class="statement hairline-top">
+        <div class="statement-media" aria-hidden="true"></div>
+        <div class="statement-scrim" aria-hidden="true"></div>
         <div class="container statement-inner">
           <span class="statement-mark" aria-hidden="true">&ldquo;</span>
           <h2 data-reveal>Cada caso es una persona, no un expediente más.</h2>
@@ -775,7 +797,8 @@
             <div class="faq-item">
               <h3>¿En qué zona atienden?</h3>
               <p>
-                Atendemos en toda la provincia de Chubut, de forma
+                Atendemos en Ciudad Autónoma de Buenos Aires y en la
+                provincia de Chubut (Trelew y Rawson), de forma
                 presencial y virtual.
               </p>
             </div>
@@ -809,14 +832,6 @@
               consultas urgentes.
             </p>
 
-            <a
-              href="https://www.instagram.com/mcdv.asociados/"
-              target="_blank"
-              rel="noopener"
-              class="contact-instagram"
-            >
-              @mcdv.asociados
-            </a>
           </div>
 
           <form class="contact-form" id="contactForm" data-reveal>
@@ -885,13 +900,18 @@
           <img src="img/hero_1.jpg" alt="" loading="lazy" width="1920" height="1280" />
         </picture>
         <div class="footer-band-overlay">
+          <img class="footer-band-logo" src="img/logo-mcdv-light.png" alt="" width="272" height="284" />
           <span class="footer-band-word">MCDV &amp; Asociados</span>
           <span class="footer-band-sub">Estudio Jurídico</span>
         </div>
       </div>
 
       <div class="container footer-bottom">
-        <span>Dirección a confirmar</span>
+        <div class="footer-addresses">
+          <span class="footer-address"><strong>CABA</strong> Av. Corrientes 1464, Of. 302</span>
+          <span class="footer-address"><strong>Trelew</strong> Pasaje Lamadrid 1191</span>
+          <span class="footer-address"><strong>Rawson</strong> Rivadavia 885</span>
+        </div>
 
         <a
           href="https://www.instagram.com/mcdv.asociados/"
@@ -899,10 +919,10 @@
           rel="noopener"
           class="footer-instagram"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="5" />
-            <circle cx="12" cy="12" r="4" />
-            <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none" />
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="var(--gray-light)" stroke-width="1.5" />
+            <circle cx="12" cy="12" r="4" stroke="var(--bronze-light)" stroke-width="1.5" />
+            <circle cx="17.3" cy="6.7" r="1.2" fill="var(--bronze)" stroke="none" />
           </svg>
           <span>@mcdv.asociados</span>
         </a>
@@ -925,6 +945,6 @@
       <img src="img/wsp.png" alt="WhatsApp" class="wa-icon" width="52" height="52" />
     </a>
 
-    <script src="./script.js?v=20260917e" defer></script>
+    <script src="./script.js?v=20260918h" defer></script>
   </body>
 </html>
