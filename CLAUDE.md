@@ -4,11 +4,19 @@ Landing page real en producción (HTML/CSS/JS puro, sin frameworks, sin build).
 Archivos: `index.html`, `areas/*.html` (5 páginas de detalle por área), `style-mcdv.css`,
 `script.js`, `img/`.
 
-**Para contexto de fondo** (qué es real vs. placeholder, decisiones de marca/paleta,
-convenciones heredadas del sitio hermano `Drpablocrespo/`): leer `contexto-proyecto-mcdv.md`.
-Ese archivo no se actualiza solo — puede estar desactualizado en detalles puntuales
-respecto al estado actual del HTML/CSS; ante la duda, confiar en el código y en
-`git log` por sobre ese documento.
+**Antes de arrancar, leer `ESTADO-ACTUAL.md`** — checklist de qué falta, qué se
+resolvió último, mapa rápido de archivos. Es corto a propósito: reemplaza tener
+que re-derivar el estado del proyecto desde `git log`/lectura completa de HTML
+en cada sesión (deadline ajustado, cuidar tokens). Se actualiza a mano al cierre
+de cada sesión con cambios reales — si está desactualizado, confiar en el código
+y `git log` por sobre el documento.
+
+**Para el "por qué" de una decisión de diseño pasada** (qué se probó, qué se
+descartó, bugs de GSAP ya pisados, decisiones de marca/paleta, convenciones
+heredadas del sitio hermano `Drpablocrespo/`): `contexto-proyecto-mcdv.md` tiene
+el log completo ronda por ronda (~850 líneas). Es un archivo de archivo/consulta,
+no de lectura de rutina — abrirlo solo cuando haga falta esa arqueología puntual,
+nunca de punta a punta "por las dudas".
 
 **NO usar el flujo de mockups de la extensión Super Design** (`.superdesign/design_iterations/`,
 `generateTheme`, etc.) — este es el sitio real, se edita directamente sobre
@@ -42,6 +50,11 @@ respecto al estado actual del HTML/CSS; ante la duda, confiar en el código y en
   toque alguno de esos dos archivos, antes de testear.
 - **Commits**: mensajes en español explicando el *por qué* (no solo el qué), separados
   por tipo de cambio, terminan con `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>`.
+- **Cuidar tokens** (deadline ajustado): `grep`/`Read` acotado a la sección relevante
+  en vez de archivos enteros cuando alcance; no releer `contexto-proyecto-mcdv.md`
+  completo por rutina (ver arriba); no lanzar un agente/Explore si un grep directo
+  resuelve la pregunta; actualizar `ESTADO-ACTUAL.md` al cierre de cada sesión en vez
+  de dejar que la próxima sesión reconstruya el estado desde `git log`.
 
 ## Sistema de diseño (referencia rápida)
 
